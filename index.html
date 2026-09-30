@@ -1,0 +1,7660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TD-PH Teacher Management Portal</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#fff;
+  color:#111;
+}
+
+.app{
+  width:100%;
+  max-width:none;
+  min-height:100vh;
+  margin:0;
+  padding:0;
+}
+
+.card{
+  width:100%;
+  min-height:100vh;
+  background:#fff;
+  border-radius:0;
+  box-shadow:none;
+  overflow:hidden;
+}
+
+.topbar{
+  background:#00e5e5;
+  padding:14px 18px;
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+}
+
+.nav{
+  display:none;
+  gap:8px;
+  padding:12px clamp(18px,3vw,40px);
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  flex-wrap:wrap;
+}
+
+.nav button{
+  border:0;
+  border-radius:8px;
+  padding:10px 18px;
+  font-weight:700;
+  cursor:pointer;
+  background:#eee;
+  font-size:14px;
+}
+
+.nav button.active{
+  background:#00d9d9;
+}
+
+.page{
+  display:none;
+  padding:24px clamp(18px,3vw,40px) 32px;
+}
+
+.page.active{
+  display:block;
+}
+
+/* Large dashboard navigation cards */
+.dashboard-menu{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin:0;
+}
+
+.dashboard-menu-btn{
+  min-height:105px;
+  border:1px solid #b8b8b8;
+  border-radius:12px;
+  background:#87CEEB;
+  padding:20px;
+  cursor:pointer;
+  text-align:left;
+  font-size:20px;
+  font-weight:800;
+  box-shadow:0 2px 7px rgba(0,0,0,.06);
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+}
+
+.dashboard-menu-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 5px 14px rgba(0,0,0,.12);
+  background:#70c5e8;
+}
+
+.dashboard-menu-btn:active{
+  transform:translateY(0);
+}
+
+.dashboard-menu-label{
+  display:block;
+  margin-bottom:7px;
+  font-size:20px;
+}
+
+.dashboard-menu-sub{
+  display:none;
+}
+
+/* Dashboard overview */
+#dashboardPage > h2,
+#dashboardPage .dashboard-grid{
+  display:none;
+}
+
+#dashboardPage{
+  padding-top:24px;
+}
+
+.dashboard-overview{
+  display:grid;
+  gap:18px;
+  margin-bottom:22px;
+}
+
+.teacher-dashboard-card{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:22px 24px;
+  border:1px solid #d0d0d0;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+.teacher-dashboard-photo{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  background:#eee;
+  border:2px solid #ddd;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+  font-size:42px;
+}
+
+.teacher-dashboard-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.teacher-dashboard-title{
+  margin:0;
+  font-size:clamp(28px,4vw,44px);
+  font-weight:900;
+  line-height:1.05;
+  text-transform:uppercase;
+}
+
+.teacher-dashboard-label{
+  margin-top:7px;
+  color:#666;
+  font-size:14px;
+  font-weight:700;
+}
+
+.dashboard-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.dashboard-summary-card{
+  min-height:125px;
+  padding:20px;
+  border:1px solid #ccc;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.dashboard-summary-label{
+  font-size:15px;
+  font-weight:700;
+  color:#555;
+}
+
+.dashboard-summary-number{
+  margin-top:10px;
+  font-size:38px;
+  line-height:1;
+  font-weight:900;
+}
+
+.dashboard-todo{
+  border:1px solid #ccc;
+  border-radius:12px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.dashboard-todo-title{
+  padding:13px 16px;
+  background:#87CEEB;
+  font-size:17px;
+  font-weight:900;
+}
+
+.dashboard-todo-body{
+  padding:18px;
+  min-height:72px;
+}
+
+.dashboard-todo-main{
+  font-size:18px;
+  font-weight:800;
+}
+
+.dashboard-todo-sub{
+  margin-top:6px;
+  color:#666;
+  font-size:14px;
+}
+
+#dashboardPage .dashboard-menu-btn{
+  min-height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+#dashboardPage .dashboard-menu-label{
+  margin:0;
+  font-size:22px;
+}
+
+
+#dashboardPage .dashboard-menu-label{
+  line-height:1.25;
+}
+
+#dashboardPage .dashboard-menu-btn{
+  color:#111;
+}
+
+.page-back-wrap{
+  margin-bottom:14px;
+}
+
+@media(max-width:700px){
+  .teacher-dashboard-card{
+    padding:18px;
+  }
+  .teacher-dashboard-photo{
+    width:76px;
+    height:76px;
+    font-size:34px;
+  }
+  .dashboard-summary-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.portal-page-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.portal-page-actions button{
+  border:0;
+  border-radius:8px;
+  padding:10px 16px;
+  background:#00d9d9;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.page-back-btn{
+  border:0;
+  border-radius:8px;
+  padding:10px 16px;
+  background:#87CEEB;
+  font-weight:800;
+  cursor:pointer;
+  font-size:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.page-back-btn:hover{
+  background:#70c5e8;
+}
+
+@media(max-width:700px){
+  .dashboard-menu{
+    grid-template-columns:1fr;
+  }
+
+  .dashboard-menu-btn{
+    min-height:90px;
+  }
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+label{
+  display:block;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+input,textarea,select{
+  width:100%;
+  border:1px solid #bbb;
+  border-radius:7px;
+  padding:10px;
+  font-size:15px;
+  background:#fff;
+}
+
+input[readonly]{
+  background:#f4f4f4;
+}
+
+textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.section{
+  margin-top:16px;
+  border:1px solid #aaa;
+  border-radius:7px;
+  overflow:hidden;
+}
+
+.section-title{
+  background:#00e5e5;
+  padding:7px 10px;
+  text-align:center;
+  font-weight:700;
+}
+
+.section-body{
+  padding:12px;
+}
+
+.score-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.rating{
+  background:#ffff00;
+  padding:7px;
+  font-weight:700;
+  text-align:center;
+  margin-top:8px;
+  border-radius:5px;
+}
+
+.stars{
+  font-size:25px;
+  letter-spacing:2px;
+  color:#111;
+  white-space:nowrap;
+}
+
+.stars button{
+  border:0;
+  background:none;
+  cursor:pointer;
+  font-size:25px;
+  padding:0 1px;
+}
+
+.performance{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid #aaa;
+  border-top:0;
+}
+
+.perf-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:7px 9px;
+  border-top:1px solid #aaa;
+}
+
+.perf-item:nth-child(odd){
+  border-right:1px solid #aaa;
+}
+
+.comment-box{
+  background:#f7f7f7;
+  border:1px dashed #999;
+  min-height:150px;
+  padding:12px;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+button.primary,
+button.secondary,
+.btn{
+  border:0;
+  border-radius:8px;
+  padding:12px 18px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.primary{
+  background:#00d9d9;
+}
+
+.secondary{
+  background:#ddd;
+}
+
+.status{
+  margin-top:12px;
+  padding:10px;
+  border-radius:7px;
+  display:none;
+}
+
+.status.show{
+  display:block;
+}
+
+.status.ok{
+  background:#dff6df;
+}
+
+.status.error{
+  background:#ffe1e1;
+}
+
+.small{
+  font-size:12px;
+  color:#666;
+  margin-top:5px;
+}
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat{
+  border:1px solid #aaa;
+  border-radius:9px;
+  padding:16px;
+  background:#fafafa;
+}
+
+.stat b{
+  font-size:28px;
+  display:block;
+  margin-top:5px;
+}
+
+.panel{
+  border:1px solid #aaa;
+  border-radius:9px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.panel-title{
+  background:#00e5e5;
+  padding:10px;
+  font-weight:700;
+}
+
+.panel-body{
+  padding:14px;
+}
+
+.add-student-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+.record-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.record-table th,
+.record-table td{
+  border:1px solid #aaa;
+  padding:9px;
+  text-align:left;
+}
+
+.record-table th{
+  background:#f1f1f1;
+}
+
+.empty{
+  padding:18px;
+  text-align:center;
+  color:#666;
+}
+
+.student-list{
+  display:grid;
+  gap:8px;
+}
+
+.student-row{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:10px 12px;
+  gap:10px;
+}
+
+.student-info b{
+  display:block;
+}
+
+.student-info span{
+  font-size:12px;
+  color:#666;
+}
+
+.student-actions{
+  position:relative;
+  margin-left:auto;
+}
+
+.dots-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  background:transparent;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:24px;
+  line-height:1;
+  font-weight:700;
+  padding:0;
+}
+
+.dots-btn:hover{
+  background:#eee;
+}
+
+.student-menu{
+  position:absolute;
+  right:44px;
+  top:50%;
+  transform:translateY(-50%);
+  min-width:130px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+  padding:5px;
+  z-index:50;
+  display:none;
+}
+
+.student-menu.show{
+  display:block;
+}
+
+.student-menu button{
+  display:block;
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:9px 11px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+}
+
+.student-menu button:hover{
+  background:#f1f1f1;
+}
+
+.student-menu .delete-option{
+  color:#b00020;
+}
+
+
+/* =========================================================
+   RECORD OF EVALUATION
+========================================================= */
+
+.evaluation-student-list{
+  display:grid;
+  gap:10px;
+}
+
+.evaluation-student-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:11px 12px;
+  background:#fff;
+  transition:.15s ease;
+}
+
+.evaluation-student-card:hover{
+  border-color:#aaa;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.evaluation-student-avatar{
+  width:52px;
+  height:52px;
+  min-width:52px;
+  border-radius:50%;
+  background:#e9eeee;
+  border:1px solid #cfd6d6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  font-weight:800;
+  color:#333;
+  overflow:hidden;
+}
+
+.evaluation-student-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.evaluation-student-info{
+  flex:1;
+  min-width:0;
+}
+
+.evaluation-student-info .student-name{
+  font-size:16px;
+  font-weight:800;
+  display:block;
+  word-break:break-word;
+}
+
+.evaluation-student-info .student-id{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:#666;
+  word-break:break-word;
+}
+
+.evaluation-student-info .latest-evaluation{
+  display:block;
+  margin-top:3px;
+  font-size:11px;
+  color:#777;
+}
+
+.class-record-btn{
+  flex-shrink:0;
+  border:0;
+  border-radius:8px;
+  padding:10px 13px;
+  background:#00d9d9;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.class-record-btn:hover{
+  background:#00c8c8;
+}
+
+.evaluation-record-count{
+  display:inline-block;
+  margin-left:6px;
+  padding:3px 7px;
+  border-radius:12px;
+  background:#eee;
+  font-size:11px;
+  font-weight:700;
+}
+
+.record-student-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+  padding-bottom:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.record-student-avatar{
+  width:54px;
+  height:54px;
+  min-width:54px;
+  border-radius:50%;
+  background:#e9eeee;
+  border:1px solid #cfd6d6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:800;
+  overflow:hidden;
+}
+
+.record-student-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.record-student-header-info{
+  min-width:0;
+}
+
+.record-student-header-info b{
+  display:block;
+  font-size:17px;
+  word-break:break-word;
+}
+
+.record-student-header-info span{
+  display:block;
+  margin-top:3px;
+  color:#666;
+  font-size:12px;
+}
+
+.class-record-item{
+  border:1px solid #ccc;
+  border-radius:9px;
+  margin-bottom:10px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.class-record-item:last-child{
+  margin-bottom:0;
+}
+
+.class-record-item-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  background:#f4f4f4;
+  border-bottom:1px solid #ddd;
+}
+
+.class-record-item-header b{
+  font-size:14px;
+}
+
+.class-record-item-body{
+  padding:12px;
+}
+
+.class-record-summary{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.class-record-summary-info{
+  min-width:0;
+  flex:1;
+}
+
+.class-record-summary-topic{
+  font-size:15px;
+  font-weight:800;
+  word-break:break-word;
+}
+
+.class-record-summary-date{
+  margin-top:5px;
+  color:#666;
+  font-size:12px;
+}
+
+.view-record-btn{
+  flex-shrink:0;
+  border:0;
+  border-radius:7px;
+  padding:9px 14px;
+  background:#00d9d9;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.view-record-btn:hover{
+  background:#00c8c8;
+}
+
+.class-record-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.class-record-field{
+  border:1px solid #e0e0e0;
+  border-radius:7px;
+  padding:8px;
+  background:#fafafa;
+}
+
+.class-record-field.full{
+  grid-column:1/-1;
+}
+
+.class-record-field label{
+  font-size:11px;
+  color:#666;
+  margin-bottom:3px;
+}
+
+.class-record-field div{
+  font-size:13px;
+  line-height:1.4;
+  word-break:break-word;
+}
+
+.class-record-stars{
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+/* Performance stars in Class Record -> View Evaluation */
+.record-performance-stars{
+  display:inline-flex;
+  align-items:center;
+  gap:1px;
+  white-space:nowrap;
+  line-height:1;
+}
+
+.record-performance-star{
+  font-size:16px;
+  line-height:1;
+}
+
+.record-performance-star.filled{
+  color:#FFD700;
+}
+
+.record-performance-star.empty{
+  color:#fff;
+  -webkit-text-stroke:1px #999;
+  text-shadow:0 0 1px #999;
+}
+
+.class-record-comment{
+  white-space:pre-wrap;
+}
+
+.record-view-modal{
+  max-width:720px;
+}
+
+.record-view-modal .modal-actions{
+  justify-content:flex-end;
+}
+
+.record-detail-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.record-detail-title{
+  font-size:18px;
+  font-weight:800;
+  line-height:1.3;
+}
+
+.record-detail-date{
+  margin-top:4px;
+  font-size:12px;
+  color:#666;
+}
+
+.record-detail-section{
+  margin-top:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.record-detail-section-title{
+  background:#00e5e5;
+  padding:8px 10px;
+  font-weight:800;
+  font-size:13px;
+}
+
+.record-detail-section-body{
+  padding:10px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.record-detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.record-detail-box{
+  border:1px solid #ddd;
+  border-radius:7px;
+  padding:9px;
+  background:#fafafa;
+}
+
+.record-detail-box label{
+  font-size:11px;
+  color:#666;
+  margin-bottom:4px;
+}
+
+.record-detail-box div{
+  font-size:13px;
+  line-height:1.4;
+  word-break:break-word;
+}
+
+
+/* =========================================================
+   STANDARD MODALS
+========================================================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  overflow-y:auto;
+  z-index:9990;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:100%;
+  max-width:460px;
+  max-height:calc(100vh - 36px);
+  overflow-y:auto;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 35px rgba(0,0,0,.25);
+  padding:20px;
+}
+
+.modal h3{
+  margin:0 0 8px;
+}
+
+.modal p{
+  margin:8px 0 14px;
+  line-height:1.45;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+
+.modal-actions button{
+  border:0;
+  border-radius:8px;
+  padding:10px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.modal-cancel{
+  background:#ddd;
+}
+
+.modal-save{
+  background:#00d9d9;
+}
+
+.modal-delete{
+  background:#d9534f;
+  color:#fff;
+}
+
+.modal-error{
+  display:none;
+  margin-top:10px;
+  padding:9px;
+  border-radius:7px;
+  background:#ffe1e1;
+  color:#8a0000;
+  font-size:13px;
+}
+
+.modal-error.show{
+  display:block;
+}
+
+
+/* =========================================================
+   USER BAR / PROFILE
+========================================================= */
+
+.userbar{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  padding:9px 15px;
+  background:#ffffff;
+  border-bottom:1px solid #e1e1e1;
+  position:relative;
+}
+
+.profile-trigger{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid #e0e0e0;
+  background:#f9fbfb;
+  border-radius:10px;
+  padding:6px 12px 6px 7px;
+  cursor:pointer;
+  font-weight:700;
+  min-width:175px;
+  transition:.15s ease;
+}
+
+.profile-trigger:hover{
+  background:#f1fafa;
+  border-color:#bfcfcf;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.profile-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#e9eeee;
+  border:1px solid #d2dada;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.profile-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-name-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-width:0;
+  line-height:1.2;
+}
+
+.profile-label{
+  font-size:10px;
+  color:#777;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.profile-name{
+  font-weight:700;
+  font-size:13px;
+  color:#222;
+  max-width:180px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   TEACHER PROFILE
+========================================================= */
+
+.profile-panel{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(520px,calc(100vw - 30px));
+  max-width:520px;
+  max-height:calc(100vh - 30px);
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.30);
+  padding:20px;
+  z-index:10000;
+  display:none;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+}
+
+.profile-panel.show{
+  display:block;
+}
+
+.profile-panel.show::before{
+  content:"";
+  position:fixed;
+  left:50%;
+  top:50%;
+  width:100vw;
+  height:100vh;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,.45);
+  z-index:-1;
+  pointer-events:none;
+}
+
+.profile-panel-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.profile-picture-wrap{
+  position:relative;
+}
+
+.profile-picture-large{
+  width:68px;
+  height:68px;
+  border-radius:50%;
+  background:#ddd;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  font-size:32px;
+  flex-shrink:0;
+}
+
+.profile-picture-large img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-picture-btn{
+  margin-top:6px;
+  border:0;
+  background:none;
+  color:#007b83;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  padding:0;
+}
+
+.profile-picture-btn:hover{
+  text-decoration:underline;
+}
+
+.profile-header-name{
+  min-width:0;
+}
+
+.profile-header-name b{
+  display:block;
+  font-size:16px;
+}
+
+.profile-header-name span{
+  display:block;
+  font-size:12px;
+  color:#666;
+  margin-top:3px;
+  word-break:break-word;
+}
+
+.profile-fields{
+  margin-top:12px;
+}
+
+.profile-field{
+  margin-bottom:10px;
+}
+
+.profile-field label{
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.profile-field input,
+.profile-field select{
+  padding:8px;
+  font-size:13px;
+}
+
+.profile-field input[readonly]{
+  background:#f4f4f4;
+}
+
+.profile-actions{
+  display:flex;
+  gap:7px;
+  margin-top:12px;
+}
+
+.profile-save-btn{
+  flex:1;
+  border:0;
+  border-radius:7px;
+  padding:9px;
+  background:#00d9d9;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.profile-password-btn{
+  width:100%;
+  border:0;
+  border-radius:7px;
+  padding:9px;
+  background:#eee;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:7px;
+}
+
+.profile-password-btn:hover{
+  background:#ddd;
+}
+
+.profile-menu-wrap{
+  position:relative;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #ddd;
+}
+
+.profile-menu-trigger{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:100%;
+  border:0;
+  border-radius:7px;
+  padding:9px;
+  background:#f1f1f1;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.profile-menu-trigger:hover{
+  background:#e7e7e7;
+}
+
+.profile-more-menu{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:45px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.16);
+  padding:5px;
+  display:none;
+  z-index:10001;
+}
+
+.profile-more-menu.show{
+  display:block;
+}
+
+.profile-more-menu button{
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:10px 11px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+}
+
+.profile-more-menu button:hover{
+  background:#f1f1f1;
+}
+
+.profile-more-menu .profile-logout-option{
+  color:#b00020;
+}
+
+.profile-status{
+  display:none;
+  margin-top:9px;
+  padding:8px;
+  border-radius:7px;
+  font-size:12px;
+}
+
+.profile-status.show{
+  display:block;
+}
+
+.profile-status.ok{
+  background:#dff6df;
+}
+
+.profile-status.error{
+  background:#ffe1e1;
+  color:#8a0000;
+}
+
+.logout-btn{
+  border:0;
+  border-radius:7px;
+  padding:7px 12px;
+  background:#ddd;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.logout-btn:hover{
+  background:#ccc;
+}
+
+.account-dots-btn{
+  width:36px;
+  height:34px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  cursor:pointer;
+  font-size:23px;
+  line-height:1;
+  font-weight:700;
+  padding:0;
+}
+
+.account-dots-btn:hover{
+  background:#eee;
+}
+
+.account-menu{
+  position:absolute;
+  right:0;
+  top:42px;
+  min-width:170px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);
+  padding:5px;
+  z-index:80;
+  display:none;
+}
+
+.account-menu.show{
+  display:block;
+}
+
+.account-menu button{
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:10px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  color:#b00020;
+}
+
+.account-menu button:hover{
+  background:#ffecec;
+}
+
+
+/* =========================================================
+   CLEAR ALL RECORDS CAPTCHA
+========================================================= */
+
+.captcha-box{
+  margin-top:15px;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  background:#f7f7f7;
+  text-align:center;
+}
+
+.captcha-code{
+  display:inline-block;
+  min-width:150px;
+  padding:12px 18px;
+  margin:5px 0 12px;
+  border:1px dashed #888;
+  border-radius:8px;
+  background:#fff;
+  font-size:27px;
+  font-weight:800;
+  letter-spacing:7px;
+  user-select:none;
+}
+
+.captcha-refresh{
+  display:block;
+  margin:0 auto 12px;
+  border:0;
+  background:none;
+  color:#007b83;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.captcha-refresh:hover{
+  text-decoration:underline;
+}
+
+.captcha-input{
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:4px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+
+/* AUTH */
+
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#f2f4f7;
+}
+
+.auth-card{
+  width:100%;
+  max-width:430px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.14);
+  overflow:hidden;
+}
+
+.auth-header{
+  background:#00e5e5;
+  padding:22px 20px;
+  text-align:center;
+}
+
+.brand-logo{
+  width:58px;
+  height:58px;
+  margin:0 auto 8px;
+  border-radius:15px;
+  background:#111;
+  color:#00e5e5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-1px;
+  box-shadow:0 3px 10px rgba(0,0,0,.14);
+}
+
+.auth-header h1{
+  margin:0;
+  font-size:21px;
+}
+
+.auth-header p{
+  margin:5px 0 0;
+  font-size:14px;
+  font-weight:600;
+}
+
+.auth-body{
+  padding:22px;
+}
+
+.auth-body h2{
+  margin:0 0 15px;
+}
+
+.auth-body label{
+  margin-top:10px;
+}
+
+.auth-body input{
+  margin-bottom:2px;
+}
+
+.auth-btn{
+  width:100%;
+  margin-top:15px;
+}
+
+.auth-switch{
+  margin-top:14px;
+  text-align:center;
+  font-size:14px;
+}
+
+.auth-switch button{
+  border:0;
+  background:none;
+  color:#007b83;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.auth-message{
+  display:none;
+  margin-top:12px;
+  padding:10px;
+  border-radius:7px;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.auth-message.show{
+  display:block;
+}
+
+.auth-message.ok{
+  background:#dff6df;
+}
+
+.auth-message.error{
+  background:#ffe1e1;
+  color:#8a0000;
+}
+
+
+/* PASSWORD */
+
+.password-wrap{
+  position:relative;
+  width:100%;
+}
+
+.password-wrap input{
+  padding-right:50px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:7px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  font-size:18px;
+  padding:6px 8px;
+  border-radius:6px;
+}
+
+.password-toggle:hover{
+  background:#eee;
+}
+
+.forgot-password-wrap{
+  text-align:right;
+  margin-top:8px;
+}
+
+.forgot-password-btn{
+  border:0;
+  background:none;
+  color:#007b83;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  padding:0;
+}
+
+.forgot-password-btn:hover{
+  text-decoration:underline;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px){
+  .app{
+    width:calc(100% - 12px);
+    margin:6px auto;
+  }
+
+  .grid,
+  .score-box,
+  .performance,
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .perf-item:nth-child(odd){
+    border-right:0;
+  }
+
+  .add-student-grid{
+    grid-template-columns:1fr;
+  }
+
+  .nav button{
+    flex:1;
+    min-width:120px;
+  }
+
+  .student-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .userbar{
+    align-items:center;
+  }
+
+  .evaluation-student-card{
+    align-items:flex-start;
+  }
+
+  .class-record-btn{
+    align-self:center;
+  }
+
+  .class-record-grid,
+  .record-detail-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .profile-panel{
+    left:50%;
+    top:50%;
+    width:calc(100vw - 20px);
+    max-width:none;
+    max-height:calc(100vh - 20px);
+    padding:16px;
+    border-radius:12px;
+  }
+
+  .profile-panel-header{
+    align-items:flex-start;
+  }
+
+  .profile-header-name b{
+    font-size:15px;
+  }
+
+  .profile-field{
+    margin-bottom:11px;
+  }
+
+  .profile-actions{
+    flex-direction:column;
+  }
+
+  .profile-save-btn{
+    width:100%;
+  }
+
+  .profile-more-menu{
+    bottom:45px;
+  }
+
+  .evaluation-student-card{
+    flex-wrap:wrap;
+  }
+
+  .evaluation-student-avatar{
+    width:46px;
+    height:46px;
+    min-width:46px;
+  }
+
+  .evaluation-student-info{
+    width:calc(100% - 62px);
+  }
+
+  .class-record-btn{
+    width:100%;
+  }
+
+  .class-record-summary{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .view-record-btn{
+    width:100%;
+  }
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print{
+
+  .nav,
+  .buttons,
+  .small,
+  .status,
+  #dashboardPage,
+  #recordsPage,
+  .userbar{
+    display:none!important;
+  }
+
+  .page{
+    display:block!important;
+  }
+
+  .app{
+    margin:0;
+    padding:0;
+  }
+
+  .card{
+    box-shadow:none;
+  }
+
+  .profile-panel{
+    display:none!important;
+  }
+
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+
+<body>
+
+<!-- =========================================================
+     AUTH SCREEN
+========================================================= -->
+
+<div id="authScreen" class="auth-screen">
+
+<div class="auth-card">
+
+<div class="auth-header">
+
+<div class="brand-logo">
+TD
+</div>
+
+<h1>
+TD-PH
+</h1>
+
+<p>
+Teacher Management Portal
+</p>
+
+</div>
+
+<div class="auth-body">
+
+<div id="loginPanel">
+
+<h2>Login</h2>
+
+<label>Email</label>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="teacher@email.com"
+autocomplete="email"
+>
+
+<label>Password</label>
+
+<div class="password-wrap">
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('loginPassword',this)"
+aria-label="Show password"
+>👁</button>
+
+</div>
+
+<div class="forgot-password-wrap">
+
+<button
+type="button"
+class="forgot-password-btn"
+onclick="showAuthPanel('forgot')"
+>
+Forgot Password?
+</button>
+
+</div>
+
+<button
+id="loginBtn"
+type="button"
+class="primary auth-btn"
+>
+Login
+</button>
+
+<div class="auth-switch">
+
+Don't have an account?
+
+<button
+type="button"
+onclick="showAuthPanel('signup')"
+>
+Create Account
+</button>
+
+</div>
+
+</div>
+
+
+<div id="signupPanel" class="hidden">
+
+<h2>Create Account</h2>
+
+<label>Teacher Name</label>
+
+<input
+id="signupName"
+placeholder="Your name"
+autocomplete="name"
+>
+
+<label>Email</label>
+
+<input
+id="signupEmail"
+type="email"
+placeholder="teacher@email.com"
+autocomplete="email"
+>
+
+<label>Password</label>
+
+<div class="password-wrap">
+
+<input
+id="signupPassword"
+type="password"
+placeholder="At least 6 characters"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('signupPassword',this)"
+aria-label="Show password"
+>👁</button>
+
+</div>
+
+<label>Confirm Password</label>
+
+<div class="password-wrap">
+
+<input
+id="signupConfirm"
+type="password"
+placeholder="Re-enter password"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('signupConfirm',this)"
+aria-label="Show password"
+>👁</button>
+
+</div>
+
+<button
+id="signupBtn"
+type="button"
+class="primary auth-btn"
+>
+Create Account
+</button>
+
+<div class="auth-switch">
+
+Already have an account?
+
+<button
+type="button"
+onclick="showAuthPanel('login')"
+>
+Login
+</button>
+
+</div>
+
+</div>
+
+
+<div id="verifyPanel" class="hidden">
+
+<h2>Verify Your Email</h2>
+
+<p style="font-size:14px;line-height:1.5;margin-top:0">
+
+We sent a confirmation link to
+
+<b id="verifyEmailText">your email</b>.
+
+</p>
+
+<p style="font-size:14px;line-height:1.5;margin-top:12px">
+
+Please open the email and click
+<b>Confirm email address</b>
+to verify your account.
+
+</p>
+
+<p style="font-size:13px;line-height:1.5;margin-top:12px">
+
+After confirming your email, return to this website and log in using your email and password.
+
+</p>
+
+<button
+id="resendBtn"
+type="button"
+class="secondary auth-btn"
+>
+Resend Confirmation Email
+</button>
+
+<div class="auth-switch">
+
+<button
+type="button"
+onclick="showAuthPanel('login')"
+>
+Back to Login
+</button>
+
+</div>
+
+</div>
+
+
+<div id="forgotPanel" class="hidden">
+
+<h2>Forgot Password?</h2>
+
+<p style="font-size:14px;line-height:1.5;margin-top:0">
+
+Enter your account email and we will send you a password reset link.
+
+</p>
+
+<label>Email</label>
+
+<input
+id="forgotEmail"
+type="email"
+placeholder="teacher@email.com"
+autocomplete="email"
+>
+
+<button
+id="forgotBtn"
+type="button"
+class="primary auth-btn"
+>
+Send Reset Link
+</button>
+
+<div class="auth-switch">
+
+<button
+type="button"
+onclick="showAuthPanel('login')"
+>
+Back to Login
+</button>
+
+</div>
+
+</div>
+
+
+<div id="resetPanel" class="hidden">
+
+<h2>Set New Password</h2>
+
+<p style="font-size:14px;line-height:1.5;margin-top:0">
+
+Enter your new password below.
+
+</p>
+
+<label>New Password</label>
+
+<div class="password-wrap">
+
+<input
+id="resetPassword"
+type="password"
+placeholder="At least 6 characters"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('resetPassword',this)"
+aria-label="Show password"
+>👁</button>
+
+</div>
+
+<label>Confirm New Password</label>
+
+<div class="password-wrap">
+
+<input
+id="resetConfirm"
+type="password"
+placeholder="Re-enter password"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('resetConfirm',this)"
+aria-label="Show password"
+>👁</button>
+
+</div>
+
+<button
+id="resetBtn"
+type="button"
+class="primary auth-btn"
+>
+Update Password
+</button>
+
+</div>
+
+<div id="authMessage" class="auth-message"></div>
+
+</div>
+</div>
+</div>
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+
+<div id="appShell" class="hidden">
+
+<div class="app">
+
+<div class="card">
+
+<div class="topbar">
+
+<span style="font-weight:800;letter-spacing:.5px">
+TD
+</span>
+
+&nbsp; TD-PH Teacher Management Portal
+
+</div>
+
+
+<div class="userbar">
+
+<div style="position:relative">
+
+<button
+type="button"
+class="profile-trigger"
+onclick="toggleProfilePanel(event)"
+aria-label="Open teacher profile"
+>
+
+<div
+id="profileIcon"
+class="profile-icon"
+>
+👤
+</div>
+
+<div class="profile-name-wrap">
+
+<span class="profile-label">
+Teacher Account
+</span>
+
+<span
+id="currentTeacher"
+class="profile-name"
+>
+Teacher
+</span>
+
+</div>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="nav">
+
+<button
+id="navDashboard"
+class="active"
+onclick="showPage('dashboard')"
+>
+Dashboard
+</button>
+
+<button
+id="navEvaluation"
+onclick="showPage('evaluation')"
+>
+Evaluation
+</button>
+
+<button
+id="navRecords"
+onclick="showPage('records')"
+>
+Record of Evaluation
+</button>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div id="dashboardPage" class="page active">
+
+<h2 style="margin-top:0">
+Dashboard
+</h2>
+
+<div class="dashboard-overview">
+
+<div class="teacher-dashboard-card">
+<div id="dashboardTeacherPhoto" class="teacher-dashboard-photo">👤</div>
+<div style="min-width:0">
+<div id="dashboardTeacherName" class="teacher-dashboard-title">TEACHER</div>
+<div class="teacher-dashboard-label">Teacher Dashboard</div>
+</div>
+</div>
+
+<div class="dashboard-summary-grid">
+<div class="dashboard-summary-card">
+<div class="dashboard-summary-label">NUMBER OF STUDENTS</div>
+<div id="dashboardStudentCount" class="dashboard-summary-number">0</div>
+</div>
+
+<div class="dashboard-summary-card">
+<div class="dashboard-summary-label">NUMBER OF APPOINTMENTS</div>
+<div id="dashboardAppointmentCount" class="dashboard-summary-number">0</div>
+</div>
+
+<div class="dashboard-summary-card">
+<div class="dashboard-summary-label">CLASSES FOR TODAY</div>
+<div id="dashboardTodayClassCount" class="dashboard-summary-number">0</div>
+</div>
+</div>
+
+<div class="dashboard-todo">
+<div class="dashboard-todo-title">TO-DO LIST</div>
+<div class="dashboard-todo-body">
+<div id="dashboardNextClass" class="dashboard-todo-main">No upcoming class.</div>
+<div id="dashboardNextClassSub" class="dashboard-todo-sub">Your next class or appointment will appear here.</div>
+</div>
+</div>
+
+</div>
+
+<div class="dashboard-menu">
+<button type="button" class="dashboard-menu-btn" onclick="showPage('student')">
+<span class="dashboard-menu-label">👨‍🎓 STUDENT</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('evaluation')">
+<span class="dashboard-menu-label">📝 EVALUATION</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('records')">
+<span class="dashboard-menu-label">📋 RECORD OF EVALUATION</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('contract')">
+<span class="dashboard-menu-label">📄 STUDENT CONTRACT</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('appointment')">
+<span class="dashboard-menu-label">📅 APPOINTMENT</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('payment')">
+<span class="dashboard-menu-label">💳 PAYMENT</span>
+</button>
+</div>
+
+<div class="dashboard-grid">
+
+<div class="stat">
+Students
+<b id="studentCount">0</b>
+</div>
+
+<div class="stat">
+Evaluations
+<b id="evaluationCount">0</b>
+</div>
+
+<div class="stat">
+Last Evaluation
+<b id="lastEvaluation">—</b>
+</div>
+
+</div>
+
+
+
+
+<!-- STUDENT -->
+
+<div id="studentPage" class="page">
+
+<h2 style="margin-top:0">Student</h2>
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<div id="studentRecordsSection" class="panel">
+
+<div class="panel-title">
+STUDENT RECORDS
+</div>
+
+<div class="panel-body">
+
+<p style="margin-top:0">
+Add each student once. During evaluation, you will only select the student.
+</p>
+
+<div class="add-student-grid">
+
+<div>
+
+<label>Student Name</label>
+
+<input
+id="newStudentName"
+placeholder="Student name"
+>
+
+</div>
+
+<div>
+
+<label>Parent's Email</label>
+
+<input
+id="newStudentEmail"
+type="email"
+placeholder="parent@email.com"
+>
+
+</div>
+
+<div>
+
+<label>Student ID</label>
+
+<input
+id="newStudentId"
+placeholder="Student ID"
+>
+
+</div>
+
+<button
+id="addStudentBtn"
+type="button"
+class="primary btn"
+>
+Add Student
+</button>
+
+</div>
+
+<div id="studentStatus" class="status"></div>
+
+<div
+id="studentList"
+class="student-list"
+style="margin-top:15px"
+></div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- STUDENT CONTRACT -->
+
+<div id="contractPage" class="page">
+
+<h2 style="margin-top:0">Student Contract</h2>
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<div class="panel">
+<div class="panel-title">STUDENT CONTRACT</div>
+<div class="panel-body">
+<p style="margin-top:0">Student contract management will be placed here.</p>
+<p class="small">This page is ready for the Student Contract fields and workflow without changing the existing student and evaluation records.</p>
+</div>
+</div>
+
+</div>
+
+<!-- APPOINTMENT -->
+
+<div id="appointmentPage" class="page">
+
+<h2 style="margin-top:0">Appointment</h2>
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<div class="panel">
+<div class="panel-title">APPOINTMENT / CLASS SCHEDULE</div>
+<div class="panel-body">
+<p style="margin-top:0">Appointment and class schedule management will be placed here.</p>
+<p class="small">This section can later contain the student's preferred schedule, confirmed class time, and appointment status.</p>
+</div>
+</div>
+
+</div>
+
+<!-- PAYMENT -->
+
+<div id="paymentPage" class="page">
+
+<h2 style="margin-top:0">Payment</h2>
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<div class="panel">
+<div class="panel-title">PAYMENT RECORDS</div>
+<div class="panel-body">
+<p style="margin-top:0">Payment management will be placed here.</p>
+<p class="small">This section can later contain package, amount paid, payment date, balance, and payment status.</p>
+</div>
+</div>
+
+</div>
+
+<!-- EVALUATION -->
+
+<div id="evaluationPage" class="page">
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<h2 style="margin-top:0">
+Evaluation
+</h2>
+
+<div class="section" style="margin-top:0">
+
+<div class="section-title">
+SELECT STUDENT TO EVALUATE
+</div>
+
+<div class="section-body">
+
+<label>Student</label>
+
+<select
+id="studentSelect"
+onchange="selectStudent()"
+>
+
+<option value="">
+-- Select a student --
+</option>
+
+</select>
+
+<div class="small">
+Student Name, Parent's Email, and Student ID will be filled automatically from the student record.
+</div>
+
+</div>
+</div>
+
+<div
+class="grid"
+style="margin-top:16px"
+>
+
+<div>
+
+<label>Student Name</label>
+
+<input
+id="studentName"
+placeholder="Select a student first"
+readonly
+>
+
+</div>
+
+<div>
+
+<label>Parent's Email</label>
+
+<input
+id="parentEmail"
+type="email"
+placeholder="Select a student first"
+readonly
+>
+
+</div>
+
+<div>
+
+<label>Student ID</label>
+
+<input
+id="studentId"
+placeholder="Select a student first"
+readonly
+>
+
+</div>
+
+<div>
+
+<label>Date</label>
+
+<input
+id="date"
+type="date"
+>
+
+</div>
+
+<div>
+
+<label>Time</label>
+
+<input
+id="time"
+type="time"
+>
+
+</div>
+
+<div>
+
+<label>Lesson / Topic</label>
+
+<input
+id="lessonTopic"
+placeholder="Lesson / Topic"
+>
+
+</div>
+
+<div>
+
+<label>Class Duration</label>
+
+<input
+id="duration"
+value="25 minutes"
+>
+
+</div>
+
+<div>
+
+<label>Teacher</label>
+
+<input
+id="teacher"
+value="Teacher Danyeal"
+>
+
+</div>
+
+<div>
+
+<label>Overall Score</label>
+
+<input
+id="score"
+type="number"
+min="0"
+max="100"
+placeholder="Automatic"
+readonly
+>
+
+<div class="small">
+Automatically calculated from the 6 student performance ratings.
+</div>
+
+</div>
+
+</div>
+
+<div
+class="score-box"
+style="margin-top:12px"
+>
+
+<div>
+
+<label>Rating</label>
+
+<div
+id="ratingText"
+class="rating"
+>
+Excellent
+</div>
+
+</div>
+
+<div>
+
+<label>Score Range</label>
+
+<div
+id="scoreRange"
+class="rating"
+>
+95–100
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="section-title">
+WHAT WE LEARNED TODAY / VOCABULARY
+</div>
+
+<div class="section-body">
+
+<textarea
+id="vocabulary"
+placeholder="Example: apple, banana, hungry, I like..., I don't like..."
+></textarea>
+
+</div>
+</div>
+
+<div class="section">
+
+<div class="section-title">
+NEEDS IMPROVEMENT / AREAS TO PRACTICE
+</div>
+
+<div class="section-body">
+
+<textarea
+id="improvement"
+placeholder="Example: pronunciation of /r/, answering in complete sentences, reading fluency"
+></textarea>
+
+</div>
+</div>
+
+<div class="section">
+
+<div
+class="section-title"
+style="text-align:left"
+>
+STUDENT PERFORMANCE
+</div>
+
+<div class="performance">
+
+<div class="perf-item">
+
+<b>Participation:</b>
+
+<span
+class="stars"
+data-field="participation"
+></span>
+
+</div>
+
+<div class="perf-item">
+
+<b>Pronunciation:</b>
+
+<span
+class="stars"
+data-field="pronunciation"
+></span>
+
+</div>
+
+<div class="perf-item">
+
+<b>Behavior:</b>
+
+<span
+class="stars"
+data-field="behavior"
+></span>
+
+</div>
+
+<div class="perf-item">
+
+<b>Speaking:</b>
+
+<span
+class="stars"
+data-field="speaking"
+></span>
+
+</div>
+
+<div class="perf-item">
+
+<b>Understanding:</b>
+
+<span
+class="stars"
+data-field="understanding"
+></span>
+
+</div>
+
+<div class="perf-item">
+
+<b>Listening:</b>
+
+<span
+class="stars"
+data-field="listening"
+></span>
+
+</div>
+
+</div>
+</div>
+
+<div class="section">
+
+<div
+class="section-title"
+style="text-align:left"
+>
+TEACHER'S COMMENT / NOTE — AUTOMATIC
+</div>
+
+<div class="section-body">
+
+<div
+id="commentPreview"
+class="comment-box"
+>
+Select a student and fill in the lesson details. The teacher's comment will be generated automatically.
+</div>
+
+</div>
+</div>
+
+<div class="buttons">
+
+<button
+class="primary"
+onclick="updateComment()"
+>
+Generate / Update Comment
+</button>
+
+<button
+id="submitBtn"
+class="primary"
+onclick="sendEvaluation()"
+>
+Submit & Email Parent
+</button>
+
+<button
+class="secondary"
+onclick="window.print()"
+>
+Print / Save PDF
+</button>
+
+<button
+class="secondary"
+onclick="resetForm()"
+>
+Clear
+</button>
+
+</div>
+
+<div id="status" class="status"></div>
+
+<div class="small">
+EmailJS is connected. After you submit, the class memo will be emailed automatically to the parent and saved in Record of Evaluation.
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     RECORD OF EVALUATION
+========================================================= -->
+
+<div id="recordsPage" class="page">
+
+<div class="page-back-wrap">
+<button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
+</div>
+
+<h2 style="margin-top:0">
+Record of Evaluation
+</h2>
+
+<div class="panel">
+
+<div class="panel-title">
+STUDENT EVALUATION RECORDS
+</div>
+
+<div class="panel-body">
+
+<div
+id="evaluationStudentList"
+class="evaluation-student-list"
+></div>
+
+<div
+id="recordEmpty"
+class="empty"
+>
+No students or evaluations recorded yet.
+</div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- =========================================================
+     TEACHER PROFILE
+========================================================= -->
+
+<div
+id="profilePanel"
+class="profile-panel"
+onclick="event.stopPropagation()"
+>
+
+<div class="profile-panel-header">
+
+<div class="profile-picture-wrap">
+
+<div
+id="profilePictureLarge"
+class="profile-picture-large"
+>
+👤
+</div>
+
+<button
+type="button"
+class="profile-picture-btn"
+onclick="openProfilePicturePicker(event)"
+>
+Change Picture
+</button>
+
+<input
+id="profilePictureInput"
+type="file"
+accept="image/*"
+style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;"
+onchange="handleProfilePicture(event)"
+>
+
+</div>
+
+<div class="profile-header-name">
+
+<b id="profileHeaderName">
+Teacher
+</b>
+
+<span id="profileHeaderEmail">
+—
+</span>
+
+</div>
+
+</div>
+
+<div class="profile-fields">
+
+<div class="profile-field">
+
+<label>Username</label>
+
+<input
+id="profileUsername"
+placeholder="Username"
+>
+
+</div>
+
+<div class="profile-field">
+
+<label>Teacher Full Name</label>
+
+<input
+id="profileFullName"
+placeholder="Teacher Full Name"
+>
+
+</div>
+
+<div class="profile-field">
+
+<label>Email</label>
+
+<input
+id="profileEmail"
+type="email"
+readonly
+>
+
+</div>
+
+<div class="profile-field">
+
+<label>Phone Number</label>
+
+<input
+id="profilePhone"
+type="tel"
+placeholder="Phone Number"
+>
+
+</div>
+
+<div class="profile-field">
+
+<label>Gender</label>
+
+<select id="profileGender">
+
+<option value="">
+Select Gender
+</option>
+
+<option value="Male">
+Male
+</option>
+
+<option value="Female">
+Female
+</option>
+
+<option value="Prefer not to say">
+Prefer not to say
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div
+id="profileStatus"
+class="profile-status"
+></div>
+
+<div class="profile-actions">
+
+<button
+type="button"
+class="profile-save-btn"
+onclick="saveTeacherProfile()"
+>
+Save Profile
+</button>
+
+</div>
+
+<button
+type="button"
+class="profile-password-btn"
+onclick="openChangePasswordModal()"
+>
+Change Password
+</button>
+
+<div class="profile-menu-wrap">
+
+<button
+type="button"
+class="profile-menu-trigger"
+onclick="toggleProfileMoreMenu(event)"
+>
+⋮ &nbsp; More Options
+</button>
+
+<div
+id="profileMoreMenu"
+class="profile-more-menu"
+>
+
+<button
+type="button"
+onclick="openClearAllRecordsFromProfile()"
+>
+Clear All Records
+</button>
+
+<button
+type="button"
+class="profile-logout-option"
+onclick="logoutTeacher()"
+>
+Log Out
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     EDIT STUDENT MODAL
+========================================================= -->
+
+<div
+id="editStudentModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeEditStudent()"
+>
+
+<div class="modal">
+
+<h3>Edit Student</h3>
+
+<p>
+Update the student's saved information.
+</p>
+
+<input
+type="hidden"
+id="editOriginalId"
+>
+
+<label>Student Name</label>
+
+<input
+id="editStudentName"
+placeholder="Student name"
+>
+
+<label style="margin-top:10px">
+Parent's Email
+</label>
+
+<input
+id="editStudentEmail"
+type="email"
+placeholder="parent@email.com"
+>
+
+<label style="margin-top:10px">
+Student ID
+</label>
+
+<input
+id="editStudentId"
+placeholder="Student ID"
+>
+
+<div
+id="editStudentError"
+class="modal-error"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeEditStudent()"
+>
+Cancel
+</button>
+
+<button
+type="button"
+class="modal-save"
+onclick="saveEditedStudent()"
+>
+Save Changes
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     DELETE STUDENT MODAL
+========================================================= -->
+
+<div
+id="deleteStudentModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeDeleteStudent()"
+>
+
+<div class="modal">
+
+<h3>Confirm Student Deletion</h3>
+
+<p>
+To prevent accidental deletion, type the student's
+<strong>Student ID</strong>
+exactly as shown below:
+</p>
+
+<div
+id="deleteStudentIdLabel"
+style="font-weight:700;background:#f4f4f4;border:1px solid #ddd;border-radius:7px;padding:10px;margin-bottom:12px"
+></div>
+
+<input
+type="hidden"
+id="deleteTargetId"
+>
+
+<input
+id="deleteConfirmId"
+placeholder="Type Student ID to confirm"
+autocomplete="off"
+>
+
+<div
+id="deleteStudentError"
+class="modal-error"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeDeleteStudent()"
+>
+Cancel
+</button>
+
+<button
+type="button"
+class="modal-delete"
+onclick="confirmDeleteStudent()"
+>
+Delete Student
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     CLASS RECORD MODAL
+========================================================= -->
+
+<div
+id="studentClassRecordModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeStudentClassRecord()"
+>
+
+<div class="modal record-view-modal">
+
+<div
+id="studentClassRecordContent"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeStudentClassRecord()"
+>
+Close
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     INDIVIDUAL EVALUATION VIEW MODAL
+========================================================= -->
+
+<div
+id="evaluationViewModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeEvaluationView()"
+>
+
+<div class="modal record-view-modal">
+
+<div
+id="evaluationViewContent"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeEvaluationView()"
+>
+Close
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     CHANGE PASSWORD MODAL
+========================================================= -->
+
+<div
+id="changePasswordModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeChangePasswordModal()"
+>
+
+<div class="modal">
+
+<h3>
+Change Password
+</h3>
+
+<p>
+Enter your new password below.
+</p>
+
+<label>New Password</label>
+
+<div class="password-wrap">
+
+<input
+id="profileNewPassword"
+type="password"
+placeholder="At least 6 characters"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('profileNewPassword',this)"
+aria-label="Show password"
+>
+👁
+</button>
+
+</div>
+
+<label style="margin-top:10px">
+Confirm New Password
+</label>
+
+<div class="password-wrap">
+
+<input
+id="profileConfirmPassword"
+type="password"
+placeholder="Re-enter new password"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('profileConfirmPassword',this)"
+aria-label="Show password"
+>
+👁
+</button>
+
+</div>
+
+<div
+id="changePasswordError"
+class="modal-error"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeChangePasswordModal()"
+>
+Cancel
+</button>
+
+<button
+type="button"
+class="modal-save"
+onclick="changeProfilePassword()"
+>
+Change Password
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     CLEAR ALL RECORDS CAPTCHA MODAL
+========================================================= -->
+
+<div
+id="clearAllRecordsModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeClearAllRecords()"
+>
+
+<div class="modal">
+
+<h3>
+Clear All Records
+</h3>
+
+<p>
+This will permanently delete all
+<strong>student records</strong> and
+<strong>evaluation records</strong>
+for this account.
+</p>
+
+<p style="color:#b00020;font-weight:700;">
+This action cannot be undone.
+</p>
+
+<div class="captcha-box">
+
+<div style="font-weight:700;margin-bottom:4px;">
+Enter the 6-digit CAPTCHA
+</div>
+
+<div
+id="clearAllCaptchaCode"
+class="captcha-code"
+>
+000000
+</div>
+
+<button
+type="button"
+class="captcha-refresh"
+onclick="generateClearAllCaptcha()"
+>
+↻ Generate New CAPTCHA
+</button>
+
+<input
+id="clearAllCaptchaInput"
+class="captcha-input"
+type="text"
+inputmode="numeric"
+maxlength="6"
+placeholder="Enter 6 digits"
+autocomplete="off"
+>
+
+</div>
+
+<div
+id="clearAllRecordsError"
+class="modal-error"
+></div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeClearAllRecords()"
+>
+Cancel
+</button>
+
+<button
+type="button"
+class="modal-delete"
+onclick="confirmClearAllRecords()"
+>
+Clear All Records
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const EMAILJS_PUBLIC_KEY='c6EftsVJb2RHlRH_E';
+
+const EMAILJS_SERVICE_ID='service_wx3z91j';
+
+const EMAILJS_TEMPLATE_ID='template_3kqt32w';
+
+const STUDENTS_BASE_KEY='teacherDanyealStudents_v2';
+
+const EVALUATIONS_BASE_KEY='teacherDanyealEvaluations_v2';
+
+const SUPABASE_URL=
+'https://ibhmimpmeftzkrtzhkmp.supabase.co';
+
+const SUPABASE_PUBLISHABLE_KEY=
+'sb_publishable_HqQA24yJsm_PE_1TKi2W4g_Mpdr9GI3';
+
+const SUPABASE_REDIRECT_URL=
+'https://td-2026000.github.io/TD-PH-Teacher-Management-Portal/';
+
+const supabaseClient=
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+let currentUser=null;
+
+let pendingVerificationEmail='';
+
+const stars={};
+
+let commentVersion=0;
+
+let clearAllCaptcha='';
+
+
+/* =========================================================
+   USER STORAGE
+========================================================= */
+
+function userStorageKey(base){
+
+return currentUser
+?`${base}_${currentUser.id}`
+:base;
+
+}
+
+function getStudents(){
+
+return JSON.parse(
+localStorage.getItem(
+userStorageKey(STUDENTS_BASE_KEY)
+)||'[]'
+);
+
+}
+
+function saveStudents(data){
+
+localStorage.setItem(
+userStorageKey(STUDENTS_BASE_KEY),
+JSON.stringify(data)
+);
+
+}
+
+function getEvaluations(){
+
+return JSON.parse(
+localStorage.getItem(
+userStorageKey(EVALUATIONS_BASE_KEY)
+)||'[]'
+);
+
+}
+
+function saveEvaluations(data){
+
+localStorage.setItem(
+userStorageKey(EVALUATIONS_BASE_KEY),
+JSON.stringify(data)
+);
+
+}
+
+
+/* =========================================================
+   PROFILE STORAGE
+========================================================= */
+
+function profileStorageKey(){
+
+return currentUser
+?`teacherDanyealProfile_${currentUser.id}`
+:'teacherDanyealProfile';
+
+}
+
+function getTeacherProfile(){
+
+try{
+
+return JSON.parse(
+localStorage.getItem(
+profileStorageKey()
+)||'{}'
+);
+
+}catch(error){
+
+return {};
+
+}
+
+}
+
+function saveTeacherProfileData(data){
+
+localStorage.setItem(
+profileStorageKey(),
+JSON.stringify(data)
+);
+
+}
+
+
+/* =========================================================
+   AUTH UI
+========================================================= */
+
+function showAuthPanel(panel){
+
+document.getElementById('loginPanel')
+.classList.toggle('hidden',panel!=='login');
+
+document.getElementById('signupPanel')
+.classList.toggle('hidden',panel!=='signup');
+
+document.getElementById('verifyPanel')
+.classList.toggle('hidden',panel!=='verify');
+
+document.getElementById('forgotPanel')
+.classList.toggle('hidden',panel!=='forgot');
+
+document.getElementById('resetPanel')
+.classList.toggle('hidden',panel!=='reset');
+
+clearAuthMessage();
+
+}
+
+function showAuthMessage(msg,ok=false){
+
+const el=document.getElementById('authMessage');
+
+el.textContent=msg;
+
+el.className=
+'auth-message show '+
+(ok?'ok':'error');
+
+}
+
+function clearAuthMessage(){
+
+const el=document.getElementById('authMessage');
+
+el.textContent='';
+
+el.className='auth-message';
+
+}
+
+function setAuthBusy(id,busy,label){
+
+const b=document.getElementById(id);
+
+if(!b)return;
+
+b.disabled=busy;
+
+b.textContent=
+busy
+?'Please wait...'
+:label;
+
+}
+
+
+/* =========================================================
+   SHOW / HIDE PASSWORD
+========================================================= */
+
+function togglePassword(inputId,button){
+
+const input=document.getElementById(inputId);
+
+if(input.type==='password'){
+
+input.type='text';
+
+button.textContent='🙈';
+
+button.setAttribute(
+'aria-label',
+'Hide password'
+);
+
+}else{
+
+input.type='password';
+
+button.textContent='👁';
+
+button.setAttribute(
+'aria-label',
+'Show password'
+);
+
+}
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function loginTeacher(){
+
+const email=
+document.getElementById('loginEmail')
+.value.trim();
+
+const password=
+document.getElementById('loginPassword')
+.value;
+
+if(!email)
+return showAuthMessage(
+'Please enter your email.'
+);
+
+if(!password)
+return showAuthMessage(
+'Please enter your password.'
+);
+
+setAuthBusy(
+'loginBtn',
+true,
+'Login'
+);
+
+const {error}=
+await supabaseClient.auth.signInWithPassword({
+
+email,
+
+password
+
+});
+
+if(error){
+
+showAuthMessage(error.message);
+
+}
+
+setAuthBusy(
+'loginBtn',
+false,
+'Login'
+);
+
+}
+
+
+/* =========================================================
+   CREATE ACCOUNT
+========================================================= */
+
+async function createTeacherAccount(){
+
+const name=
+document.getElementById('signupName')
+.value.trim();
+
+const email=
+document.getElementById('signupEmail')
+.value.trim();
+
+const password=
+document.getElementById('signupPassword')
+.value;
+
+const confirm=
+document.getElementById('signupConfirm')
+.value;
+
+if(!name)
+return showAuthMessage(
+'Please enter your teacher name.'
+);
+
+if(!email)
+return showAuthMessage(
+'Please enter your email.'
+);
+
+if(password.length<6)
+return showAuthMessage(
+'Password must be at least 6 characters.'
+);
+
+if(password!==confirm)
+return showAuthMessage(
+'Passwords do not match.'
+);
+
+setAuthBusy(
+'signupBtn',
+true,
+'Create Account'
+);
+
+const {data,error}=
+await supabaseClient.auth.signUp({
+
+email,
+
+password,
+
+options:{
+
+data:{
+full_name:name
+},
+
+emailRedirectTo:
+SUPABASE_REDIRECT_URL
+
+}
+
+});
+
+if(error){
+
+showAuthMessage(error.message);
+
+setAuthBusy(
+'signupBtn',
+false,
+'Create Account'
+);
+
+return;
+
+}
+
+if(data.session){
+
+showAuthMessage(
+'Account created successfully. You are now logged in.',
+true
+);
+
+}else{
+
+pendingVerificationEmail=email;
+
+document.getElementById(
+'verifyEmailText'
+).textContent=email;
+
+showAuthPanel('verify');
+
+showAuthMessage(
+'A confirmation email has been sent to your email address.',
+true
+);
+
+}
+
+setAuthBusy(
+'signupBtn',
+false,
+'Create Account'
+);
+
+}
+
+
+/* =========================================================
+   RESEND CONFIRMATION EMAIL
+========================================================= */
+
+async function resendVerificationEmail(){
+
+const email=
+pendingVerificationEmail ||
+document.getElementById('signupEmail')
+.value.trim();
+
+if(!email){
+
+return showAuthMessage(
+'No verification email is available. Please create the account again.'
+);
+
+}
+
+setAuthBusy(
+'resendBtn',
+true,
+'Resend Confirmation Email'
+);
+
+const {error}=
+await supabaseClient.auth.resend({
+
+type:'signup',
+
+email,
+
+options:{
+
+emailRedirectTo:
+SUPABASE_REDIRECT_URL
+
+}
+
+});
+
+if(error){
+
+showAuthMessage(error.message);
+
+}else{
+
+showAuthMessage(
+'A new confirmation email has been sent. Please check your inbox.',
+true
+);
+
+}
+
+setAuthBusy(
+'resendBtn',
+false,
+'Resend Confirmation Email'
+);
+
+}
+
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+async function sendPasswordReset(){
+
+const email=
+document.getElementById('forgotEmail')
+.value.trim();
+
+if(!email){
+
+return showAuthMessage(
+'Please enter your email address.'
+);
+
+}
+
+setAuthBusy(
+'forgotBtn',
+true,
+'Send Reset Link'
+);
+
+const {error}=
+await supabaseClient.auth.resetPasswordForEmail(
+
+email,
+
+{
+
+redirectTo:
+SUPABASE_REDIRECT_URL
+
+}
+
+);
+
+if(error){
+
+showAuthMessage(error.message);
+
+}else{
+
+showAuthMessage(
+'Password reset link sent. Please check your email inbox and spam folder.',
+true
+);
+
+}
+
+setAuthBusy(
+'forgotBtn',
+false,
+'Send Reset Link'
+);
+
+}
+
+
+/* =========================================================
+   PASSWORD RECOVERY DETECTION
+========================================================= */
+
+function isPasswordRecoveryUrl(){
+
+const hash=
+window.location.hash || '';
+
+const search=
+window.location.search || '';
+
+return (
+hash.includes('type=recovery') ||
+search.includes('type=recovery')
+);
+
+}
+
+async function checkPasswordRecovery(){
+
+if(!isPasswordRecoveryUrl()){
+
+return false;
+
+}
+
+document.getElementById(
+'appShell'
+).classList.add('hidden');
+
+document.getElementById(
+'authScreen'
+).classList.remove('hidden');
+
+showAuthPanel('reset');
+
+return true;
+
+}
+
+
+/* =========================================================
+   UPDATE PASSWORD
+========================================================= */
+
+async function updatePassword(){
+
+const password=
+document.getElementById('resetPassword')
+.value;
+
+const confirm=
+document.getElementById('resetConfirm')
+.value;
+
+if(password.length<6){
+
+return showAuthMessage(
+'Password must be at least 6 characters.'
+);
+
+}
+
+if(password!==confirm){
+
+return showAuthMessage(
+'Passwords do not match.'
+);
+
+}
+
+setAuthBusy(
+'resetBtn',
+true,
+'Update Password'
+);
+
+const {error}=
+await supabaseClient.auth.updateUser({
+
+password
+
+});
+
+if(error){
+
+showAuthMessage(error.message);
+
+setAuthBusy(
+'resetBtn',
+false,
+'Update Password'
+);
+
+return;
+
+}
+
+showAuthMessage(
+'Password updated successfully. Redirecting to login...',
+true
+);
+
+setTimeout(
+async()=>{
+
+await supabaseClient.auth.signOut();
+
+window.history.replaceState(
+{},
+document.title,
+SUPABASE_REDIRECT_URL
+);
+
+showAuthPanel('login');
+
+document.getElementById(
+'loginPassword'
+).value='';
+
+document.getElementById(
+'resetPassword'
+).value='';
+
+document.getElementById(
+'resetConfirm'
+).value='';
+
+setAuthBusy(
+'resetBtn',
+false,
+'Update Password'
+);
+
+},
+1500
+);
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function toggleProfilePanel(event){
+
+if(event)
+event.stopPropagation();
+
+const panel=
+document.getElementById(
+'profilePanel'
+);
+
+if(!panel)
+return;
+
+const isOpen=
+panel.classList.contains('show');
+
+if(isOpen){
+
+closeProfilePanel();
+
+}else{
+
+loadTeacherProfile();
+
+panel.classList.add('show');
+
+}
+
+}
+
+function closeProfilePanel(){
+
+const panel=
+document.getElementById(
+'profilePanel'
+);
+
+if(panel)
+panel.classList.remove('show');
+
+closeProfileMoreMenu();
+
+}
+
+function toggleProfileMoreMenu(event){
+
+if(event)
+event.stopPropagation();
+
+const menu=
+document.getElementById(
+'profileMoreMenu'
+);
+
+if(!menu)
+return;
+
+menu.classList.toggle('show');
+
+}
+
+function closeProfileMoreMenu(){
+
+const menu=
+document.getElementById(
+'profileMoreMenu'
+);
+
+if(menu)
+menu.classList.remove('show');
+
+}
+
+function loadTeacherProfile(){
+
+if(!currentUser)
+return;
+
+const saved=
+getTeacherProfile();
+
+const fullName=
+saved.fullName ||
+currentUser.user_metadata?.full_name ||
+'Teacher';
+
+const username=
+saved.username ||
+currentUser.user_metadata?.username ||
+fullName;
+
+const phone=
+saved.phone ||
+'';
+
+const gender=
+saved.gender ||
+'';
+
+document.getElementById(
+'profileUsername'
+).value=username;
+
+document.getElementById(
+'profileFullName'
+).value=fullName;
+
+document.getElementById(
+'profileEmail'
+).value=currentUser.email || '';
+
+document.getElementById(
+'profilePhone'
+).value=phone;
+
+document.getElementById(
+'profileGender'
+).value=gender;
+
+document.getElementById(
+'profileHeaderName'
+).textContent=fullName;
+
+document.getElementById(
+'profileHeaderEmail'
+).textContent=currentUser.email || '';
+
+document.getElementById(
+'currentTeacher'
+).textContent=fullName;
+
+setProfilePicture(
+saved.picture || ''
+);
+
+}
+
+function saveTeacherProfile(){
+
+if(!currentUser)
+return;
+
+const username=
+document.getElementById(
+'profileUsername'
+).value.trim();
+
+const fullName=
+document.getElementById(
+'profileFullName'
+).value.trim();
+
+const phone=
+document.getElementById(
+'profilePhone'
+).value.trim();
+
+const gender=
+document.getElementById(
+'profileGender'
+).value;
+
+if(!username){
+
+return showProfileStatus(
+'Please enter a username.',
+false
+);
+
+}
+
+if(!fullName){
+
+return showProfileStatus(
+'Please enter your full name.',
+false
+);
+
+}
+
+const old=
+getTeacherProfile();
+
+const data={
+
+username,
+
+fullName,
+
+phone,
+
+gender,
+
+picture:
+old.picture || ''
+
+};
+
+saveTeacherProfileData(data);
+
+document.getElementById(
+'currentTeacher'
+).textContent=fullName;
+
+document.getElementById(
+'profileHeaderName'
+).textContent=fullName;
+
+showProfileStatus(
+'Profile saved successfully.',
+true
+);
+
+}
+
+function showProfileStatus(msg,ok=true){
+
+const el=
+document.getElementById(
+'profileStatus'
+);
+
+el.textContent=msg;
+
+el.className=
+'profile-status show '+
+(ok?'ok':'error');
+
+setTimeout(
+()=>{
+
+el.classList.remove('show');
+
+},
+2500
+);
+
+}
+
+function setProfilePicture(src){
+
+const small=document.getElementById('profileIcon');
+const large=document.getElementById('profilePictureLarge');
+
+if(src){
+
+const safeSrc=String(src);
+
+if(small){
+small.innerHTML=
+`<img src="${safeSrc}" alt="Profile Picture">`;
+}
+
+if(large){
+large.innerHTML=
+`<img src="${safeSrc}" alt="Profile Picture">`;
+}
+
+}else{
+
+if(small) small.textContent='👤';
+if(large) large.textContent='👤';
+
+}
+
+}
+
+function openProfilePicturePicker(event){
+
+if(event) event.stopPropagation();
+
+const input=document.getElementById('profilePictureInput');
+
+if(!input) return;
+
+input.value='';
+input.click();
+
+}
+
+function handleProfilePicture(event){
+
+const input=event && event.target;
+const file=input && input.files ? input.files[0] : null;
+
+if(!file) return;
+
+if(!file.type || !file.type.startsWith('image/')){
+
+showProfileStatus(
+'Please select an image file.',
+false
+);
+
+return;
+
+}
+
+const reader=new FileReader();
+
+reader.onload=function(){
+
+const result=reader.result;
+
+if(!result) return;
+
+const old=getTeacherProfile();
+
+old.picture=result;
+
+saveTeacherProfileData(old);
+
+setProfilePicture(result);
+
+showProfileStatus(
+'Profile picture updated successfully.',
+true
+);
+
+};
+
+reader.onerror=function(){
+
+showProfileStatus(
+'Unable to read the selected picture.',
+false
+);
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+/* =========================================================
+   CHANGE PASSWORD FROM PROFILE
+========================================================= */
+
+function openChangePasswordModal(){
+
+closeProfileMoreMenu();
+
+closeProfilePanel();
+
+document.getElementById(
+'profileNewPassword'
+).value='';
+
+document.getElementById(
+'profileConfirmPassword'
+).value='';
+
+document.getElementById(
+'changePasswordError'
+).textContent='';
+
+document.getElementById(
+'changePasswordError'
+).classList.remove('show');
+
+document.getElementById(
+'changePasswordModal'
+).classList.add('show');
+
+setTimeout(
+()=>{
+
+document.getElementById(
+'profileNewPassword'
+).focus();
+
+},
+50
+);
+
+}
+
+function closeChangePasswordModal(){
+
+document.getElementById(
+'changePasswordModal'
+).classList.remove('show');
+
+}
+
+async function changeProfilePassword(){
+
+const password=
+document.getElementById(
+'profileNewPassword'
+).value;
+
+const confirm=
+document.getElementById(
+'profileConfirmPassword'
+).value;
+
+const error=
+document.getElementById(
+'changePasswordError'
+);
+
+if(password.length<6){
+
+error.textContent=
+'Password must be at least 6 characters.';
+
+error.classList.add('show');
+
+return;
+
+}
+
+if(password!==confirm){
+
+error.textContent=
+'Passwords do not match.';
+
+error.classList.add('show');
+
+return;
+
+}
+
+const button=
+document.querySelector(
+'#changePasswordModal .modal-save'
+);
+
+button.disabled=true;
+
+button.textContent=
+'Updating...';
+
+const {error:updateError}=
+await supabaseClient.auth.updateUser({
+
+password
+
+});
+
+if(updateError){
+
+error.textContent=
+updateError.message;
+
+error.classList.add('show');
+
+button.disabled=false;
+
+button.textContent=
+'Change Password';
+
+return;
+
+}
+
+closeChangePasswordModal();
+
+button.disabled=false;
+
+button.textContent=
+'Change Password';
+
+showProfileStatus(
+'Password changed successfully.',
+true
+);
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logoutTeacher(){
+
+closeProfilePanel();
+
+closeClearAllRecords();
+
+closeStudentClassRecord();
+
+closeEvaluationView();
+
+await supabaseClient.auth.signOut();
+
+}
+
+
+/* =========================================================
+   SIGNED IN
+========================================================= */
+
+async function handleSignedIn(user){
+
+currentUser=user;
+
+const savedProfile=
+getTeacherProfile();
+
+const fullName=
+savedProfile.fullName ||
+savedProfile.full_name ||
+user.user_metadata?.full_name ||
+user.email ||
+'Teacher';
+
+document.getElementById(
+'currentTeacher'
+).textContent=fullName;
+
+document.getElementById(
+'authScreen'
+).classList.add('hidden');
+
+document.getElementById(
+'appShell'
+).classList.remove('hidden');
+
+loadTeacherProfile();
+
+renderDashboard();
+
+populateStudentSelect();
+
+renderRecords();
+
+}
+
+
+/* =========================================================
+   SIGNED OUT
+========================================================= */
+
+function handleSignedOut(){
+
+currentUser=null;
+
+closeProfilePanel();
+
+closeClearAllRecords();
+
+closeStudentClassRecord();
+
+closeEvaluationView();
+
+document.getElementById(
+'appShell'
+).classList.add('hidden');
+
+document.getElementById(
+'authScreen'
+).classList.remove('hidden');
+
+showAuthPanel('login');
+
+}
+
+
+/* =========================================================
+   INIT AUTH
+========================================================= */
+
+async function initAuth(){
+
+const recovery=
+await checkPasswordRecovery();
+
+if(recovery){
+
+return;
+
+}
+
+const {
+data:{session}
+}=
+await supabaseClient.auth.getSession();
+
+if(session){
+
+await handleSignedIn(session.user);
+
+}else{
+
+handleSignedOut();
+
+}
+
+supabaseClient.auth.onAuthStateChange(
+(event,session)=>{
+
+if(event==='PASSWORD_RECOVERY'){
+
+document.getElementById(
+'appShell'
+).classList.add('hidden');
+
+document.getElementById(
+'authScreen'
+).classList.remove('hidden');
+
+showAuthPanel('reset');
+
+return;
+
+}
+
+if(session){
+
+handleSignedIn(session.user);
+
+}else{
+
+handleSignedOut();
+
+}
+
+}
+);
+
+}
+
+
+/* =========================================================
+   AUTH EVENT LISTENERS
+========================================================= */
+
+document.getElementById(
+'loginBtn'
+).addEventListener(
+'click',
+loginTeacher
+);
+
+document.getElementById(
+'signupBtn'
+).addEventListener(
+'click',
+createTeacherAccount
+);
+
+document.getElementById(
+'resendBtn'
+).addEventListener(
+'click',
+resendVerificationEmail
+);
+
+document.getElementById(
+'forgotBtn'
+).addEventListener(
+'click',
+sendPasswordReset
+);
+
+document.getElementById(
+'resetBtn'
+).addEventListener(
+'click',
+updatePassword
+);
+
+document.getElementById(
+'loginPassword'
+).addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Enter')
+loginTeacher();
+
+}
+);
+
+document.getElementById(
+'signupConfirm'
+).addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Enter')
+createTeacherAccount();
+
+}
+);
+
+document.getElementById(
+'forgotEmail'
+).addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Enter')
+sendPasswordReset();
+
+}
+);
+
+document.getElementById(
+'resetConfirm'
+).addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Enter')
+updatePassword();
+
+}
+);
+
+
+/* =========================================================
+   PROFILE EVENT LISTENER
+========================================================= */
+
+
+
+
+/* =========================================================
+   OUTSIDE CLICK
+========================================================= */
+
+document.addEventListener(
+'click',
+e=>{
+
+if(
+!e.target.closest('.profile-trigger') &&
+!e.target.closest('#profilePanel')
+){
+
+closeProfilePanel();
+
+}
+
+if(
+!e.target.closest('.student-actions')
+){
+
+closeStudentMenus();
+
+}
+
+}
+);
+
+
+/* =========================================================
+   CLEAR ALL RECORDS
+========================================================= */
+
+function generateClearAllCaptcha(){
+
+clearAllCaptcha=
+String(
+Math.floor(
+100000+
+Math.random()*900000
+)
+);
+
+document.getElementById(
+'clearAllCaptchaCode'
+).textContent=
+clearAllCaptcha;
+
+document.getElementById(
+'clearAllCaptchaInput'
+).value='';
+
+const error=
+document.getElementById(
+'clearAllRecordsError'
+);
+
+error.textContent='';
+
+error.classList.remove('show');
+
+}
+
+function openClearAllRecords(){
+
+closeProfileMoreMenu();
+
+closeProfilePanel();
+
+generateClearAllCaptcha();
+
+document.getElementById(
+'clearAllRecordsModal'
+).classList.add('show');
+
+setTimeout(
+()=>{
+
+document.getElementById(
+'clearAllCaptchaInput'
+).focus();
+
+},
+50
+);
+
+}
+
+function openClearAllRecordsFromProfile(){
+
+openClearAllRecords();
+
+}
+
+function closeClearAllRecords(){
+
+document.getElementById(
+'clearAllRecordsModal'
+).classList.remove('show');
+
+clearAllCaptcha='';
+
+document.getElementById(
+'clearAllCaptchaInput'
+).value='';
+
+document.getElementById(
+'clearAllRecordsError'
+).textContent='';
+
+document.getElementById(
+'clearAllRecordsError'
+).classList.remove('show');
+
+}
+
+function confirmClearAllRecords(){
+
+const input=
+document.getElementById(
+'clearAllCaptchaInput'
+).value.trim();
+
+const error=
+document.getElementById(
+'clearAllRecordsError'
+);
+
+if(!/^\d{6}$/.test(input)){
+
+error.textContent=
+'Please enter the complete 6-digit CAPTCHA.';
+
+error.classList.add('show');
+
+return;
+
+}
+
+if(input!==clearAllCaptcha){
+
+error.textContent=
+'Incorrect CAPTCHA. No records were deleted.';
+
+error.classList.add('show');
+
+generateClearAllCaptcha();
+
+return;
+
+}
+
+if(!currentUser){
+
+error.textContent=
+'No active teacher account was found.';
+
+error.classList.add('show');
+
+return;
+
+}
+
+localStorage.removeItem(
+userStorageKey(STUDENTS_BASE_KEY)
+);
+
+localStorage.removeItem(
+userStorageKey(EVALUATIONS_BASE_KEY)
+);
+
+closeClearAllRecords();
+
+renderDashboard();
+
+populateStudentSelect();
+
+renderRecords();
+
+showStudentStatus(
+'All student and evaluation records have been cleared successfully.',
+true
+);
+
+showPage('dashboard');
+
+}
+
+
+/* =========================================================
+   DASHBOARD MENU HELPERS
+========================================================= */
+
+function goDashboardTop(){
+  showPage('dashboard');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openDashboardStudentSection(){
+  showPage('student');
+}
+
+
+/* =========================================================
+   DASHBOARD BACK BUTTON
+========================================================= */
+
+function backToDashboard(){
+  showPage('dashboard');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(page){
+
+closeProfilePanel();
+
+closeStudentClassRecord();
+
+closeEvaluationView();
+
+document.querySelectorAll('.page')
+.forEach(
+p=>p.classList.remove('active')
+);
+
+document.getElementById(
+page+'Page'
+).classList.add('active');
+
+document.querySelectorAll('.nav button')
+.forEach(
+b=>b.classList.remove('active')
+);
+
+const navButton=document.getElementById(
+'nav'+
+page.charAt(0).toUpperCase()+
+page.slice(1)
+);
+
+if(navButton){
+  navButton.classList.add('active');
+}
+
+if(page==='dashboard')
+renderDashboard();
+
+if(page==='student')
+renderStudents();
+
+if(page==='evaluation')
+populateStudentSelect();
+
+if(page==='records')
+renderRecords();
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+
+/* =========================================================
+   STUDENT STATUS
+========================================================= */
+
+function showStudentStatus(msg,ok=true){
+
+const s=document.getElementById(
+'studentStatus'
+);
+
+s.textContent=msg;
+
+s.className=
+'status show '+
+(ok?'ok':'error');
+
+}
+
+
+/* =========================================================
+   ADD STUDENT
+========================================================= */
+
+function addStudent(){
+
+const name=
+document.getElementById(
+'newStudentName'
+).value.trim();
+
+const email=
+document.getElementById(
+'newStudentEmail'
+).value.trim();
+
+const id=
+document.getElementById(
+'newStudentId'
+).value.trim();
+
+if(!name)
+return showStudentStatus(
+'Please enter the student name.',
+false
+);
+
+if(!email)
+return showStudentStatus(
+"Please enter the parent's email.",
+false
+);
+
+if(!id)
+return showStudentStatus(
+'Please enter the student ID.',
+false
+);
+
+const students=getStudents();
+
+if(
+students.some(
+s=>s.id.toLowerCase()===id.toLowerCase()
+)
+){
+
+return showStudentStatus(
+'That Student ID already exists.',
+false
+);
+
+}
+
+students.push({
+
+id,
+
+name,
+
+email,
+
+createdAt:new Date().toISOString()
+
+});
+
+saveStudents(students);
+
+document.getElementById(
+'newStudentName'
+).value='';
+
+document.getElementById(
+'newStudentEmail'
+).value='';
+
+document.getElementById(
+'newStudentId'
+).value='';
+
+showStudentStatus(
+'Student added successfully.',
+true
+);
+
+renderDashboard();
+
+populateStudentSelect();
+
+renderRecords();
+
+}
+
+
+/* =========================================================
+   STUDENT MENU
+========================================================= */
+
+function toggleStudentMenu(id){
+
+document.querySelectorAll(
+'.student-menu'
+).forEach(
+m=>m.classList.remove('show')
+);
+
+const menu=document.getElementById(
+'studentMenu-'+
+encodeURIComponent(id)
+);
+
+if(menu)
+menu.classList.toggle('show');
+
+}
+
+function closeStudentMenus(){
+
+document.querySelectorAll(
+'.student-menu'
+).forEach(
+m=>m.classList.remove('show')
+);
+
+}
+
+
+/* =========================================================
+   EDIT STUDENT
+========================================================= */
+
+function openEditStudent(id){
+
+closeStudentMenus();
+
+const student=
+getStudents().find(
+s=>s.id===id
+);
+
+if(!student)return;
+
+document.getElementById(
+'editOriginalId'
+).value=student.id;
+
+document.getElementById(
+'editStudentName'
+).value=student.name;
+
+document.getElementById(
+'editStudentEmail'
+).value=student.email;
+
+document.getElementById(
+'editStudentId'
+).value=student.id;
+
+document.getElementById(
+'editStudentError'
+).textContent='';
+
+document.getElementById(
+'editStudentError'
+).classList.remove('show');
+
+document.getElementById(
+'editStudentModal'
+).classList.add('show');
+
+}
+
+function closeEditStudent(){
+
+document.getElementById(
+'editStudentModal'
+).classList.remove('show');
+
+}
+
+function saveEditedStudent(){
+
+const originalId=
+document.getElementById(
+'editOriginalId'
+).value;
+
+const name=
+document.getElementById(
+'editStudentName'
+).value.trim();
+
+const email=
+document.getElementById(
+'editStudentEmail'
+).value.trim();
+
+const id=
+document.getElementById(
+'editStudentId'
+).value.trim();
+
+const err=
+document.getElementById(
+'editStudentError'
+);
+
+const fail=msg=>{
+
+err.textContent=msg;
+
+err.classList.add('show');
+
+};
+
+if(!name)
+return fail(
+'Please enter the student name.'
+);
+
+if(!email)
+return fail(
+"Please enter the parent's email."
+);
+
+if(!id)
+return fail(
+'Please enter the student ID.'
+);
+
+const students=getStudents();
+
+if(
+students.some(
+s=>
+s.id.toLowerCase()===id.toLowerCase()
+&&
+s.id!==originalId
+)
+){
+
+return fail(
+'That Student ID already exists.'
+);
+
+}
+
+const index=
+students.findIndex(
+s=>s.id===originalId
+);
+
+if(index<0)
+return fail(
+'Student record could not be found.'
+);
+
+students[index]={
+
+...students[index],
+
+name,
+
+email,
+
+id
+
+};
+
+saveStudents(students);
+
+closeEditStudent();
+
+renderDashboard();
+
+populateStudentSelect(id);
+
+renderRecords();
+
+showStudentStatus(
+'Student record updated successfully.',
+true
+);
+
+}
+
+
+/* =========================================================
+   DELETE STUDENT
+========================================================= */
+
+function openDeleteStudent(id){
+
+closeStudentMenus();
+
+const student=
+getStudents().find(
+s=>s.id===id
+);
+
+if(!student)return;
+
+document.getElementById(
+'deleteTargetId'
+).value=student.id;
+
+document.getElementById(
+'deleteStudentIdLabel'
+).textContent=student.id;
+
+document.getElementById(
+'deleteConfirmId'
+).value='';
+
+document.getElementById(
+'deleteStudentError'
+).textContent='';
+
+document.getElementById(
+'deleteStudentError'
+).classList.remove('show');
+
+document.getElementById(
+'deleteStudentModal'
+).classList.add('show');
+
+setTimeout(
+()=>{
+
+document.getElementById(
+'deleteConfirmId'
+).focus();
+
+},
+50
+);
+
+}
+
+function closeDeleteStudent(){
+
+document.getElementById(
+'deleteStudentModal'
+).classList.remove('show');
+
+}
+
+function confirmDeleteStudent(){
+
+const target=
+document.getElementById(
+'deleteTargetId'
+).value;
+
+const typed=
+document.getElementById(
+'deleteConfirmId'
+).value.trim();
+
+const err=
+document.getElementById(
+'deleteStudentError'
+);
+
+if(typed!==target){
+
+err.textContent=
+'Student ID does not match. The student was NOT deleted.';
+
+err.classList.add('show');
+
+return;
+
+}
+
+saveStudents(
+getStudents().filter(
+s=>s.id!==target
+)
+);
+
+closeDeleteStudent();
+
+renderDashboard();
+
+populateStudentSelect();
+
+renderRecords();
+
+showStudentStatus(
+'Student deleted successfully. Existing evaluation history was kept.',
+true
+);
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function getDashboardAppointments(){
+
+try{
+const key=currentUser
+?`teacherDanyealAppointments_${currentUser.id}`
+:'teacherDanyealAppointments';
+const data=JSON.parse(localStorage.getItem(key)||'[]');
+return Array.isArray(data)?data:[];
+}catch(error){
+return [];
+}
+
+}
+
+function getAppointmentDateTime(item){
+
+const raw=item?.dateTime || item?.scheduledAt || item?.startDateTime || '';
+if(raw){
+const d=new Date(raw);
+if(!isNaN(d.getTime())) return d;
+}
+
+const date=item?.date || item?.appointmentDate || item?.classDate || '';
+const time=item?.time || item?.appointmentTime || item?.classTime || '00:00';
+if(date){
+const d=new Date(`${date}T${time}`);
+if(!isNaN(d.getTime())) return d;
+}
+
+return null;
+}
+
+function renderDashboard(){
+
+const students=getStudents();
+const evals=getEvaluations();
+
+const studentCountEl=document.getElementById('studentCount');
+const evaluationCountEl=document.getElementById('evaluationCount');
+const lastEvaluationEl=document.getElementById('lastEvaluation');
+
+if(studentCountEl) studentCountEl.textContent=students.length;
+if(evaluationCountEl) evaluationCountEl.textContent=evals.length;
+
+const latestEvaluation=evals.length
+?evals.slice().sort((a,b)=>getEvaluationTimestamp(b)-getEvaluationTimestamp(a))[0]
+:null;
+
+if(lastEvaluationEl){
+lastEvaluationEl.textContent=latestEvaluation
+?formatDateTime(latestEvaluation.dateTime || latestEvaluation.createdAt)
+:'—';
+}
+
+const profile=getTeacherProfile();
+const username=profile.username || currentUser?.user_metadata?.username || defaultUsername(currentUser?.email) || 'Teacher';
+
+const teacherNameEl=document.getElementById('dashboardTeacherName');
+if(teacherNameEl) teacherNameEl.textContent=username;
+
+const photoEl=document.getElementById('dashboardTeacherPhoto');
+const picture=profile.picture || profile.profile_picture || '';
+if(photoEl){
+if(picture){
+photoEl.innerHTML=`<img src="${String(picture)}" alt="Teacher Profile Picture">`;
+}else{
+photoEl.textContent='👤';
+}
+}
+
+const studentCountDash=document.getElementById('dashboardStudentCount');
+if(studentCountDash) studentCountDash.textContent=students.length;
+
+const appointments=getDashboardAppointments();
+const now=new Date();
+const validAppointments=appointments
+.map(item=>({item,date:getAppointmentDateTime(item)}))
+.filter(x=>x.date && !isNaN(x.date.getTime()));
+
+const todayCount=validAppointments.filter(x=>
+ x.date.getFullYear()===now.getFullYear() &&
+ x.date.getMonth()===now.getMonth() &&
+ x.date.getDate()===now.getDate()
+).length;
+
+const appointmentCountDash=document.getElementById('dashboardAppointmentCount');
+if(appointmentCountDash) appointmentCountDash.textContent=appointments.length;
+
+const todayClassCountDash=document.getElementById('dashboardTodayClassCount');
+if(todayClassCountDash) todayClassCountDash.textContent=todayCount;
+
+const next=validAppointments
+.filter(x=>x.date.getTime()>=now.getTime())
+.sort((a,b)=>a.date-b.date)[0];
+
+const nextMain=document.getElementById('dashboardNextClass');
+const nextSub=document.getElementById('dashboardNextClassSub');
+
+if(next){
+const item=next.item;
+const studentName=item.studentName || item.student || item.name || 'Student';
+const label=item.title || item.subject || 'Class / Appointment';
+if(nextMain) nextMain.textContent=`${label} — ${studentName}`;
+if(nextSub) nextSub.textContent=formatDateTime(next.date.toISOString());
+}else{
+if(nextMain) nextMain.textContent='No upcoming class.';
+if(nextSub) nextSub.textContent='Your next class or appointment will appear here.';
+}
+
+const list=document.getElementById('studentList');
+if(!students.length){
+if(list) list.innerHTML='<div class="empty">No students yet. Add your first student above.</div>';
+return;
+}
+
+if(list){
+list.innerHTML=students.map(s=>`
+<div class="student-row">
+<div class="student-info">
+<b>${escapeHtml(s.name)}</b>
+<span>ID: ${escapeHtml(s.id)} · ${escapeHtml(s.email)}</span>
+</div>
+<div class="student-actions">
+<button type="button" class="dots-btn" aria-label="Student options" onclick="event.stopPropagation();toggleStudentMenu('${escapeAttr(s.id)}')">⋮</button>
+<div id="studentMenu-${encodeURIComponent(s.id)}" class="student-menu">
+<button type="button" onclick="openEditStudent('${escapeAttr(s.id)}')">Edit</button>
+<button type="button" class="delete-option" onclick="openDeleteStudent('${escapeAttr(s.id)}')">Delete</button>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+}
+
+
+/* =========================================================
+   STUDENT PAGE
+========================================================= */
+
+function renderStudents(){
+  const students=getStudents();
+  const list=document.getElementById('studentList');
+  if(!list) return;
+
+  if(!students.length){
+    list.innerHTML='<div class="empty">No students yet. Add your first student above.</div>';
+    return;
+  }
+
+  list.innerHTML=students.map(s=>`
+<div class="student-row">
+<div class="student-info">
+<b>${escapeHtml(s.name)}</b>
+<span>ID: ${escapeHtml(s.id)} · ${escapeHtml(s.email)}</span>
+</div>
+<div class="student-actions">
+<button type="button" class="dots-btn" aria-label="Student options" onclick="event.stopPropagation();toggleStudentMenu('${escapeAttr(s.id)}')">⋮</button>
+<div id="studentMenu-${encodeURIComponent(s.id)}" class="student-menu">
+<button type="button" onclick="openEditStudent('${escapeAttr(s.id)}')">Edit</button>
+<button type="button" class="delete-option" onclick="openDeleteStudent('${escapeAttr(s.id)}')">Delete</button>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+
+/* =========================================================
+   STUDENT SELECT
+========================================================= */
+
+function populateStudentSelect(selectedId){
+
+const select=
+document.getElementById(
+'studentSelect'
+);
+
+const students=getStudents();
+
+const current=
+selectedId ||
+select.value;
+
+select.innerHTML=
+'<option value="">-- Select a student --</option>'+
+students.map(
+s=>
+`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} — ${escapeHtml(s.id)}</option>`
+)
+.join('');
+
+if(
+current &&
+students.some(
+s=>s.id===current
+)
+){
+
+select.value=current;
+
+}
+
+}
+
+
+/* =========================================================
+   SELECT STUDENT
+========================================================= */
+
+function selectStudent(){
+
+const id=
+document.getElementById(
+'studentSelect'
+).value;
+
+const student=
+getStudents().find(
+s=>s.id===id
+);
+
+document.getElementById(
+'studentName'
+).value=
+student
+?student.name
+:'';
+
+document.getElementById(
+'parentEmail'
+).value=
+student
+?student.email
+:'';
+
+document.getElementById(
+'studentId'
+).value=
+student
+?student.id
+:'';
+
+commentVersion=0;
+
+updateOverallScore();
+
+generateComment();
+
+}
+
+
+/* =========================================================
+   SECURITY / HTML HELPERS
+========================================================= */
+
+function escapeHtml(str){
+
+return String(str).replace(
+/[&<>'"]/g,
+c=>({
+
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+"'":'&#39;',
+'"':'&quot;'
+
+}[c])
+);
+
+}
+
+function escapeAttr(str){
+
+return escapeHtml(str)
+.replace(/`/g,'&#96;');
+
+}
+
+function formatDateTime(value){
+
+if(!value)return '—';
+
+const d=new Date(value);
+
+return isNaN(d)
+?value
+:d.toLocaleString(
+[],
+{
+year:'numeric',
+month:'2-digit',
+day:'2-digit',
+hour:'2-digit',
+minute:'2-digit'
+}
+);
+
+}
+
+
+/* =========================================================
+   STAR RATINGS
+========================================================= */
+
+document.querySelectorAll(
+'.stars'
+).forEach(el=>{
+
+const field=el.dataset.field;
+
+stars[field]=5;
+
+for(
+let i=1;
+i<=5;
+i++
+){
+
+const b=document.createElement(
+'button'
+);
+
+b.type='button';
+
+b.innerHTML='★';
+
+b.title=i+' star';
+
+b.onclick=()=>
+setStars(field,i);
+
+el.appendChild(b);
+
+}
+
+setStars(field,5);
+
+});
+
+
+/* =========================================================
+   AUTOMATIC OVERALL SCORE
+========================================================= */
+
+function updateOverallScore(){
+
+const fields=[
+'participation',
+'pronunciation',
+'behavior',
+'speaking',
+'understanding',
+'listening'
+];
+
+const total=fields.reduce(
+(sum,field)=>
+sum+(Number(stars[field])||0),
+0
+);
+
+const average=
+total/fields.length;
+
+const score=Math.round(
+(average/5)*100
+);
+
+document.getElementById(
+'score'
+).value=score;
+
+const [rating,range]=
+getRating(score);
+
+document.getElementById(
+'ratingText'
+).textContent=rating;
+
+document.getElementById(
+'scoreRange'
+).textContent=range;
+
+return score;
+
+}
+
+function setStars(field,n){
+
+stars[field]=n;
+
+const el=document.querySelector(
+`[data-field="${field}"]`
+);
+
+[
+...el.querySelectorAll('button')
+].forEach(
+(b,i)=>
+b.style.opacity=
+i<n
+?'1'
+:'0.28'
+);
+
+updateOverallScore();
+
+if(
+document.getElementById(
+'studentName'
+).value
+){
+
+generateComment();
+
+}
+
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+function getRating(score){
+
+score=Number(score);
+
+if(!score && score!==0)
+return [
+'Excellent',
+'95–100'
+];
+
+if(score>=95)
+return [
+'Excellent',
+'95–100'
+];
+
+if(score>=90)
+return [
+'Very Good',
+'90–94'
+];
+
+if(score>=80)
+return [
+'Good',
+'80–89'
+];
+
+if(score>=70)
+return [
+'Needs Practice',
+'70–79'
+];
+
+return [
+'Needs Improvement',
+'0–69'
+];
+
+}
+
+
+/* =========================================================
+   AUTOMATIC TEACHER COMMENT
+========================================================= */
+
+function buildComment(variant){
+
+const name=
+document.getElementById(
+'studentName'
+).value.trim() ||
+'The student';
+
+const vocab=
+document.getElementById(
+'vocabulary'
+).value.trim();
+
+const improvement=
+document.getElementById(
+'improvement'
+).value.trim();
+
+const score=
+document.getElementById(
+'score'
+).value;
+
+const speaking=
+stars.speaking||5;
+
+const pronunciation=
+stars.pronunciation||5;
+
+const understanding=
+stars.understanding||5;
+
+const [rating]=getRating(score);
+
+let parts=[];
+
+const vocabStart=[
+
+`${name} learned and practiced ${vocab} during today's lesson.`,
+
+`${name} actively worked on ${vocab} in today's English lesson.`,
+
+`During today's class, ${name} practiced and reviewed ${vocab}.`,
+
+`${name} made progress today while learning and practicing ${vocab}.`
+
+];
+
+const vocabEmpty=[
+
+`${name} participated in today's lesson and practiced the target language.`,
+
+`${name} took part in today's lesson and practiced the target language.`,
+
+`During today's class, ${name} practiced the lesson target and participated in the activities.`,
+
+`${name} participated in the lesson and practiced the target English skills.`
+
+];
+
+const imp=[
+
+`For continued progress, ${name} should continue practicing ${improvement}.`,
+
+`To continue improving, ${name} can focus on ${improvement}.`,
+
+`For the next lessons, ${name} is encouraged to work on ${improvement}.`,
+
+`A helpful next step for ${name} is to continue working on ${improvement}.`
+
+];
+
+const impEmpty=[
+
+`${name} is encouraged to continue reviewing today's lesson and practicing the target language at home.`,
+
+`Regular review of today's lesson at home will help ${name} continue making progress.`,
+
+`${name} is encouraged to review the lesson and practice the target language regularly.`,
+
+`Continuing to review and practice today's lesson will support further progress.`
+
+];
+
+const scoreText=[
+
+`Overall performance: ${rating} (${score}/100).`,
+
+`${name}'s overall result was ${rating}, with a score of ${score}/100.`,
+
+`The overall performance rating was ${rating} (${score}/100).`,
+
+`Today's overall result was ${rating}, with ${score}/100.`
+
+];
+
+const comm=[
+
+`${name} showed good communication and pronunciation during class.`,
+
+`${name} communicated well and demonstrated good pronunciation.`,
+
+`${name} showed positive speaking skills and clear pronunciation.`,
+
+`${name} demonstrated good speaking and pronunciation during the class.`
+
+];
+
+const commLow=[
+
+`${name} would benefit from additional speaking and pronunciation practice.`,
+
+`Additional practice in speaking and pronunciation will help ${name} build confidence.`,
+
+`More speaking and pronunciation practice would support ${name}'s continued progress.`,
+
+`Focused speaking and pronunciation practice can help ${name} improve further.`
+
+];
+
+const understand=[
+
+`The lesson was understood well.`,
+
+`${name} demonstrated a good understanding of the lesson.`,
+
+`${name} showed a good level of understanding throughout the lesson.`,
+
+`${name} followed and understood the lesson well.`
+
+];
+
+const understandLow=[
+
+`More review and guided practice will help strengthen understanding.`,
+
+`Continued guided practice and review will help improve understanding.`,
+
+`Additional explanation, review, and practice may help strengthen ${name}'s understanding.`,
+
+`More guided review will help ${name} develop stronger understanding of the lesson.`
+
+];
+
+parts.push(
+(vocab?vocabStart:vocabEmpty)[variant]
+);
+
+parts.push(
+(improvement?imp:impEmpty)[variant]
+);
+
+if(score)
+parts.push(
+scoreText[variant]
+);
+
+parts.push(
+(
+speaking>=4 &&
+pronunciation>=4
+?comm
+:commLow
+)[variant]
+);
+
+parts.push(
+(
+understanding>=4
+?understand
+:understandLow
+)[variant]
+);
+
+return parts.join(' ');
+
+}
+
+
+function generateComment(){
+
+commentVersion=0;
+
+const box=
+document.getElementById(
+'commentPreview'
+);
+
+box.textContent=
+buildComment(0);
+
+return box.textContent;
+
+}
+
+
+function updateComment(){
+
+commentVersion=
+(commentVersion+1)%4;
+
+const box=
+document.getElementById(
+'commentPreview'
+);
+
+box.textContent=
+buildComment(
+commentVersion
+);
+
+return box.textContent;
+
+}
+
+
+/* =========================================================
+   LIVE SCORE / COMMENT
+========================================================= */
+
+document.getElementById(
+'score'
+).addEventListener(
+'input',
+()=>{
+
+updateOverallScore();
+
+if(
+document.getElementById(
+'studentName'
+).value
+){
+
+generateComment();
+
+}
+
+}
+);
+
+[
+'vocabulary',
+'improvement'
+].forEach(
+id=>
+document.getElementById(id)
+.addEventListener(
+'input',
+()=>{
+
+if(
+document.getElementById(
+'studentName'
+).value
+){
+
+generateComment();
+
+}
+
+}
+)
+);
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(msg,ok=true){
+
+const s=
+document.getElementById(
+'status'
+);
+
+s.textContent=msg;
+
+s.className=
+'status show '+
+(ok?'ok':'error');
+
+}
+
+
+/* =========================================================
+   SEND EVALUATION
+========================================================= */
+
+function sendEvaluation(){
+
+const name=
+document.getElementById(
+'studentName'
+).value.trim();
+
+const email=
+document.getElementById(
+'parentEmail'
+).value.trim();
+
+const calculatedScore=
+updateOverallScore();
+
+const scoreValue=
+String(calculatedScore);
+
+const submitBtn=
+document.getElementById(
+'submitBtn'
+);
+
+if(!name)
+return showStatus(
+'Please select a student first.',
+false
+);
+
+if(!email)
+return showStatus(
+"Please select a student with a parent's email.",
+false
+);
+
+if(
+!document.getElementById(
+'date'
+).value
+)
+return showStatus(
+'Please select the class date.',
+false
+);
+
+if(
+!document.getElementById(
+'time'
+).value
+)
+return showStatus(
+'Please select the class time.',
+false
+);
+
+const currentComment=
+document.getElementById(
+'commentPreview'
+).textContent.trim();
+
+if(!currentComment){
+
+return showStatus(
+'Please generate a teacher comment before sending.',
+false
+);
+
+}
+
+const [rating]=
+getRating(scoreValue);
+
+const starText=n=>
+'★'.repeat(
+Number(n)||0
+)+
+'☆'.repeat(
+Math.max(
+0,
+5-(Number(n)||0)
+)
+);
+
+const dateValue=
+document.getElementById(
+'date'
+).value;
+
+const timeValue=
+document.getElementById(
+'time'
+).value;
+
+const templateParams={
+
+parent_email:email,
+
+student_name:name,
+
+student_id:
+document.getElementById(
+'studentId'
+).value,
+
+score:
+`${scoreValue}/100`,
+
+rating,
+
+date:
+`${dateValue} ${timeValue}`,
+
+duration:
+document.getElementById(
+'duration'
+).value.trim() ||
+'N/A',
+
+lesson_topic:
+document.getElementById(
+'lessonTopic'
+).value.trim() ||
+'N/A',
+
+teacher:
+document.getElementById(
+'teacher'
+).value.trim() ||
+'Teacher Danyeal',
+
+vocabulary:
+document.getElementById(
+'vocabulary'
+).value.trim() ||
+'No vocabulary/lesson notes provided.',
+
+improvement:
+document.getElementById(
+'improvement'
+).value.trim() ||
+'No specific improvement areas noted.',
+
+participation:
+starText(
+stars.participation
+),
+
+pronunciation:
+starText(
+stars.pronunciation
+),
+
+behavior:
+starText(
+stars.behavior
+),
+
+speaking:
+starText(
+stars.speaking
+),
+
+understanding:
+starText(
+stars.understanding
+),
+
+listening:
+starText(
+stars.listening
+),
+
+teacher_comment:
+currentComment
+
+};
+
+
+/*
+   IMPORTANT:
+   evaluationSavedAt is the exact moment the evaluation
+   was successfully saved after EmailJS sends successfully.
+   This is now the PRIMARY sorting timestamp.
+*/
+
+const evaluationSavedAt=
+new Date().toISOString();
+
+const record={
+
+...templateParams,
+
+dateTime:
+`${dateValue}T${timeValue}`,
+
+createdAt:
+evaluationSavedAt,
+
+evaluationSavedAt:
+
+evaluationSavedAt
+
+};
+
+if(!window.emailjs){
+
+return showStatus(
+'Email service is still loading. Please wait a moment and try again.',
+false
+);
+
+}
+
+emailjs.init({
+
+publicKey:
+EMAILJS_PUBLIC_KEY
+
+});
+
+submitBtn.disabled=true;
+
+submitBtn.textContent=
+'Sending Memo...';
+
+showStatus(
+'Sending the class memo to the parent...',
+true
+);
+
+emailjs
+.send(
+EMAILJS_SERVICE_ID,
+EMAILJS_TEMPLATE_ID,
+templateParams
+)
+
+.then(()=>{
+
+const evals=
+getEvaluations();
+
+evals.push(record);
+
+saveEvaluations(evals);
+
+showStatus(
+`Class Memo sent successfully to ${email}. Evaluation saved to Record of Evaluation.`,
+true
+);
+
+renderDashboard();
+
+/*
+   Immediately re-render the student evaluation list.
+   Because the newly saved evaluation has the newest
+   evaluationSavedAt timestamp, this student moves to top.
+*/
+renderRecords();
+
+})
+
+.catch(error=>{
+
+console.error(
+'EmailJS error:',
+error
+);
+
+showStatus(
+'The memo could not be sent. The evaluation was not saved yet.',
+false
+);
+
+})
+
+.finally(()=>{
+
+submitBtn.disabled=false;
+
+submitBtn.textContent=
+'Submit & Email Parent';
+
+});
+
+}
+
+
+/* =========================================================
+   RESET EVALUATION FORM
+========================================================= */
+
+function resetForm(){
+
+document.getElementById(
+'studentSelect'
+).value='';
+
+[
+'studentName',
+'parentEmail',
+'studentId',
+'date',
+'time',
+'lessonTopic',
+'vocabulary',
+'improvement'
+].forEach(
+id=>
+document.getElementById(id).value=''
+);
+
+document.getElementById(
+'duration'
+).value='25 minutes';
+
+document.getElementById(
+'teacher'
+).value='Teacher Danyeal';
+
+Object.keys(stars).forEach(
+k=>setStars(k,5)
+);
+
+updateOverallScore();
+
+commentVersion=0;
+
+document.getElementById(
+'commentPreview'
+).textContent=
+"Select a student and fill in the lesson details. The teacher's comment will be generated automatically.";
+
+showStatus(
+'Form cleared.',
+true
+);
+
+}
+
+
+/* =========================================================
+   RECORDS - STUDENT BASED
+========================================================= */
+
+function getEvaluationStudentId(evaluation){
+
+return String(
+evaluation.student_id ||
+''
+).trim();
+
+}
+
+
+/*
+   Returns all evaluations for one student.
+   The newest evaluation is always first.
+*/
+
+function getStudentEvaluations(studentId){
+
+const target=
+String(studentId).trim();
+
+return getEvaluations()
+.filter(
+evaluation=>
+getEvaluationStudentId(evaluation)===target
+)
+.sort(
+(a,b)=>
+getEvaluationTimestamp(b)-
+getEvaluationTimestamp(a)
+);
+
+}
+
+
+/*
+   IMPORTANT SORTING FUNCTION
+   ==========================
+   evaluationSavedAt = actual save/submission time
+   createdAt          = backward compatibility
+   dateTime           = final fallback for old records
+
+   This means changing/viewing the record will NOT
+   affect its position.
+*/
+
+function getEvaluationTimestamp(evaluation){
+
+const value=
+evaluation.evaluationSavedAt ||
+evaluation.createdAt ||
+evaluation.dateTime ||
+'';
+
+const time=
+new Date(value).getTime();
+
+return Number.isNaN(time)
+?0
+:time;
+
+}
+
+
+function getStudentInitials(name){
+
+const text=
+String(name||'')
+.trim();
+
+if(!text)
+return '👤';
+
+const parts=
+text
+.split(/\s+/)
+.filter(Boolean);
+
+if(parts.length===1)
+return parts[0]
+.charAt(0)
+.toUpperCase();
+
+return (
+parts[0].charAt(0)+
+parts[parts.length-1].charAt(0)
+).toUpperCase();
+
+}
+
+
+/* =========================================================
+   STUDENT AVATAR
+========================================================= */
+
+function getStudentAvatarHtml(student,extraClass=''){
+
+const picture=
+student.picture ||
+student.profilePicture ||
+student.photo ||
+student.avatar ||
+'';
+
+if(picture){
+
+return `
+<div class="${extraClass}">
+<img
+src="${escapeAttr(picture)}"
+alt="Student Profile Picture"
+>
+</div>
+`;
+
+}
+
+return `
+<div class="${extraClass}">
+${escapeHtml(
+getStudentInitials(student.name)
+)}
+</div>
+`;
+
+}
+
+
+/* =========================================================
+   RENDER RECORD OF EVALUATION
+========================================================= */
+
+function renderRecords(){
+
+const students=
+getStudents();
+
+const evaluations=
+getEvaluations();
+
+const container=
+document.getElementById(
+'evaluationStudentList'
+);
+
+const empty=
+document.getElementById(
+'recordEmpty'
+);
+
+if(!students.length){
+
+container.innerHTML='';
+
+empty.textContent=
+'No students recorded yet.';
+
+empty.style.display='block';
+
+return;
+
+}
+
+
+/*
+   Build one record-list item for every student.
+*/
+
+const studentData=
+students.map(
+(student,index)=>{
+
+const studentEvals=
+evaluations
+.filter(
+evaluation=>
+getEvaluationStudentId(evaluation)===
+String(student.id).trim()
+)
+.sort(
+(a,b)=>
+getEvaluationTimestamp(b)-
+getEvaluationTimestamp(a)
+);
+
+return {
+
+student,
+
+index,
+
+evaluations:studentEvals,
+
+latestTimestamp:
+studentEvals.length
+?getEvaluationTimestamp(
+studentEvals[0]
+)
+:0
+
+};
+
+}
+);
+
+
+/*
+   ========================================================
+   FINAL STUDENT SORTING RULE
+   ========================================================
+
+   1. Students with evaluations come first.
+   2. Among evaluated students:
+      newest evaluationSavedAt comes first.
+   3. Students without evaluations remain below.
+   4. If two timestamps are exactly equal,
+      preserve original student order.
+*/
+
+studentData.sort(
+(a,b)=>{
+
+const aHasEvaluation=
+a.latestTimestamp>0;
+
+const bHasEvaluation=
+b.latestTimestamp>0;
+
+
+/* Evaluated students before unevaluated students */
+
+if(
+aHasEvaluation &&
+!bHasEvaluation
+){
+
+return -1;
+
+}
+
+if(
+!aHasEvaluation &&
+bHasEvaluation
+){
+
+return 1;
+
+}
+
+
+/* Both have evaluations */
+
+if(
+aHasEvaluation &&
+bHasEvaluation
+){
+
+if(
+b.latestTimestamp !==
+a.latestTimestamp
+){
+
+return (
+b.latestTimestamp-
+a.latestTimestamp
+);
+
+}
+
+}
+
+
+/* Both unevaluated OR exact timestamp tie */
+
+return a.index-b.index;
+
+}
+);
+
+empty.style.display='none';
+
+container.innerHTML=
+studentData
+.map(
+item=>{
+
+const student=
+item.student;
+
+const count=
+item.evaluations.length;
+
+const latest=
+item.evaluations[0];
+
+const latestText=
+latest
+?`Last evaluation: ${escapeHtml(
+formatDateTime(
+latest.evaluationSavedAt ||
+latest.createdAt ||
+latest.dateTime
+)
+)}`
+:'No evaluation yet';
+
+return `
+
+<div class="evaluation-student-card">
+
+${getStudentAvatarHtml(
+student,
+'evaluation-student-avatar'
+)}
+
+<div class="evaluation-student-info">
+
+<span class="student-name">
+${escapeHtml(student.name)}
+</span>
+
+<span class="student-id">
+Student ID: ${escapeHtml(student.id)}
+</span>
+
+<span class="latest-evaluation">
+
+${latestText}
+
+${
+count
+?`
+<span class="evaluation-record-count">
+${count}
+${count===1?' Class':' Classes'}
+</span>
+`
+:''
+}
+
+</span>
+
+</div>
+
+<button
+type="button"
+class="class-record-btn"
+onclick="openStudentClassRecord('${escapeAttr(student.id)}')"
+>
+Class Record
+</button>
+
+</div>
+
+`;
+
+}
+)
+.join('');
+
+}
+
+
+/* =========================================================
+   OPEN STUDENT CLASS RECORD
+========================================================= */
+
+function openStudentClassRecord(studentId){
+
+const student=
+getStudents().find(
+s=>String(s.id)===String(studentId)
+);
+
+if(!student)
+return;
+
+const records=
+getStudentEvaluations(student.id);
+
+const container=
+document.getElementById(
+'studentClassRecordContent'
+);
+
+let html=`
+
+<div class="record-student-header">
+
+${getStudentAvatarHtml(
+student,
+'record-student-avatar'
+)}
+
+<div class="record-student-header-info">
+
+<b>
+${escapeHtml(student.name)}
+</b>
+
+<span>
+Student ID: ${escapeHtml(student.id)}
+</span>
+
+<span>
+${escapeHtml(student.email)}
+</span>
+
+</div>
+
+</div>
+
+`;
+
+if(!records.length){
+
+html+=`
+
+<div class="empty">
+No evaluation records found for this student yet.
+</div>
+
+`;
+
+}else{
+
+html+=`
+
+<div style="font-weight:800;margin-bottom:10px;">
+Class Evaluation History
+</div>
+
+`;
+
+html+=records
+.map(
+(evaluation,index)=>{
+
+const topic=
+evaluation.lesson_topic ||
+'N/A';
+
+const dateTime=
+evaluation.dateTime ||
+evaluation.createdAt ||
+'';
+
+return `
+
+<div class="class-record-item">
+
+<div class="class-record-item-header">
+
+<b>
+Evaluation ${records.length-index}
+</b>
+
+<span
+class="small"
+style="margin-top:0"
+>
+${escapeHtml(
+formatDateTime(dateTime)
+)}
+</span>
+
+</div>
+
+<div class="class-record-item-body">
+
+<div class="class-record-summary">
+
+<div class="class-record-summary-info">
+
+<div class="class-record-summary-topic">
+Topic:
+${escapeHtml(topic)}
+</div>
+
+<div class="class-record-summary-date">
+Date & Time:
+${escapeHtml(
+formatDateTime(dateTime)
+)}
+</div>
+
+</div>
+
+<button
+type="button"
+class="view-record-btn"
+onclick="viewEvaluationRecord('${escapeAttr(student.id)}','${escapeAttr(String(index))}')"
+>
+View
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+)
+.join('');
+
+}
+
+container.innerHTML=html;
+
+document.getElementById(
+'studentClassRecordModal'
+).classList.add('show');
+
+}
+
+
+/* =========================================================
+   CLOSE STUDENT CLASS RECORD
+========================================================= */
+
+function closeStudentClassRecord(){
+
+const modal=
+document.getElementById(
+'studentClassRecordModal'
+);
+
+if(modal)
+modal.classList.remove('show');
+
+}
+
+
+/* =========================================================
+   VIEW INDIVIDUAL EVALUATION
+========================================================= */
+
+function viewEvaluationRecord(studentId,index){
+
+const student=
+getStudents().find(
+s=>String(s.id)===String(studentId)
+);
+
+if(!student)
+return;
+
+const records=
+getStudentEvaluations(student.id);
+
+const evaluation=
+records[Number(index)];
+
+if(!evaluation)
+return;
+
+const container=
+document.getElementById(
+'evaluationViewContent'
+);
+
+const starsText=value=>{
+
+/*
+   Saved evaluations store each performance rating as a
+   star string such as "★★☆☆☆". The old code tried to
+   convert that string with Number(), which became NaN and
+   therefore rendered all stars as empty.
+
+   Read both the current saved star-string format and a
+   numeric value so old/new records display correctly.
+*/
+let count=0;
+
+if(typeof value==='number'){
+  count=value;
+}else{
+  const text=String(value||'');
+  const fullStars=(text.match(/★/g)||[]).length;
+
+  if(fullStars>0){
+    count=fullStars;
+  }else if(/^\s*\d+(?:\.\d+)?\s*$/.test(text)){
+    count=Number(text);
+  }
+}
+
+count=Math.max(0,Math.min(5,Math.round(count)));
+
+return `<span class="record-performance-stars" aria-label="${count} out of 5 stars">`+
+Array.from({length:5},(_,i)=>
+  `<span class="record-performance-star ${i<count?'filled':'empty'}">${i<count?'★':'★'}</span>`
+).join('')+
+'</span>';
+};
+
+const topic=
+evaluation.lesson_topic ||
+'N/A';
+
+const dateTime=
+evaluation.dateTime ||
+evaluation.createdAt ||
+'';
+
+container.innerHTML=`
+
+<div class="record-detail-header">
+
+${getStudentAvatarHtml(
+student,
+'record-student-avatar'
+)}
+
+<div>
+
+<div class="record-detail-title">
+${escapeHtml(student.name)}
+</div>
+
+<div class="record-detail-date">
+Student ID: ${escapeHtml(student.id)}
+</div>
+
+<div class="record-detail-date">
+${escapeHtml(
+formatDateTime(dateTime)
+)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="record-detail-section">
+
+<div class="record-detail-section-title">
+LESSON / CLASS INFORMATION
+</div>
+
+<div class="record-detail-grid">
+
+<div class="record-detail-box">
+
+<label>Topic</label>
+
+<div>
+${escapeHtml(topic)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Date & Time</label>
+
+<div>
+${escapeHtml(
+formatDateTime(dateTime)
+)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Class Duration</label>
+
+<div>
+${escapeHtml(
+evaluation.duration ||
+'N/A'
+)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Teacher</label>
+
+<div>
+${escapeHtml(
+evaluation.teacher ||
+'Teacher Danyeal'
+)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Overall Score</label>
+
+<div>
+${escapeHtml(
+evaluation.score ||
+'N/A'
+)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Rating</label>
+
+<div>
+${escapeHtml(
+evaluation.rating ||
+'N/A'
+)}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="record-detail-section">
+
+<div class="record-detail-section-title">
+WHAT WE LEARNED TODAY / VOCABULARY
+</div>
+
+<div class="record-detail-section-body">
+${escapeHtml(
+evaluation.vocabulary ||
+'No vocabulary/lesson notes provided.'
+)}
+</div>
+
+</div>
+
+
+<div class="record-detail-section">
+
+<div class="record-detail-section-title">
+NEEDS IMPROVEMENT / AREAS TO PRACTICE
+</div>
+
+<div class="record-detail-section-body">
+${escapeHtml(
+evaluation.improvement ||
+'No specific improvement areas noted.'
+)}
+</div>
+
+</div>
+
+
+<div class="record-detail-section">
+
+<div class="record-detail-section-title">
+STUDENT PERFORMANCE
+</div>
+
+<div class="record-detail-grid">
+
+<div class="record-detail-box">
+
+<label>Participation</label>
+
+<div>
+${starsText(evaluation.participation)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Pronunciation</label>
+
+<div>
+${starsText(evaluation.pronunciation)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Behavior</label>
+
+<div>
+${starsText(evaluation.behavior)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Speaking</label>
+
+<div>
+${starsText(evaluation.speaking)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Understanding</label>
+
+<div>
+${starsText(evaluation.understanding)}
+</div>
+
+</div>
+
+<div class="record-detail-box">
+
+<label>Listening</label>
+
+<div>
+${starsText(evaluation.listening)}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="record-detail-section">
+
+<div class="record-detail-section-title">
+TEACHER'S COMMENT / CLASS MEMO
+</div>
+
+<div class="record-detail-section-body">
+${escapeHtml(
+evaluation.teacher_comment ||
+'No teacher comment recorded.'
+)}
+</div>
+
+</div>
+
+`;
+
+document.getElementById(
+'evaluationViewModal'
+).classList.add('show');
+
+}
+
+
+/* =========================================================
+   CLOSE INDIVIDUAL EVALUATION
+========================================================= */
+
+function closeEvaluationView(){
+
+const modal=
+document.getElementById(
+'evaluationViewModal'
+);
+
+if(modal)
+modal.classList.remove('show');
+
+}
+
+
+/* =========================================================
+   DELETE ENTER / ESCAPE
+========================================================= */
+
+document.getElementById(
+'deleteConfirmId'
+).addEventListener(
+'keydown',
+function(e){
+
+if(e.key==='Enter')
+confirmDeleteStudent();
+
+}
+);
+
+document.getElementById(
+'clearAllCaptchaInput'
+).addEventListener(
+'keydown',
+function(e){
+
+if(e.key==='Enter')
+confirmClearAllRecords();
+
+}
+);
+
+document.addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Escape'){
+
+closeEditStudent();
+
+closeDeleteStudent();
+
+closeStudentMenus();
+
+closeProfilePanel();
+
+closeChangePasswordModal();
+
+closeClearAllRecords();
+
+closeStudentClassRecord();
+
+closeEvaluationView();
+
+}
+
+}
+);
+
+
+/* =========================================================
+   ADD STUDENT BUTTON
+========================================================= */
+
+document.getElementById(
+'addStudentBtn'
+).addEventListener(
+'click',
+function(){
+
+try{
+
+addStudent();
+
+}catch(error){
+
+console.error(
+'Add Student error:',
+error
+);
+
+showStudentStatus(
+'Unable to add the student. Please try again.',
+false
+);
+
+}
+
+}
+);
+
+
+/* =========================================================
+   START APPLICATION
+========================================================= */
+
+initAuth();
+
+</script>
+
+</body>
+</html>
