@@ -2294,12 +2294,12 @@ Dashboard
 
 <div class="dashboard-summary-grid">
 <div class="dashboard-summary-card">
-<div class="dashboard-summary-label">NUMBER OF STUDENTS</div>
+<div class="dashboard-summary-label">STUDENTS</div>
 <div id="dashboardStudentCount" class="dashboard-summary-number">0</div>
 </div>
 
 <div class="dashboard-summary-card">
-<div class="dashboard-summary-label">NUMBER OF APPOINTMENTS</div>
+<div class="dashboard-summary-label">APPOINTMENTS</div>
 <div id="dashboardAppointmentCount" class="dashboard-summary-number">0</div>
 </div>
 
@@ -2321,27 +2321,27 @@ Dashboard
 
 <div class="dashboard-menu">
 <button type="button" class="dashboard-menu-btn" onclick="showPage('student')">
-<span class="dashboard-menu-label">👨‍🎓 STUDENT</span>
+<span class="dashboard-menu-label">STUDENT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('evaluation')">
-<span class="dashboard-menu-label">📝 EVALUATION</span>
+<span class="dashboard-menu-label">EVALUATION</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('records')">
-<span class="dashboard-menu-label">📋 RECORD OF EVALUATION</span>
+<span class="dashboard-menu-label">RECORD OF EVALUATION</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('contract')">
-<span class="dashboard-menu-label">📄 STUDENT CONTRACT</span>
+<span class="dashboard-menu-label">STUDENT CONTRACT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('appointment')">
-<span class="dashboard-menu-label">📅 APPOINTMENT</span>
+<span class="dashboard-menu-label">APPOINTMENT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('payment')">
-<span class="dashboard-menu-label">💳 PAYMENT</span>
+<span class="dashboard-menu-label">PAYMENT</span>
 </button>
 </div>
 
@@ -4245,6 +4245,8 @@ menu.classList.remove('show');
 
 }
 
+let pendingProfilePicture='';
+
 function loadTeacherProfile(){
 
 if(!currentUser)
@@ -4303,8 +4305,10 @@ document.getElementById(
 'currentTeacher'
 ).textContent=fullName;
 
+pendingProfilePicture=saved.picture || '';
+
 setProfilePicture(
-saved.picture || ''
+pendingProfilePicture
 );
 
 }
@@ -4366,12 +4370,13 @@ phone,
 gender,
 
 picture:
-old.picture || ''
+pendingProfilePicture || ''
 
 };
 
 saveTeacherProfileData(data);
 
+/* Update the visible profile immediately — no page refresh needed */
 document.getElementById(
 'currentTeacher'
 ).textContent=fullName;
@@ -4379,6 +4384,33 @@ document.getElementById(
 document.getElementById(
 'profileHeaderName'
 ).textContent=fullName;
+
+const dashboardUsernameEl=
+document.getElementById(
+'dashboardTeacherName'
+);
+
+if(dashboardUsernameEl){
+dashboardUsernameEl.textContent=username;
+}
+
+/* Keep the dashboard profile picture synchronized immediately */
+const dashboardPhotoEl=
+document.getElementById(
+'dashboardTeacherPhoto'
+);
+
+if(dashboardPhotoEl){
+const savedPicture=
+data.picture || data.profile_picture || '';
+
+if(savedPicture){
+dashboardPhotoEl.innerHTML=
+`<img src="${String(savedPicture)}" alt="Teacher Profile Picture">`;
+}else{
+dashboardPhotoEl.textContent='👤';
+}
+}
 
 showProfileStatus(
 'Profile saved successfully.',
@@ -4478,16 +4510,19 @@ const result=reader.result;
 
 if(!result) return;
 
-const old=getTeacherProfile();
+/* Keep the new picture as a temporary draft.
+   Nothing is saved to the profile until Save Profile is clicked. */
+pendingProfilePicture=result;
 
-old.picture=result;
+const large=document.getElementById('profilePictureLarge');
 
-saveTeacherProfileData(old);
-
-setProfilePicture(result);
+if(large){
+large.innerHTML=
+`<img src="${String(result)}" alt="Profile Picture">`;
+}
 
 showProfileStatus(
-'Profile picture updated successfully.',
+'Profile picture selected. Click Save Profile to apply it.',
 true
 );
 
