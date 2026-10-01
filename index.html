@@ -2176,6 +2176,9 @@ button.secondary,
 .appointment-month-day.other-month{background:#f5f5f5;color:#999}
 .appointment-month-day.today{box-shadow:inset 0 0 0 2px #00caca}
 .appointment-month-day.selected{background:#e9ffff;box-shadow:inset 0 0 0 3px #00bcbc}
+.appointment-month-day.has-bookings{background:#dffcff}
+.appointment-month-day.has-bookings:hover{background:#d5fbff}
+.appointment-month-day.has-bookings.other-month{background:#eefbfc}
 .appointment-month-number{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:6px;font-weight:900;font-size:15px}
 .appointment-today-badge{font-size:8px;background:#00bcbc;color:#fff;border-radius:10px;padding:3px 5px}
 .appointment-mini-list{display:grid;gap:5px}
@@ -2256,6 +2259,369 @@ button.secondary,
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style id="global-theme-color-overrides">
+/* GLOBAL COLOR THEME: selected palette controls the entire non-white UI color system. */
+:root{
+  --global-accent:#00e5e5;
+  --global-accent-dark:#00bcbc;
+  --global-accent-soft:#e7ffff;
+  --global-accent-pale:#f3ffff;
+  --global-accent-mid:#b8f7f7;
+  --global-text-on-accent:#071717;
+  --global-border:#8edddd;
+}
+
+/* Major colored surfaces / headers */
+.topbar,
+.dashboard-menu-btn,
+.dashboard-menu-btn:hover,
+.nav button.active,
+button.primary,
+.btn-primary,
+.primary-btn,
+.save-btn,
+.submit-btn,
+.add-btn,
+.action-btn,
+.settings-action-btn,
+.sound-test-btn,
+.network-retest-btn,
+.mode-btn.active,
+.palette-btn.active,
+.appointment-action-btn,
+.appointment-add-btn,
+.schedule-add-btn,
+.student-add-btn,
+.payment-add-btn,
+.evaluation-action-btn,
+#downloadEvaluationBtn:not(:disabled),
+#saveEvaluationBtn,
+#generateEvaluationBtn,
+#clearEvaluationBtn,
+#addAssessmentBtn,
+#addClassBtn,
+#addStudentBtn{
+  background:var(--global-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+
+/* Stronger / darker interactive states */
+button:hover,
+.btn:hover,
+.primary-btn:hover,
+.save-btn:hover,
+.submit-btn:hover,
+.add-btn:hover,
+.action-btn:hover,
+.settings-action-btn:hover,
+.sound-test-btn:hover,
+.network-retest-btn:hover,
+.mode-btn.active:hover,
+.dashboard-menu-btn:hover{
+  border-color:var(--global-accent-dark)!important;
+}
+
+/* The main navigation and UI accent lines */
+.nav,
+.userbar,
+.portal-settings-header,
+.settings-section-title,
+.section-title,
+.card-header,
+.panel-header,
+.table-header,
+.modal-header,
+.form-section-title,
+.appointment-header,
+.schedule-header{
+  border-color:var(--global-border)!important;
+}
+
+/* Colored/soft surfaces become palette-derived instead of staying cyan/blue/green/red. */
+.dashboard-summary-card,
+.dashboard-menu-sub,
+.font-preview,
+.custom-color-row,
+.notification-row,
+.mode-btn,
+.settings-select,
+.palette-btn,
+.appointment-month-day.has-bookings,
+.appointment-month-day.has-bookings:hover,
+.highlight,
+.badge,
+.tag,
+.status-badge,
+.info-badge,
+.success-box,
+.warning-box,
+.notice-box,
+.soft-box{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-border)!important;
+}
+
+/* Existing light-blue dashboard cards are now controlled by the selected palette. */
+.dashboard-menu-btn{
+  box-shadow:0 2px 7px rgba(0,0,0,.06);
+}
+
+/* Accent borders, outlines and selected states */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible,
+.nav button.active,
+.selected,
+.active,
+.tab.active,
+.filter-btn.active,
+.appointment-month-day.selected,
+.appointment-month-day.today,
+.evaluation-select-mode .class-record-item{
+  border-color:var(--global-accent)!important;
+  outline-color:var(--global-accent)!important;
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"]{
+  accent-color:var(--global-accent)!important;
+}
+
+/* Links / accent text */
+a,
+.link,
+.accent-text,
+.text-accent,
+.portal-settings-header h3,
+.settings-section-title{
+  color:var(--global-accent-dark)!important;
+}
+
+/* Theme-colored icons / decorative elements */
+.icon-accent,
+.fa-accent,
+.bi-accent,
+.emoji-accent{
+  color:var(--global-accent-dark)!important;
+}
+
+/* One global rule for common inline colored surfaces created by the app. */
+[data-theme-color="accent"],
+[data-theme-color="primary"]{
+  background:var(--global-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+[data-theme-color="soft"]{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-border)!important;
+}
+
+/* Keep white intentionally white; global color changes only the non-white theme layer. */
+.global-theme-preserve-white{background:#fff!important;color:#111!important}
+</style>
+
+<style id="td-global-theme-sweep">
+/* FINAL GLOBAL THEME SWEEP: removes leftover blue/green/red/cyan/purple UI colors. */
+.td-theme-sweep-bg{background:var(--global-accent)!important;background-image:none!important;color:var(--global-text-on-accent)!important;border-color:var(--global-accent-dark)!important}
+.td-theme-sweep-bg-light{background:var(--global-accent-soft)!important;background-image:none!important;border-color:var(--global-border)!important}
+.td-theme-sweep-text{color:var(--global-accent-dark)!important}
+.td-theme-sweep-border{border-color:var(--global-border)!important}
+</style>
+
+<style id="td-evaluation-contract-theme-fix">
+/* =========================================================
+   CLASS RECORD / EVALUATION — ALWAYS FOLLOW THE SELECTED THEME
+   These selectors cover dynamically-rendered evaluation records too.
+========================================================= */
+.evaluation-student-card,
+.class-record-item,
+.record-student-header,
+.evaluation-record-count,
+.class-record-field,
+.class-record-item-header,
+.evaluation-record-tools .class-record-dots,
+.class-record-actions .class-record-dots,
+.class-record-menu{
+  border-color:var(--global-border)!important;
+}
+
+.evaluation-student-card,
+.class-record-item{
+  background:var(--portal-surface,#fff)!important;
+  color:var(--portal-text,#111)!important;
+}
+
+.evaluation-student-card:hover{
+  border-color:var(--global-accent)!important;
+}
+
+.evaluation-student-avatar,
+.record-student-avatar{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-border)!important;
+  color:var(--global-accent-dark)!important;
+}
+
+.evaluation-student-info .student-id,
+.evaluation-student-info .latest-evaluation,
+.record-student-header-info span,
+.class-record-summary-date,
+.class-record-field label{
+  color:var(--global-accent-dark)!important;
+}
+
+.class-record-btn,
+.view-record-btn{
+  background:var(--global-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+
+.class-record-btn:hover,
+.view-record-btn:hover{
+  background:var(--global-accent-dark)!important;
+  color:#fff!important;
+}
+
+.class-record-item-header{
+  background:var(--global-accent-soft)!important;
+  border-bottom-color:var(--global-border)!important;
+}
+
+.class-record-field{
+  background:var(--global-accent-pale)!important;
+}
+
+.class-record-dots,
+.class-record-menu,
+.class-record-menu button{
+  background:var(--portal-surface,#fff)!important;
+  color:var(--portal-text,#111)!important;
+}
+
+.class-record-dots:hover,
+.class-record-menu button:hover{
+  background:var(--global-accent-soft)!important;
+  color:var(--global-accent-dark)!important;
+}
+
+.evaluation-select-box{
+  accent-color:var(--global-accent)!important;
+}
+
+.evaluation-select-mode .class-record-item{
+  border-color:var(--global-accent)!important;
+  box-shadow:0 0 0 1px var(--global-accent-soft) inset;
+}
+
+/* Evaluation action area follows the selected theme instead of fixed cyan. */
+.evaluation-action-btn,
+#downloadEvaluationBtn:not(:disabled),
+#saveEvaluationBtn,
+#generateEvaluationBtn,
+#clearEvaluationBtn,
+#addAssessmentBtn{
+  background:var(--global-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+
+/* =========================================================
+   RAINBOW MODE — EVALUATION / CLASS RECORD ALSO PARTICIPATE
+========================================================= */
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+1) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+1) .view-record-btn{background:var(--rainbow-red)!important;border-color:var(--rainbow-red)!important;color:#fff!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+2) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+2) .view-record-btn{background:var(--rainbow-orange)!important;border-color:var(--rainbow-orange)!important;color:#111!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+3) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+3) .view-record-btn{background:var(--rainbow-yellow)!important;border-color:var(--rainbow-yellow)!important;color:#111!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+4) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+4) .view-record-btn{background:var(--rainbow-green)!important;border-color:var(--rainbow-green)!important;color:#111!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+5) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+5) .view-record-btn{background:var(--rainbow-blue)!important;border-color:var(--rainbow-blue)!important;color:#fff!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+6) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n+6) .view-record-btn{background:var(--rainbow-purple)!important;border-color:var(--rainbow-purple)!important;color:#fff!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n) .class-record-btn,
+body.portal-rainbow .class-record-item:nth-of-type(7n) .view-record-btn{background:var(--rainbow-pink)!important;border-color:var(--rainbow-pink)!important;color:#fff!important}
+
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+1),
+body.portal-rainbow .class-record-item:nth-of-type(7n+1) .class-record-item-header{background:#fff1f1!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+2),
+body.portal-rainbow .class-record-item:nth-of-type(7n+2) .class-record-item-header{background:#fff5e8!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+3),
+body.portal-rainbow .class-record-item:nth-of-type(7n+3) .class-record-item-header{background:#fffde5!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+4),
+body.portal-rainbow .class-record-item:nth-of-type(7n+4) .class-record-item-header{background:#effff5!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+5),
+body.portal-rainbow .class-record-item:nth-of-type(7n+5) .class-record-item-header{background:#eef7ff!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n+6),
+body.portal-rainbow .class-record-item:nth-of-type(7n+6) .class-record-item-header{background:#f6efff!important}
+body.portal-rainbow .evaluation-student-card:nth-of-type(7n),
+body.portal-rainbow .class-record-item:nth-of-type(7n) .class-record-item-header{background:#fff0f7!important}
+
+/* =========================================================
+   STUDENT CONTRACT — KEEP THE ACTUAL FILL / SIGN DOCUMENT WHITE
+   This intentionally overrides the global theme for readability.
+========================================================= */
+.contract-document,
+.contract-document *{
+  --contract-theme-reset:#fff;
+}
+
+.contract-document{
+  background:#fff!important;
+  color:#111!important;
+  border-color:#d9dee7!important;
+}
+
+.contract-document .contract-header,
+.contract-document .contract-section h3{
+  color:#111!important;
+  border-color:#111!important;
+}
+
+.contract-document .contract-info-box,
+.contract-document .contract-student-info .contract-info-box,
+.contract-document .contract-signature,
+.contract-document .signature-grid > div{
+  background:#fff!important;
+  color:#111!important;
+  border-color:#e4e7ec!important;
+}
+
+.contract-document .contract-info-box label,
+.contract-document p,
+.contract-document span,
+.contract-document strong,
+.contract-document div{
+  color:inherit;
+}
+
+.contract-upload-panel,
+.contract-sign-upload,
+.contract-preview,
+.contract-sign-preview{
+  background:#fff!important;
+  color:#111!important;
+  border-color:#d9dee7!important;
+}
+
+.contract-picker-item{
+  background:#fff!important;
+  color:#111!important;
+  border-color:#d9dee7!important;
+}
+
+.contract-picker-item:hover{
+  background:#fff!important;
+  border-color:#b8b8b8!important;
+}
+</style>
+
 </head>
 
 <body>
@@ -2654,8 +3020,80 @@ Teacher
 
 </div>
 
+<button type="button" id="settingsGearBtn" class="settings-gear-btn" onclick="togglePortalSettings(event)" aria-label="Open Settings" title="Settings">⚙️</button>
+
 </div>
 
+
+<div id="portalSettingsPanel" class="portal-settings-panel" aria-hidden="true">
+  <div class="portal-settings-header">
+    <div><h3>Settings</h3><span>Customize your Teacher Management Portal</span></div>
+    <button type="button" class="portal-settings-close" onclick="closePortalSettings()" aria-label="Close Settings">×</button>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">COLOR PALETTE</div>
+    <div class="palette-grid" id="paletteGrid"></div>
+    <div class="custom-color-row">
+      <div><strong>Color Wheel</strong><small>Choose any overall accent color</small></div>
+      <input id="customAccentColor" type="color" value="#00e5e5" aria-label="Choose custom accent color" onchange="applyCustomAccent(this.value)">
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">APPEARANCE</div>
+    <div class="mode-grid">
+      <button type="button" id="lightModeBtn" class="mode-btn" onclick="setPortalTheme('light')">☀️ <span>Light Mode</span></button>
+      <button type="button" id="darkModeBtn" class="mode-btn" onclick="setPortalTheme('dark')">🌙 <span>Night / Dark Mode</span></button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">FONT</div>
+    <select id="portalFontSelect" class="settings-select" onchange="applyPortalFont(this.value)" aria-label="Choose website font"></select>
+    <div id="fontPreview" class="font-preview">Teacher Management Portal — Font Preview</div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">NETWORK TEST</div>
+    <button type="button" class="settings-action-btn" onclick="openNetworkTest()">📶 Run Full-Screen Network Test</button>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">NOTIFICATIONS</div>
+    <div class="notification-row">
+      <div><strong>Class Reminder</strong><small>Alert when a class starts within 10 minutes</small></div>
+      <label class="switch"><input id="portalNotificationToggle" type="checkbox" onchange="setPortalNotifications(this.checked)"><span></span></label>
+    </div>
+    <div class="notification-sound-row">
+      <label for="portalNotificationSound">Notification Sound</label>
+      <select id="portalNotificationSound" class="settings-select" onchange="setNotificationSound(this.value)">
+        <option value="chime">🔔 Chime</option>
+        <option value="bell">🔔 Bell</option>
+        <option value="double">🔔 Double Bell</option>
+        <option value="soft">🔔 Soft Tone</option>
+      </select>
+      <button type="button" class="sound-test-btn" onclick="testNotificationSound()">Test Sound</button>
+    </div>
+  </div>
+</div>
+
+<div id="networkTestOverlay" class="network-test-overlay" aria-hidden="true">
+  <div class="network-test-card">
+    <button type="button" class="network-test-close" onclick="closeNetworkTest()" aria-label="Close Network Test">×</button>
+    <div class="network-test-icon">📶</div>
+    <h2>Network Speed Test</h2>
+    <p class="network-test-subtitle">Testing your current connection...</p>
+    <div class="network-meter"><div id="networkMeterBar"></div></div>
+    <div class="network-status" id="networkTestStatus">Preparing test...</div>
+    <div class="network-results">
+      <div><span>DOWNLOAD</span><strong id="networkDownload">—</strong><small>Mbps</small></div>
+      <div><span>LATENCY</span><strong id="networkLatency">—</strong><small>ms</small></div>
+      <div><span>CONNECTION</span><strong id="networkConnectionType">—</strong><small>browser estimate</small></div>
+    </div>
+    <button type="button" id="networkRetestBtn" class="network-retest-btn" onclick="runNetworkTest()">Run Test Again</button>
+  </div>
+</div>
 
 <div class="nav">
 
@@ -7480,12 +7918,13 @@ const inMonth=cursor.getMonth()===appointmentMonthDate.getMonth();
 const today=dateString===getLocalDateString(new Date());
 const selected=dateString===selectedAppointmentDate;
 const dayItems=items.filter(a=>a.date===dateString).sort((a,b)=>String(a.time).localeCompare(String(b.time)));
+const hasBookings=getAppointments().some(a=>a.date===dateString);
 const bookingCount=dayItems.length;
 const bookingLabel=bookingCount===1?'1 booking':`${bookingCount} bookings`;
 const bookingMarkup=bookingCount
 ?`<div class="appointment-booking-count">${bookingLabel}</div>`
 :'';
-cells+=`<div class="appointment-month-day ${inMonth?'':'other-month'} ${today?'today':''} ${selected?'selected':''}" onclick="selectAppointmentDay('${dateString}')">
+cells+=`<div class="appointment-month-day ${inMonth?'':'other-month'} ${today?'today':''} ${selected?'selected':''} ${hasBookings?'has-bookings':''}" onclick="selectAppointmentDay('${dateString}')">
 <div class="appointment-month-number"><span>${cursor.getDate()}</span>${today?'<span class="appointment-today-badge">TODAY</span>':''}</div>
 ${bookingMarkup}
 </div>`;
@@ -10714,6 +11153,174 @@ showContractSuccess(
 function showContractError(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='';e.style.background='';e.style.borderColor='';}}
 function showContractSuccess(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='#067647';e.style.background='#ecfdf3';e.style.borderColor='#abefc6';e.style.padding='10px';e.style.borderRadius='8px';}}
 
+
+
+/* =========================================================
+   SETTINGS / THEME / FONT / NETWORK / NOTIFICATIONS
+========================================================= */
+const PORTAL_SETTINGS_KEY='teacherDanyealPortalSettings';
+const PORTAL_PALETTES=[
+ {name:'Cyan',accent:'#00e5e5',dark:'#00bcbc',soft:'#e7ffff'},
+ {name:'Blue',accent:'#4f8cff',dark:'#2563eb',soft:'#eaf1ff'},
+ {name:'Purple',accent:'#9b6cff',dark:'#7c3aed',soft:'#f2ecff'},
+ {name:'Pink',accent:'#ff6fae',dark:'#db2777',soft:'#fff0f6'},
+ {name:'Red',accent:'#ff6b6b',dark:'#dc2626',soft:'#fff0f0'},
+ {name:'Orange',accent:'#ffad4d',dark:'#ea580c',soft:'#fff5e8'},
+ {name:'Yellow',accent:'#ffe45c',dark:'#d4a800',soft:'#fffbea'},
+ {name:'Green',accent:'#55d68a',dark:'#16a34a',soft:'#ebfff3'},
+ {name:'Teal',accent:'#2dd4bf',dark:'#0f9f8d',soft:'#e9fffb'},
+ {name:'Rainbow',rainbow:true,accent:'#ff4d8d',dark:'#7c3aed',soft:'#fff0f7'}
+];
+const PORTAL_FONTS=[
+ ['Arial','Arial, Helvetica, sans-serif'],['Helvetica','Helvetica, Arial, sans-serif'],['Georgia','Georgia, serif'],['Times New Roman','"Times New Roman", serif'],['Trebuchet MS','"Trebuchet MS", sans-serif'],['Verdana','Verdana, sans-serif'],['Tahoma','Tahoma, sans-serif'],['Courier New','"Courier New", monospace'],['Lucida Console','"Lucida Console", monospace'],['Palatino Linotype','"Palatino Linotype", Palatino, serif'],['Garamond','Garamond, serif'],['Cambria','Cambria, Georgia, serif'],['Calibri','Calibri, Arial, sans-serif'],['Segoe UI','"Segoe UI", Arial, sans-serif'],['Roboto','Roboto, Arial, sans-serif'],['Open Sans','"Open Sans", Arial, sans-serif'],['Poppins','Poppins, Arial, sans-serif'],['Montserrat','Montserrat, Arial, sans-serif'],['Nunito','Nunito, Arial, sans-serif'],['Inter','Inter, Arial, sans-serif']
+];
+let portalSettings={accent:'#00e5e5',accentDark:'#00bcbc',accentSoft:'#e7ffff',theme:'light',font:'Arial',notifications:true,sound:'chime'};
+let notificationTimer=null;
+let notifiedClasses={};
+
+function loadPortalSettings(){
+ try{portalSettings={...portalSettings,...JSON.parse(localStorage.getItem(PORTAL_SETTINGS_KEY)||'{}')};}catch(e){}
+ if(portalSettings.rainbow)applyRainbowTheme(false);else applyAccent(portalSettings.accent,portalSettings.accentDark,portalSettings.accentSoft,false);
+ setPortalTheme(portalSettings.theme,false);
+ applyPortalFont(portalSettings.font,false);
+ const toggle=document.getElementById('portalNotificationToggle'); if(toggle)toggle.checked=portalSettings.notifications!==false;
+ const sound=document.getElementById('portalNotificationSound'); if(sound)sound.value=portalSettings.sound||'chime';
+ const color=document.getElementById('customAccentColor'); if(color)color.value=portalSettings.accent||'#00e5e5';
+ renderPaletteButtons(); updateModeButtons();
+ if(portalSettings.notifications!==false) startClassNotificationWatcher();
+}
+function savePortalSettings(){localStorage.setItem(PORTAL_SETTINGS_KEY,JSON.stringify(portalSettings));}
+function renderPaletteButtons(){
+ const grid=document.getElementById('paletteGrid'); if(!grid)return;
+ grid.innerHTML=PORTAL_PALETTES.map((p,i)=>{const active=p.rainbow?(portalSettings.rainbow?'active':''):(portalSettings.accent.toLowerCase()===p.accent.toLowerCase()&&!portalSettings.rainbow?'active':'');const swatch=p.rainbow?'linear-gradient(90deg,#ff4d4d,#ff9f43,#ffe14a,#4ddf7c,#42a5ff,#9b6cff,#ff4d8d)':`linear-gradient(135deg,${p.accent},${p.dark})`;return `<button type="button" class="palette-btn ${active}" onclick="choosePortalPalette(${i})"><div class="palette-swatch" style="background:${swatch}"></div>${p.name}</button>`}).join('');
+}
+function choosePortalPalette(index){const p=PORTAL_PALETTES[index];if(!p)return;if(p.rainbow){applyRainbowTheme(true);}else{applyAccent(p.accent,p.dark,p.soft,true);}renderPaletteButtons();}
+function applyRainbowTheme(persist=true){
+ portalSettings.rainbow=true;
+ document.body.classList.add('portal-rainbow');
+ const root=document.documentElement;
+ root.style.setProperty('--rainbow-red','#ff4d4d');root.style.setProperty('--rainbow-orange','#ff9f43');root.style.setProperty('--rainbow-yellow','#f4d03f');root.style.setProperty('--rainbow-green','#42c978');root.style.setProperty('--rainbow-blue','#42a5ff');root.style.setProperty('--rainbow-purple','#9b6cff');root.style.setProperty('--rainbow-pink','#ff4d8d');
+ root.style.setProperty('--portal-accent','#ff4d8d');root.style.setProperty('--portal-accent-dark','#9b2c6b');root.style.setProperty('--portal-accent-soft','#fff0f7');
+ root.style.setProperty('--global-accent','#ff4d8d');root.style.setProperty('--global-accent-dark','#9b2c6b');root.style.setProperty('--global-accent-soft','#fff0f7');root.style.setProperty('--global-accent-mid','#ffc4dc');root.style.setProperty('--global-accent-pale','#fff8fb');root.style.setProperty('--global-text-on-accent','#ffffff');root.style.setProperty('--global-border','#ff9fba');
+ applyGlobalThemeSweep();
+ if(persist)savePortalSettings();
+}
+
+function applyCustomAccent(color){
+ if(!color)return;
+ const rgb=hexToRgb(color); const dark=rgb?shadeHex(color,.72):color; const soft=rgb?mixHex(color,'#ffffff',.88):color;
+ applyAccent(color,dark,soft,true);renderPaletteButtons();
+}
+function applyAccent(accent,dark,soft,persist=true){
+ portalSettings.rainbow=false;document.body.classList.remove('portal-rainbow');
+ portalSettings.accent=accent;portalSettings.accentDark=dark;portalSettings.accentSoft=soft;
+ const root=document.documentElement;root.style.setProperty('--portal-accent',accent);root.style.setProperty('--portal-accent-dark',dark);root.style.setProperty('--portal-accent-soft',soft);
+ const mid=mixHex(accent,'#ffffff',.55), pale=mixHex(accent,'#ffffff',.94), text=contrastText(accent);
+ root.style.setProperty('--global-accent',accent);root.style.setProperty('--global-accent-dark',dark);root.style.setProperty('--global-accent-soft',soft);root.style.setProperty('--global-accent-mid',mid);root.style.setProperty('--global-accent-pale',pale);root.style.setProperty('--global-text-on-accent',text);root.style.setProperty('--global-border',mid);
+
+ applyGlobalThemeSweep();
+ if(persist)savePortalSettings();
+}
+
+function tdColorIsChromatic(value){
+ const m=String(value||'').match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+ if(!m)return false;
+ const r=+m[1],g=+m[2],b=+m[3];
+ return Math.max(r,g,b)-Math.min(r,g,b)>18;
+}
+function tdRgbLuminance(value){
+ const m=String(value||'').match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+ if(!m)return 0;
+ return .299*(+m[1])+.587*(+m[2])+.114*(+m[3]);
+}
+function applyGlobalThemeSweep(){
+ const root=document.documentElement;
+ document.querySelectorAll('.td-theme-sweep-bg,.td-theme-sweep-bg-light,.td-theme-sweep-text,.td-theme-sweep-border').forEach(el=>{
+   el.classList.remove('td-theme-sweep-bg','td-theme-sweep-bg-light','td-theme-sweep-text','td-theme-sweep-border');
+ });
+ document.querySelectorAll('*').forEach(el=>{
+   if(el===document.documentElement||el===document.body||el.tagName==='IMG'||el.tagName==='SVG'||el.tagName==='VIDEO'||el.tagName==='CANVAS')return;
+   const cs=getComputedStyle(el);
+   const bg=cs.backgroundColor;
+   const bi=cs.backgroundImage;
+   const border=cs.borderTopColor;
+   const color=cs.color;
+   if(tdColorIsChromatic(bg) || (bi && bi!=='none' && /(rgb|hsl|#[0-9a-f]{3,8})/i.test(bi))){
+     const lum=tdRgbLuminance(bg);
+     el.classList.add(lum>185?'td-theme-sweep-bg-light':'td-theme-sweep-bg');
+   }
+   if(tdColorIsChromatic(color))el.classList.add('td-theme-sweep-text');
+   if(tdColorIsChromatic(border))el.classList.add('td-theme-sweep-border');
+ });
+}
+function hexToRgb(hex){const m=String(hex).replace('#','').match(/^([0-9a-f]{6})$/i);if(!m)return null;return {r:parseInt(m[1].slice(0,2),16),g:parseInt(m[1].slice(2,4),16),b:parseInt(m[1].slice(4,6),16)}}
+function shadeHex(hex,f){const r=hexToRgb(hex);if(!r)return hex;return '#'+[r.r,r.g,r.b].map(v=>Math.max(0,Math.min(255,Math.round(v*f))).toString(16).padStart(2,'0')).join('')}
+function mixHex(a,b,ratio){const x=hexToRgb(a),y=hexToRgb(b);if(!x||!y)return a;const r=1-ratio;return '#'+['r','g','b'].map(k=>Math.round(x[k]*r+y[k]*ratio).toString(16).padStart(2,'0')).join('')}
+function contrastText(hex){const r=hexToRgb(hex);if(!r)return '#111';const lum=(0.299*r.r+0.587*r.g+0.114*r.b);return lum>175?'#111111':'#ffffff'}
+function setPortalTheme(mode,persist=true){
+ portalSettings.theme=mode==='dark'?'dark':'light';document.body.classList.toggle('portal-dark',portalSettings.theme==='dark');
+ updateModeButtons();if(persist)savePortalSettings();
+}
+function updateModeButtons(){document.getElementById('lightModeBtn')?.classList.toggle('active',portalSettings.theme==='light');document.getElementById('darkModeBtn')?.classList.toggle('active',portalSettings.theme==='dark');}
+function populatePortalFonts(){const sel=document.getElementById('portalFontSelect');if(!sel)return;sel.innerHTML=PORTAL_FONTS.map(([name,stack])=>`<option value="${name}" data-stack="${escapeHtml(stack)}">${name}</option>`).join('');sel.value=portalSettings.font||'Arial';updateFontPreview();}
+function applyPortalFont(name,persist=true){const found=PORTAL_FONTS.find(x=>x[0]===name)||PORTAL_FONTS[0];portalSettings.font=found[0];document.body.style.fontFamily=found[1];const sel=document.getElementById('portalFontSelect');if(sel)sel.value=found[0];updateFontPreview();if(persist)savePortalSettings();}
+function updateFontPreview(){const el=document.getElementById('fontPreview');if(!el)return;const found=PORTAL_FONTS.find(x=>x[0]===portalSettings.font)||PORTAL_FONTS[0];el.style.fontFamily=found[1];}
+function togglePortalSettings(e){if(e)e.stopPropagation();document.getElementById('portalSettingsPanel')?.classList.toggle('show');document.getElementById('portalSettingsPanel')?.setAttribute('aria-hidden',String(!document.getElementById('portalSettingsPanel')?.classList.contains('show')))}
+function closePortalSettings(){document.getElementById('portalSettingsPanel')?.classList.remove('show');document.getElementById('portalSettingsPanel')?.setAttribute('aria-hidden','true')}
+function setPortalNotifications(enabled){portalSettings.notifications=!!enabled;savePortalSettings();if(enabled){startClassNotificationWatcher();requestNotificationPermission();}else{stopClassNotificationWatcher();}}
+function setNotificationSound(sound){portalSettings.sound=sound||'chime';savePortalSettings();}
+async function requestNotificationPermission(){if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission();}catch(e){}}}
+function testNotificationSound(){playNotificationSound();}
+function playNotificationSound(){
+ const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+ const ctx=new C(); const now=ctx.currentTime;
+ const patterns={chime:[523.25,659.25,783.99],bell:[783.99,659.25],double:[659.25,659.25,783.99],soft:[440,554.37]};
+ const tones=patterns[portalSettings.sound]||patterns.chime;
+ tones.forEach((freq,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.0001,now+i*.16);g.gain.exponentialRampToValueAtTime(.13,now+i*.16+.02);g.gain.exponentialRampToValueAtTime(.0001,now+i*.16+.14);o.connect(g);g.connect(ctx.destination);o.start(now+i*.16);o.stop(now+i*.16+.16)});
+ setTimeout(()=>ctx.close().catch(()=>{}),900);
+}
+function startClassNotificationWatcher(){if(notificationTimer)return;checkUpcomingClassNotifications();notificationTimer=setInterval(checkUpcomingClassNotifications,30000);}
+function stopClassNotificationWatcher(){if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}}
+function checkUpcomingClassNotifications(){
+ if(portalSettings.notifications===false)return;
+ let appointments=[];try{appointments=getAppointments();}catch(e){return}
+ const now=Date.now();
+ appointments.filter(a=>a&&a.status==='Scheduled'&&a.date&&a.time).forEach(a=>{
+   const start=parseAppointmentDate(a.date,a.time); if(!start)return; const ms=start.getTime()-now;
+   if(ms>=0&&ms<=10*60*1000){const key=`${a.id||a.date+'_'+a.time+'_'+a.studentId}`;if(notifiedClasses[key])return;notifiedClasses[key]=Date.now();
+     playNotificationSound();
+     const mins=Math.max(1,Math.ceil(ms/60000)); const msg=`${a.studentName||'Student'} class starts in ${mins} minute${mins===1?'':'s'}.`;
+     if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Teacher Management Portal',{body:msg,tag:key});}catch(e){}}
+     showPortalToast('⏰ '+msg);
+   }
+ });
+ Object.keys(notifiedClasses).forEach(k=>{if(now-notifiedClasses[k]>30*60*1000)delete notifiedClasses[k]});
+}
+function showPortalToast(msg){let el=document.getElementById('portalToast');if(!el){el=document.createElement('div');el.id='portalToast';el.style.cssText='position:fixed;right:18px;bottom:18px;z-index:30000;max-width:360px;padding:14px 16px;border-radius:12px;background:#111;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:800;font-size:13px;';document.body.appendChild(el)}el.textContent=msg;el.style.background=portalSettings.accentDark;el.style.color='#fff';clearTimeout(el._timer);el._timer=setTimeout(()=>el.remove(),7000);}
+
+function openNetworkTest(){closePortalSettings();const ov=document.getElementById('networkTestOverlay');if(!ov)return;ov.classList.add('show');ov.setAttribute('aria-hidden','false');runNetworkTest();}
+function closeNetworkTest(){const ov=document.getElementById('networkTestOverlay');if(ov){ov.classList.remove('show');ov.setAttribute('aria-hidden','true')}}
+async function runNetworkTest(){
+ const status=document.getElementById('networkTestStatus'),bar=document.getElementById('networkMeterBar'),dl=document.getElementById('networkDownload'),lat=document.getElementById('networkLatency'),ct=document.getElementById('networkConnectionType');
+ if(!status)return;bar.style.width='5%';dl.textContent='—';lat.textContent='—';
+ const conn=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+ ct.textContent=(conn?.effectiveType||'Detecting').toUpperCase();
+ status.textContent='Measuring latency...';
+ const t0=performance.now();
+ try{await fetch(window.location.href,{cache:'no-store',mode:'same-origin'});lat.textContent=Math.round(performance.now()-t0);}catch(e){lat.textContent='—';}
+ bar.style.width='30%';status.textContent='Measuring download speed...';
+ const bytes=1000000;const url='https://speed.cloudflare.com/__down?bytes='+bytes+'&cache='+Date.now();const start=performance.now();
+ try{await fetch(url,{cache:'no-store',mode:'no-cors'});const seconds=Math.max((performance.now()-start)/1000,.05);const mbps=(bytes*8/seconds/1000000);dl.textContent=mbps.toFixed(1);bar.style.width='100%';status.textContent='Network test complete';}
+ catch(e){if(conn?.downlink){dl.textContent=Number(conn.downlink).toFixed(1);status.textContent='Using browser network estimate';bar.style.width='100%';}else{dl.textContent='N/A';status.textContent='Download test could not complete';bar.style.width='100%';}}
+}
+
+(function initPortalSettings(){
+ const boot=()=>{populatePortalFonts();loadPortalSettings();};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePortalSettings();closeNetworkTest();}});
+ document.addEventListener('click',e=>{const p=document.getElementById('portalSettingsPanel');const b=document.getElementById('settingsGearBtn');if(p&&p.classList.contains('show')&&!p.contains(e.target)&&!b?.contains(e.target))closePortalSettings();});
+})();
+
 </script>
 
 
@@ -10721,6 +11328,221 @@ function showContractSuccess(msg){const e=document.getElementById('contractError
 
 /* Teacher-entered evaluation notes are intentionally bold for parent visibility. */
 #vocabulary, #improvement { font-weight: 700 !important; }
+
+
+/* =========================================================
+   PORTAL SETTINGS / THEMING
+========================================================= */
+:root{
+  --portal-accent:#00e5e5;
+  --portal-accent-dark:#00bcbc;
+  --portal-accent-soft:#e7ffff;
+  --portal-bg:#ffffff;
+  --portal-surface:#ffffff;
+  --portal-surface-2:#f7fafb;
+  --portal-text:#111111;
+  --portal-muted:#667085;
+  --portal-border:#d9e1e5;
+}
+
+.settings-gear-btn{
+  margin-left:auto;
+  width:42px;height:42px;
+  border:1px solid #d8e0e3;
+  border-radius:10px;
+  background:#fff;
+  color:#111;
+  font-size:21px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s ease;
+}
+.settings-gear-btn:hover{background:var(--portal-accent-soft);border-color:var(--portal-accent);transform:rotate(15deg)}
+
+.portal-settings-panel{
+  position:fixed;z-index:10020;top:72px;right:18px;
+  width:min(390px,calc(100vw - 28px));max-height:calc(100vh - 92px);
+  overflow:auto;background:var(--portal-surface);color:var(--portal-text);
+  border:1px solid var(--portal-border);border-radius:16px;
+  box-shadow:0 18px 55px rgba(0,0,0,.20);padding:0;
+  display:none;
+}
+.portal-settings-panel.show{display:block}
+.portal-settings-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:18px 18px 14px;border-bottom:1px solid var(--portal-border);position:sticky;top:0;background:var(--portal-surface);z-index:2}
+.portal-settings-header h3{margin:0;font-size:19px}.portal-settings-header span{display:block;color:var(--portal-muted);font-size:11px;margin-top:3px}
+.portal-settings-close{border:0;background:transparent;font-size:27px;line-height:1;cursor:pointer;color:var(--portal-muted)}
+.settings-section{padding:15px 18px;border-bottom:1px solid var(--portal-border)}
+.settings-section:last-child{border-bottom:0}.settings-section-title{font-size:11px;font-weight:900;letter-spacing:.08em;color:var(--portal-muted);margin-bottom:10px}
+.palette-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.palette-btn{border:2px solid transparent;border-radius:10px;padding:9px 7px;cursor:pointer;background:#fff;text-align:center;font-weight:800;font-size:11px;color:#222}
+.palette-btn.active{border-color:#111;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--portal-accent)}
+.palette-swatch{height:25px;border-radius:7px;margin-bottom:6px;border:1px solid rgba(0,0,0,.08)}
+.custom-color-row,.notification-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:10px;border:1px solid var(--portal-border);border-radius:10px;background:var(--portal-surface-2)}
+.custom-color-row strong,.notification-row strong{display:block;font-size:13px}.custom-color-row small,.notification-row small{display:block;color:var(--portal-muted);font-size:10px;margin-top:3px}
+#customAccentColor{width:54px;height:34px;border:0;background:transparent;cursor:pointer;padding:0}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mode-btn{border:1px solid var(--portal-border);background:var(--portal-surface-2);color:var(--portal-text);padding:11px 8px;border-radius:10px;font-weight:800;cursor:pointer}.mode-btn.active{background:var(--portal-accent);border-color:var(--portal-accent-dark);color:#111}
+.settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-preview{margin-top:8px;padding:10px;border-radius:9px;background:var(--portal-accent-soft);color:var(--portal-text);font-size:14px}
+.settings-action-btn,.sound-test-btn,.network-retest-btn{width:100%;border:1px solid var(--portal-accent-dark);background:var(--portal-accent);color:#111;border-radius:9px;padding:11px;font-weight:900;cursor:pointer}.sound-test-btn{margin-top:8px;width:auto;padding:8px 12px;font-size:12px}
+.notification-sound-row{margin-top:10px}.notification-sound-row label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.switch{position:relative;width:48px;height:26px;display:block;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#c7ced2;border-radius:30px;cursor:pointer;transition:.2s}.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--portal-accent-dark)}.switch input:checked+span:before{transform:translateX(22px)}
+
+.network-test-overlay{display:none;position:fixed;inset:0;z-index:20000;background:rgba(6,14,20,.92);align-items:center;justify-content:center;padding:20px}.network-test-overlay.show{display:flex}.network-test-card{position:relative;width:min(720px,95vw);background:#fff;border-radius:22px;padding:36px;text-align:center;color:#111;box-shadow:0 25px 80px rgba(0,0,0,.45)}.network-test-close{position:absolute;right:15px;top:12px;border:0;background:transparent;font-size:30px;cursor:pointer;color:#667085}.network-test-icon{font-size:42px}.network-test-card h2{margin:8px 0 4px;font-size:28px}.network-test-subtitle{color:#667085;margin:0 0 22px}.network-meter{height:10px;background:#e9eef0;border-radius:20px;overflow:hidden}.network-meter div{height:100%;width:0;background:var(--portal-accent);transition:width .35s ease}.network-status{font-weight:800;margin:14px 0 20px}.network-results{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}.network-results>div{background:#f6f8f9;border:1px solid #e1e7e9;border-radius:13px;padding:17px 8px}.network-results span{display:block;font-size:10px;font-weight:900;color:#667085;letter-spacing:.08em}.network-results strong{display:block;font-size:25px;margin-top:7px}.network-results small{color:#667085;font-size:10px}.network-retest-btn{width:auto;padding:11px 24px}
+
+/* Apply the selected accent broadly across the portal. */
+.topbar,.section-title,.dashboard-menu-btn,.nav button.active,.appointment-month-day.selected,.modal-header,.student-add-modal-header,.profile-panel-header{background:var(--portal-accent) !important}
+.dashboard-menu-btn:hover{background:var(--portal-accent-dark) !important}.nav button.active{border-color:var(--portal-accent-dark)!important}.page a,.link-button{color:var(--portal-accent-dark)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--portal-accent-dark);outline-offset:1px}
+
+body.portal-dark{background:#11181c;color:#edf4f6}.portal-dark .card,.portal-dark .page,.portal-dark .userbar,.portal-dark .nav,.portal-dark .portal-settings-panel,.portal-dark .portal-settings-header{background:#182126!important;color:#edf4f6!important}.portal-dark .nav{border-color:#2c3940}.portal-dark .profile-trigger,.portal-dark .settings-gear-btn,.portal-dark .dashboard-summary-card,.portal-dark .teacher-dashboard-card,.portal-dark .card,.portal-dark input,.portal-dark select,.portal-dark textarea,.portal-dark .settings-select,.portal-dark .settings-section,.portal-dark .mode-btn,.portal-dark .custom-color-row,.portal-dark .notification-row{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark input::placeholder,.portal-dark textarea::placeholder{color:#9aaab2}.portal-dark .settings-gear-btn{color:#fff}.portal-dark .nav button{background:#26343b;color:#edf4f6}.portal-dark .dashboard-menu-btn{color:#111}.portal-dark .portal-settings-header,.portal-dark .portal-settings-panel{background:#182126!important}.portal-dark .font-preview{color:#fff;background:#26343b}.portal-dark .small,.portal-dark .muted,.portal-dark label{color:#b4c2c8}.portal-dark .appointment-month-day{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark .appointment-month-day.has-bookings{background:#14383b!important}.portal-dark .appointment-month-day.other-month{background:#182126!important}.portal-dark .table-wrap,.portal-dark table,.portal-dark th,.portal-dark td{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}
+
+/* FULL RAINBOW THEME: every visual UI surface gets its own rainbow shade. */
+body.portal-rainbow .topbar{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+1){background:var(--rainbow-red)!important;color:#fff!important;border-color:var(--rainbow-red)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+2){background:var(--rainbow-orange)!important;color:#111!important;border-color:var(--rainbow-orange)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+3){background:var(--rainbow-yellow)!important;color:#111!important;border-color:var(--rainbow-yellow)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+4){background:var(--rainbow-green)!important;color:#111!important;border-color:var(--rainbow-green)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+5){background:var(--rainbow-blue)!important;color:#fff!important;border-color:var(--rainbow-blue)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+6){background:var(--rainbow-purple)!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n){background:var(--rainbow-pink)!important;color:#fff!important;border-color:var(--rainbow-pink)!important}
+body.portal-rainbow .dashboard-menu-btn,body.portal-rainbow .section-title,body.portal-rainbow .modal-header,body.portal-rainbow .student-add-modal-header,body.portal-rainbow .profile-panel-header,body.portal-rainbow .settings-gear-btn{background:var(--rainbow-blue)!important;color:#fff!important}
+body.portal-rainbow .dashboard-menu-btn:nth-child(2n),body.portal-rainbow .section-title:nth-child(2n),body.portal-rainbow .modal-header:nth-child(2n){background:var(--rainbow-purple)!important}
+body.portal-rainbow .dashboard-menu-btn:nth-child(3n),body.portal-rainbow .section-title:nth-child(3n),body.portal-rainbow .modal-header:nth-child(3n){background:var(--rainbow-pink)!important}
+body.portal-rainbow .card,body.portal-rainbow .dashboard-card,body.portal-rainbow .stat-card,body.portal-rainbow .panel,body.portal-rainbow .settings-card,body.portal-rainbow .appointment-card,body.portal-rainbow .student-card,body.portal-rainbow .record-card,body.portal-rainbow .info-card{border-color:var(--rainbow-blue)!important}
+body.portal-rainbow .card:nth-of-type(7n+1),body.portal-rainbow .dashboard-card:nth-of-type(7n+1),body.portal-rainbow .panel:nth-of-type(7n+1){background:linear-gradient(135deg,#fff5f5,var(--rainbow-red))!important}
+body.portal-rainbow .card:nth-of-type(7n+2),body.portal-rainbow .dashboard-card:nth-of-type(7n+2),body.portal-rainbow .panel:nth-of-type(7n+2){background:linear-gradient(135deg,#fff8ed,var(--rainbow-orange))!important}
+body.portal-rainbow .card:nth-of-type(7n+3),body.portal-rainbow .dashboard-card:nth-of-type(7n+3),body.portal-rainbow .panel:nth-of-type(7n+3){background:linear-gradient(135deg,#fffde8,var(--rainbow-yellow))!important}
+body.portal-rainbow .card:nth-of-type(7n+4),body.portal-rainbow .dashboard-card:nth-of-type(7n+4),body.portal-rainbow .panel:nth-of-type(7n+4){background:linear-gradient(135deg,#f0fff5,var(--rainbow-green))!important}
+body.portal-rainbow .card:nth-of-type(7n+5),body.portal-rainbow .dashboard-card:nth-of-type(7n+5),body.portal-rainbow .panel:nth-of-type(7n+5){background:linear-gradient(135deg,#eff8ff,var(--rainbow-blue))!important}
+body.portal-rainbow .card:nth-of-type(7n+6),body.portal-rainbow .dashboard-card:nth-of-type(7n+6),body.portal-rainbow .panel:nth-of-type(7n+6){background:linear-gradient(135deg,#f7f0ff,var(--rainbow-purple))!important}
+body.portal-rainbow .card:nth-of-type(7n),body.portal-rainbow .dashboard-card:nth-of-type(7n),body.portal-rainbow .panel:nth-of-type(7n){background:linear-gradient(135deg,#fff0f7,var(--rainbow-pink))!important}
+body.portal-rainbow .appointment-month-day.has-bookings{background:#fff0f7!important;border-color:var(--rainbow-pink)!important}
+body.portal-rainbow .appointment-month-day.selected{background:#eee5ff!important;border-color:var(--rainbow-purple)!important}
+body.portal-rainbow .appointment-month-day.today{background:#eaf4ff!important;border-color:var(--rainbow-blue)!important}
+body.portal-rainbow input:focus,body.portal-rainbow select:focus,body.portal-rainbow textarea:focus{border-color:var(--rainbow-pink)!important;box-shadow:0 0 0 3px #ffd9e8!important}
+body.portal-rainbow a{color:var(--rainbow-purple)!important}
+body.portal-rainbow .badge,body.portal-rainbow .status-badge,body.portal-rainbow .tag,body.portal-rainbow .chip{border-color:var(--rainbow-pink)!important}
+body.portal-rainbow .badge:nth-of-type(6n+1),body.portal-rainbow .status-badge:nth-of-type(6n+1),body.portal-rainbow .tag:nth-of-type(6n+1),body.portal-rainbow .chip:nth-of-type(6n+1){background:#ffd9d9!important}
+body.portal-rainbow .badge:nth-of-type(6n+2),body.portal-rainbow .status-badge:nth-of-type(6n+2),body.portal-rainbow .tag:nth-of-type(6n+2),body.portal-rainbow .chip:nth-of-type(6n+2){background:#ffe4bf!important}
+body.portal-rainbow .badge:nth-of-type(6n+3),body.portal-rainbow .status-badge:nth-of-type(6n+3),body.portal-rainbow .tag:nth-of-type(6n+3),body.portal-rainbow .chip:nth-of-type(6n+3){background:#fff2a8!important}
+body.portal-rainbow .badge:nth-of-type(6n+4),body.portal-rainbow .status-badge:nth-of-type(6n+4),body.portal-rainbow .tag:nth-of-type(6n+4),body.portal-rainbow .chip:nth-of-type(6n+4){background:#c9f5d8!important}
+body.portal-rainbow .badge:nth-of-type(6n+5),body.portal-rainbow .status-badge:nth-of-type(6n+5),body.portal-rainbow .tag:nth-of-type(6n+5),body.portal-rainbow .chip:nth-of-type(6n+5){background:#cfe7ff!important}
+body.portal-rainbow .badge:nth-of-type(6n),body.portal-rainbow .status-badge:nth-of-type(6n),body.portal-rainbow .tag:nth-of-type(6n),body.portal-rainbow .chip:nth-of-type(6n){background:#e5d2ff!important}
+
+/* Rainbow theme: intentionally gives major UI regions different coordinated rainbow colors. */
+body.portal-rainbow .topbar{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important}
+body.portal-rainbow .section-title{background:var(--rainbow-purple)!important}
+body.portal-rainbow .dashboard-menu-btn{background:var(--rainbow-blue)!important;color:#fff!important}
+body.portal-rainbow .dashboard-menu-btn:hover{background:var(--rainbow-purple)!important}
+body.portal-rainbow .nav button.active{background:var(--rainbow-green)!important;border-color:var(--rainbow-green)!important;color:#111!important}
+body.portal-rainbow .modal-header,body.portal-rainbow .student-add-modal-header{background:var(--rainbow-orange)!important;color:#111!important}
+body.portal-rainbow .profile-panel-header{background:var(--rainbow-pink)!important;color:#fff!important}
+body.portal-rainbow .settings-gear-btn{background:var(--rainbow-purple)!important;color:#fff!important}
+body.portal-rainbow button:not(.palette-btn):not(.network-test-close){border-color:var(--rainbow-blue)!important}
+body.portal-rainbow .appointment-month-weekday{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important;color:#111!important}
+body.portal-rainbow .appointment-month-day.has-bookings{background:#fff0f7!important;border-color:var(--rainbow-pink)!important}
+body.portal-rainbow .appointment-month-day.has-bookings:hover{background:#ffd1e4!important}
+body.portal-rainbow .appointment-month-day.selected{background:#e9dcff!important;box-shadow:inset 0 0 0 3px var(--rainbow-purple)!important}
+body.portal-rainbow .appointment-month-day.today{box-shadow:inset 0 0 0 2px var(--rainbow-blue)!important}
+body.portal-rainbow .appointment-today-badge{background:var(--rainbow-green)!important;color:#111!important}
+body.portal-rainbow .appointment-booking-count{background:#fff0c9!important;border-color:var(--rainbow-orange)!important;color:#a94d00!important}
+body.portal-rainbow .appointment-actions .edit{background:var(--rainbow-blue)!important;color:#fff!important}
+body.portal-rainbow .appointment-actions .complete{background:#e2f8ea!important;color:#168247!important;border-color:var(--rainbow-green)!important}
+body.portal-rainbow .appointment-mode-option.active{background:#e9dcff!important;border-color:var(--rainbow-purple)!important}
+body.portal-rainbow .settings-action-btn,body.portal-rainbow .sound-test-btn,body.portal-rainbow .network-retest-btn{background:linear-gradient(90deg,var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
+body.portal-rainbow .font-preview{background:#eaf7ff!important;border-color:var(--rainbow-blue)!important}
+body.portal-rainbow .td-theme-sweep-bg{background:var(--rainbow-blue)!important}
+body.portal-rainbow .td-theme-sweep-bg-light{background:#fff7fb!important}
+body.portal-rainbow .td-theme-sweep-border{border-color:var(--rainbow-pink)!important}
+body.portal-rainbow .td-theme-sweep-text{color:var(--rainbow-purple)!important}
+@media(max-width:600px){.portal-settings-panel{top:60px;right:10px}.mode-grid,.network-results{grid-template-columns:1fr}.network-test-card{padding:28px 18px}}
+
+
+/* Appointment Calendar - fully follows the selected global theme */
+.appointment-month-weekday{
+  background:var(--global-accent)!important;
+  color:var(--global-text-on-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+}
+.appointment-month-day{
+  background:var(--portal-surface)!important;
+  border-color:var(--global-border)!important;
+  color:var(--portal-text)!important;
+}
+.appointment-month-day:hover{
+  background:var(--global-accent-pale)!important;
+  border-color:var(--global-accent)!important;
+}
+.appointment-month-day.other-month{
+  background:var(--global-accent-pale)!important;
+  color:var(--portal-muted)!important;
+}
+.appointment-month-day.today{
+  box-shadow:inset 0 0 0 2px var(--global-accent)!important;
+}
+.appointment-month-day.selected{
+  background:var(--global-accent-soft)!important;
+  box-shadow:inset 0 0 0 3px var(--global-accent-dark)!important;
+}
+.appointment-month-day.has-bookings{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-accent)!important;
+}
+.appointment-month-day.has-bookings:hover{
+  background:var(--global-accent-mid)!important;
+}
+.appointment-month-day.has-bookings.other-month{
+  background:var(--global-accent-pale)!important;
+}
+.appointment-today-badge{
+  background:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+.appointment-booking-count{
+  border-color:var(--global-accent-dark)!important;
+  background:var(--global-accent-soft)!important;
+  color:var(--global-accent-dark)!important;
+}
+.appointment-mini-card{
+  border-color:var(--global-border)!important;
+  border-left-color:var(--global-accent-dark)!important;
+  background:var(--portal-surface)!important;
+  color:var(--portal-text)!important;
+}
+.appointment-mini-card:hover{
+  background:var(--global-accent-pale)!important;
+}
+.appointment-more{
+  color:var(--global-accent-dark)!important;
+}
+.appointment-nav button,
+.appointment-more-btn,
+.appointment-actions button,
+.appointment-more-menu button{
+  border-color:var(--global-border)!important;
+}
+.appointment-nav button:hover,
+.appointment-more-btn:hover,
+.appointment-more-menu button:hover{
+  background:var(--global-accent-soft)!important;
+}
+.appointment-actions .edit{
+  background:var(--global-accent)!important;
+  color:var(--global-text-on-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+}
+.appointment-actions .complete{
+  background:var(--global-accent-soft)!important;
+  color:var(--global-accent-dark)!important;
+  border-color:var(--global-border)!important;
+}
+.appointment-mode-option.active{
+  border-color:var(--global-accent)!important;
+  background:var(--global-accent-soft)!important;
+}
+.appointment-day-detail-head{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-border)!important;
+}
+
 </style>
 </body>
 </html>
