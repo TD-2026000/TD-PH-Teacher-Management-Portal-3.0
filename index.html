@@ -1896,6 +1896,15 @@ button.secondary,
 }
 .student-search-wrap{flex:1;min-width:240px}
 .student-filter-wrap{width:190px;max-width:100%}
+.student-sort-wrap{position:relative;flex:0 0 auto}
+.student-sort-trigger{width:44px;height:44px;border:1px solid #d7d7d7;border-radius:10px;background:#fff;font-size:25px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.student-sort-trigger:hover{border-color:#00bfc0;background:#f5ffff}
+.student-sort-menu{position:absolute;right:0;top:50px;min-width:150px;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.15);padding:6px;display:none;z-index:1000}
+.student-sort-menu.show{display:block}
+.student-sort-menu button{display:block;width:100%;border:0;background:#fff;text-align:left;padding:10px 12px;border-radius:8px;font-weight:700;cursor:pointer}
+.student-sort-menu button:hover{background:#eefafa}
+.student-section-heading{margin-top:18px;font-weight:900;font-size:15px;letter-spacing:.4px}
+.completed-heading{margin-top:30px}
 .student-card-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
 .student-card{border:1px solid #ddd;border-radius:16px;background:#fff;padding:18px 14px;box-shadow:0 3px 12px rgba(0,0,0,.07);cursor:pointer;text-align:center;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;min-height:245px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
 .student-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(0,0,0,.11);border-color:#00bfc0}
@@ -2609,14 +2618,13 @@ Last Evaluation
     <label for="studentSearch">Search Student</label>
     <input id="studentSearch" type="search" placeholder="Search student name or Student ID..." oninput="renderStudents()">
   </div>
-  <div class="student-filter-wrap">
-    <label for="studentStatusFilter">Status</label>
-    <select id="studentStatusFilter" onchange="renderStudents()">
-      <option value="all">All Students</option>
-      <option value="Active">Active</option>
-      <option value="Inactive">Inactive</option>
-      <option value="Completed">Completed</option>
-    </select>
+  <div class="student-sort-wrap">
+    <button type="button" class="student-sort-trigger" onclick="toggleStudentSortMenu(event)" aria-label="Student sorting options">⋮</button>
+    <div id="studentSortMenu" class="student-sort-menu">
+      <button type="button" onclick="setStudentSort('az')">A–Z</button>
+      <button type="button" onclick="setStudentSort('za')">Z–A</button>
+      <button type="button" onclick="setStudentSort('id')">Student ID</button>
+    </div>
   </div>
 </div>
 
@@ -2658,7 +2666,7 @@ onclick="if(event.target===this) closeAddStudent()"
 </select></div>
 <div><label>Package</label><input id="newStudentPackage" placeholder="e.g. 20 Classes"></div>
 
-<div><label>Status</label><select id="newStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select></div>
+<div><label>Status</label><select id="newStudentStatus"><option>Active</option><option>Completed</option></select></div>
 
 <div class="full">
 <label>Preferred Class Schedule</label>
@@ -2678,8 +2686,13 @@ onclick="if(event.target===this) closeAddStudent()"
 </div>
 </div>
 
-<div style="margin-top:16px;font-weight:800">ALL STUDENTS</div>
-<div id="studentList" class="student-card-list" style="margin-top:10px"></div>
+<div class="student-section-heading">ACTIVE STUDENTS</div>
+<div id="activeStudentList" class="student-card-list" style="margin-top:10px"></div>
+
+<div class="student-section-heading completed-heading">COMPLETED STUDENTS</div>
+<div id="completedStudentList" class="student-card-list" style="margin-top:10px"></div>
+
+<div id="studentList" style="display:none"></div>
 
 </div>
 </div>
@@ -3568,7 +3581,7 @@ onclick="if(event.target===this) closeEditStudent()"
       <div class="edit-student-field"><label>Class Duration</label><select id="editStudentDuration"><option value="30 Minutes">30 Minutes</option><option value="40 Minutes">40 Minutes</option><option value="50 Minutes">50 Minutes</option></select></div>
       <div class="edit-student-field"><label>Package</label><input id="editStudentPackage" placeholder="e.g. 20 Classes"></div>
       <div class="edit-student-field"><label>Start Date</label><input id="editStudentStartDate" type="date"><div class="small" style="margin-top:4px">The saved start date of the student's current package.</div></div>
-      <div class="edit-student-field"><label>Status</label><select id="editStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select></div>
+      <div class="edit-student-field"><label>Status</label><select id="editStudentStatus"><option>Active</option><option>Completed</option></select></div>
       <div class="edit-student-field full"><label>Preferred Class Schedule</label><div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div><div id="editSchedulePicker" class="schedule-picker"></div></div>
     </div>
   </div>
@@ -7751,29 +7764,46 @@ const el=document.getElementById('studentProfileModal');
 if(el)el.classList.remove('show');
 }
 
-function renderStudents(){
-const students=getStudents();
-const list=document.getElementById('studentList');
-if(!list)return;
+let studentSortMode='az';
 
-const search=(document.getElementById('studentSearch')?.value||'').trim().toLowerCase();
-const filter=document.getElementById('studentStatusFilter')?.value||'all';
-const filtered=students.filter(s=>{
- const matchesSearch=!search||String(s.name||'').toLowerCase().includes(search)||String(s.id||'').toLowerCase().includes(search);
- const matchesStatus=filter==='all'||(s.status||'Active')===filter;
- return matchesSearch&&matchesStatus;
-});
-
-if(!filtered.length){
- list.innerHTML=`<div class="empty" style="grid-column:1/-1">${students.length?'No students match your search or filter.':'No students yet. Add your first student above.'}</div>`;
- return;
+function toggleStudentSortMenu(event){
+  event.stopPropagation();
+  const menu=document.getElementById('studentSortMenu');
+  if(!menu)return;
+  document.querySelectorAll('.student-sort-menu.show').forEach(m=>{
+    if(m!==menu)m.classList.remove('show');
+  });
+  menu.classList.toggle('show');
 }
 
-list.innerHTML=filtered.map(s=>{
- const status=s.status||'Active';
- const statusClass=status.toLowerCase();
- const avatar=getStudentAvatarHtml(s,'student-avatar-circle');
- return `<div class="student-card" role="button" tabindex="0" onclick="openStudentProfile('${escapeAttr(s.id)}')" onkeydown="if(event.key==='Enter'||event.key===' ')openStudentProfile('${escapeAttr(s.id)}')">
+function setStudentSort(mode){
+  studentSortMode=mode||'az';
+  const menu=document.getElementById('studentSortMenu');
+  if(menu)menu.classList.remove('show');
+  renderStudents();
+}
+
+document.addEventListener('click',event=>{
+  if(!event.target.closest('.student-sort-wrap')){
+    document.querySelectorAll('.student-sort-menu.show').forEach(menu=>menu.classList.remove('show'));
+  }
+});
+
+function sortStudentsForDisplay(items){
+  return [...items].sort((a,b)=>{
+    if(studentSortMode==='id'){
+      return String(a.id||'').localeCompare(String(b.id||''),undefined,{numeric:true,sensitivity:'base'});
+    }
+    const result=String(a.name||'').localeCompare(String(b.name||''),undefined,{numeric:true,sensitivity:'base'});
+    return studentSortMode==='za' ? -result : result;
+  });
+}
+
+function renderStudentCard(s){
+  const status=s.status||'Active';
+  const statusClass=status.toLowerCase();
+  const avatar=getStudentAvatarHtml(s,'student-avatar-circle');
+  return `<div class="student-card" role="button" tabindex="0" onclick="openStudentProfile('${escapeAttr(s.id)}')" onkeydown="if(event.key==='Enter'||event.key===' ')openStudentProfile('${escapeAttr(s.id)}')">
   <div class="student-card-top">
    ${avatar}
    <div>
@@ -7788,7 +7818,33 @@ list.innerHTML=filtered.map(s=>{
    </div>
   </div>
  </div>`;
-}).join('');
+}
+
+function renderStudents(){
+  const students=getStudents();
+  const activeList=document.getElementById('activeStudentList');
+  const completedList=document.getElementById('completedStudentList');
+  const legacyList=document.getElementById('studentList');
+  if(!activeList||!completedList)return;
+
+  const search=(document.getElementById('studentSearch')?.value||'').trim().toLowerCase();
+  const filtered=students.filter(s=>{
+    const text=`${s.name||''} ${s.id||''}`.toLowerCase();
+    return !search||text.includes(search);
+  });
+
+  const active=sortStudentsForDisplay(filtered.filter(s=>(s.status||'Active')==='Active'));
+  const completed=sortStudentsForDisplay(filtered.filter(s=>(s.status||'Active')==='Completed'));
+
+  activeList.innerHTML=active.length
+    ?active.map(renderStudentCard).join('')
+    :`<div class="empty" style="grid-column:1/-1">${search?'No active students match your search.':'No active students yet.'}</div>`;
+
+  completedList.innerHTML=completed.length
+    ?completed.map(renderStudentCard).join('')
+    :`<div class="empty" style="grid-column:1/-1">${search?'No completed students match your search.':'No completed students yet.'}</div>`;
+
+  if(legacyList)legacyList.innerHTML='';
 }
 
 
