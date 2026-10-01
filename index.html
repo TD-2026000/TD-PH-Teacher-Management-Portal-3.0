@@ -2752,6 +2752,87 @@ body.portal-rainbow .student-card:nth-child(7n+5) .student-card-actions button{b
 body.portal-rainbow .student-card:nth-child(7n+6) .student-card-actions button{background:var(--rainbow-purple)!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
 body.portal-rainbow .student-card:nth-child(7n) .student-card-actions button{background:var(--rainbow-pink)!important;color:#fff!important;border-color:var(--rainbow-pink)!important}
 </style>
+
+<style id="portal-font-theme-runtime-fix">
+/* Robust runtime font/theme controls */
+html.portal-font-active,
+html.portal-font-active body,
+html.portal-font-active body *{
+  font-family:var(--portal-font,Arial,Helvetica,sans-serif) !important;
+}
+/* Keep font gallery's preview names/samples readable in their own preview fonts. */
+html.portal-font-active .font-choice-name,
+html.portal-font-active .font-choice::after{
+  font-family:Arial,Helvetica,sans-serif !important;
+}
+/* Font gallery previews intentionally ignore the currently applied website font.
+   Each preview receives its own inline !important font-family from renderFontGallery(). */
+html.portal-font-active .font-choice-sample,
+html.portal-font-active .font-choice-name,
+html.portal-font-active .font-choice{
+  font-family:inherit;
+}
+
+/* Strong visual design-theme layers. They are decorative and do not replace the selected palette. */
+body.portal-theme-panda .card,
+body.portal-theme-panda .panel,
+body.portal-theme-panda .student-card,
+body.portal-theme-panda .dashboard-summary-card,
+body.portal-theme-panda .teacher-dashboard-card,
+body.portal-theme-panda .appointment-card{
+  border-radius:20px !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.035) !important;
+}
+body.portal-theme-stitch .card,
+body.portal-theme-stitch .panel,
+body.portal-theme-stitch .student-card,
+body.portal-theme-stitch .dashboard-summary-card,
+body.portal-theme-stitch .teacher-dashboard-card,
+body.portal-theme-stitch .appointment-card{
+  border-radius:24px !important;
+}
+body.portal-theme-hello-kitty .card,
+body.portal-theme-hello-kitty .panel,
+body.portal-theme-hello-kitty .student-card,
+body.portal-theme-hello-kitty .dashboard-summary-card,
+body.portal-theme-hello-kitty .teacher-dashboard-card{
+  border-radius:18px !important;
+  box-shadow:0 5px 18px rgba(255,105,180,.12) !important;
+}
+body.portal-theme-sanrio .card,
+body.portal-theme-sanrio .panel,
+body.portal-theme-sanrio .student-card,
+body.portal-theme-sanrio .dashboard-summary-card,
+body.portal-theme-sanrio .teacher-dashboard-card{
+  border-radius:20px !important;
+  box-shadow:0 5px 18px rgba(155,108,255,.10) !important;
+}
+body.portal-theme-doraemon .card,
+body.portal-theme-doraemon .panel,
+body.portal-theme-doraemon .student-card,
+body.portal-theme-doraemon .dashboard-summary-card,
+body.portal-theme-doraemon .teacher-dashboard-card{
+  border-radius:18px !important;
+  box-shadow:0 4px 16px rgba(66,165,255,.13) !important;
+}
+body.portal-theme-nature .card,
+body.portal-theme-nature .panel,
+body.portal-theme-nature .student-card,
+body.portal-theme-nature .dashboard-summary-card,
+body.portal-theme-nature .teacher-dashboard-card{
+  border-radius:16px !important;
+  box-shadow:0 5px 18px rgba(66,201,120,.12) !important;
+}
+body.portal-theme-larva .card,
+body.portal-theme-larva .panel,
+body.portal-theme-larva .student-card,
+body.portal-theme-larva .dashboard-summary-card,
+body.portal-theme-larva .teacher-dashboard-card{
+  border-radius:22px !important;
+  box-shadow:0 5px 18px rgba(255,159,67,.12) !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -11476,32 +11557,69 @@ function setPortalTheme(mode,persist=true){
 }
 function updateModeButtons(){document.getElementById('lightModeBtn')?.classList.toggle('active',portalSettings.theme==='light');document.getElementById('darkModeBtn')?.classList.toggle('active',portalSettings.theme==='dark');}
 function renderDesignThemeChoices(){
- const grid=document.getElementById('designThemeGrid'); if(!grid)return;
- grid.innerHTML=DESIGN_THEMES.map(t=>`<button type="button" class="design-theme-choice ${portalSettings.designTheme===t.id?'active':''}" onclick="applyDesignTheme('${t.id}',true)" title="Use ${escapeHtml(t.name)} theme"><span class="design-theme-icon">${t.icon}</span><span class="design-theme-name">${escapeHtml(t.name)}</span><small>${escapeHtml(t.desc)}</small></button>`).join('');
+ const grid=document.getElementById('designThemeGrid');
+ if(!grid)return;
+ grid.innerHTML=DESIGN_THEMES.map(t=>`<button type="button" class="design-theme-choice ${portalSettings.designTheme===t.id?'active':''}" data-design-theme="${escapeHtml(t.id)}" title="Use ${escapeHtml(t.name)} theme"><span class="design-theme-icon">${t.icon}</span><span><span class="design-theme-name">${escapeHtml(t.name)}</span><small>${escapeHtml(t.desc)}</small></span></button>`).join('');
+ grid.querySelectorAll('.design-theme-choice').forEach(btn=>{
+   btn.addEventListener('click',()=>applyDesignTheme(btn.dataset.designTheme,true));
+ });
 }
 function applyDesignTheme(themeId,persist=true){
  const valid=DESIGN_THEMES.some(t=>t.id===themeId)?themeId:'default';
  portalSettings.designTheme=valid;
  document.body.classList.remove(...DESIGN_THEMES.map(t=>'portal-theme-'+t.id));
  document.body.classList.add('portal-theme-'+valid);
- const root=document.documentElement;
+ document.documentElement.dataset.designTheme=valid;
  const theme=DESIGN_THEMES.find(t=>t.id===valid)||DESIGN_THEMES[0];
- root.style.setProperty('--design-theme-icon', JSON.stringify(theme.icon));
+ document.documentElement.style.setProperty('--design-theme-icon',JSON.stringify(theme.icon));
  renderDesignThemeChoices();
  if(persist)savePortalSettings();
 }
 
 function populatePortalFonts(){const sel=document.getElementById('portalFontSelect');if(!sel)return;sel.innerHTML=PORTAL_FONTS.map(([name,stack])=>`<option value="${escapeHtml(name)}" style="font-family:${escapeHtml(stack)}">${escapeHtml(name)}</option>`).join('');sel.value=portalSettings.font||'Arial';renderFontGallery();updateFontPreview();}
-function renderFontGallery(){const gallery=document.getElementById('fontGallery');if(!gallery)return;gallery.innerHTML=PORTAL_FONTS.map(([name,stack],i)=>`<button type="button" class="font-choice ${portalSettings.font===name?'active':''}" style="font-family:${escapeHtml(stack)} !important" ondblclick="applyPortalFont(${JSON.stringify(name)})" title="Double click to apply ${escapeHtml(name)}"><span class="font-choice-name">${escapeHtml(name)}</span><span class="font-choice-sample" style="font-family:${escapeHtml(stack)} !important">Teacher Danyeal</span></button>`).join('');}
+function renderFontGallery(){
+ const gallery=document.getElementById('fontGallery');
+ if(!gallery)return;
+ gallery.innerHTML=PORTAL_FONTS.map(([name,stack])=>`
+   <button type="button" class="font-choice ${portalSettings.font===name?'active':''}"
+     data-font-name="${escapeHtml(name)}"
+     data-font-stack="${escapeHtml(stack)}"
+     title="Double click to apply ${escapeHtml(name)}">
+     <span class="font-choice-name" data-font-stack="${escapeHtml(stack)}">${escapeHtml(name)}</span>
+     <span class="font-choice-sample" data-font-stack="${escapeHtml(stack)}">Teacher Danyeal</span>
+   </button>`).join('');
+
+ /* Every preview keeps its OWN font, even when the website-wide font is active.
+    The important inline rule prevents the global portal font from overriding it. */
+ gallery.querySelectorAll('.font-choice').forEach(btn=>{
+   const stack=btn.dataset.fontStack || 'Arial, sans-serif';
+   const sample=btn.querySelector('.font-choice-sample');
+   const nameEl=btn.querySelector('.font-choice-name');
+   btn.style.setProperty('font-family',stack,'important');
+   if(sample)sample.style.setProperty('font-family',stack,'important');
+   if(nameEl)nameEl.style.setProperty('font-family',stack,'important');
+   btn.addEventListener('dblclick',()=>applyPortalFont(btn.dataset.fontName,true));
+   const fontName=btn.dataset.fontName;
+   try{document.fonts.load('16px "'+fontName.replace(/"/g,'\\"')+'"').then(()=>{
+     if(sample)sample.style.setProperty('font-family',stack,'important');
+     if(nameEl)nameEl.style.setProperty('font-family',stack,'important');
+   }).catch(()=>{});}catch(e){}
+ });
+}
 function applyPortalFont(name,persist=true){
  const found=PORTAL_FONTS.find(x=>x[0]===name)||PORTAL_FONTS[0];
  portalSettings.font=found[0];
  document.documentElement.style.setProperty('--portal-font',found[1]);
+ document.documentElement.style.setProperty('--font-preview-stack',found[1]);
  document.documentElement.classList.add('portal-font-active');
  document.body.classList.add('portal-font-active');
- document.documentElement.style.setProperty('font-family',found[1],'important');
- document.body.style.setProperty('font-family',found[1],'important');
- try{document.fonts.load('16px "'+found[0].replace(/"/g,'\\"')+'"').then(()=>{document.documentElement.style.setProperty('--portal-font',found[1]);});}catch(e){}
+ /* Force every rendered element to inherit the selected font. */
+ document.querySelectorAll('body *').forEach(el=>{
+   if(el.classList.contains('font-choice-sample')) return;
+   if(el.classList.contains('font-choice-name') || el.classList.contains('font-choice')) return;
+   el.style.setProperty('font-family',found[1],'important');
+ });
+ try{document.fonts.load('16px "'+found[0].replace(/"/g,'\\"')+'"').then(()=>{}).catch(()=>{});}catch(e){}
  const sel=document.getElementById('portalFontSelect');if(sel)sel.value=found[0];
  renderFontGallery();updateFontPreview();
  if(persist)savePortalSettings();
@@ -11624,7 +11742,7 @@ async function runNetworkTest(){
 #customAccentColor{width:54px;height:34px;border:0;background:transparent;cursor:pointer;padding:0}
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mode-btn{border:1px solid var(--portal-border);background:var(--portal-surface-2);color:var(--portal-text);padding:11px 8px;border-radius:10px;font-weight:800;cursor:pointer}.mode-btn.active{background:var(--portal-accent);border-color:var(--portal-accent-dark);color:#111}
 html.portal-font-active,html.portal-font-active body,html.portal-font-active body *{font-family:var(--portal-font)!important}.portal-font-active .font-choice-sample{font-family:var(--portal-font)!important}.portal-font-active .font-choice-name{font-family:Arial,sans-serif!important}
-.settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-choice-note{font-size:11px;color:var(--portal-muted);margin:8px 0}.font-gallery{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:380px;overflow:auto;padding:2px}.font-choice{border:1px solid var(--portal-border);background:var(--portal-surface);color:var(--portal-text);border-radius:9px;padding:8px 9px;text-align:left;cursor:pointer;transition:.15s;min-width:0}.font-choice:hover{border-color:var(--portal-accent-dark);transform:translateY(-1px)}.font-choice:active{transform:scale(.985)}.font-choice::after{content:'Double click to apply';display:block;font-family:Arial,sans-serif!important;font-size:8px;font-weight:800;opacity:.52;margin-top:5px}.font-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft)}.font-choice-name{display:block;font-family:Arial,sans-serif!important;font-size:9px;font-weight:800;opacity:.72;margin-bottom:2px}.font-choice-sample{display:block;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.font-gallery::-webkit-scrollbar{width:6px}.font-gallery::-webkit-scrollbar-thumb{background:var(--portal-accent);border-radius:10px}
+.settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-choice-note{font-size:11px;color:var(--portal-muted);margin:8px 0}.font-gallery{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:380px;overflow:auto;padding:2px}.font-choice{border:1px solid var(--portal-border);background:var(--portal-surface);color:var(--portal-text);border-radius:9px;padding:8px 9px;text-align:left;cursor:pointer;transition:.15s;min-width:0}.font-choice:hover{border-color:var(--portal-accent-dark);transform:translateY(-1px)}.font-choice:active{transform:scale(.985)}.font-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft)}.font-choice-name{display:block;font-family:Arial,sans-serif!important;font-size:9px;font-weight:800;opacity:.72;margin-bottom:2px}.font-choice-sample{display:block;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.font-gallery::-webkit-scrollbar{width:6px}.font-gallery::-webkit-scrollbar-thumb{background:var(--portal-accent);border-radius:10px}
 .font-preview{margin-top:8px;padding:10px;border-radius:9px;background:var(--portal-accent-soft);color:var(--portal-text);font-size:14px}
 .settings-action-btn,.sound-test-btn,.network-retest-btn{width:100%;border:1px solid var(--portal-accent-dark);background:var(--portal-accent);color:#111;border-radius:9px;padding:11px;font-weight:900;cursor:pointer}.sound-test-btn{margin-top:8px;width:auto;padding:8px 12px;font-size:12px}
 .notification-sound-row{margin-top:10px}.notification-sound-row label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.switch{position:relative;width:48px;height:26px;display:block;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#c7ced2;border-radius:30px;cursor:pointer;transition:.2s}.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--portal-accent-dark)}.switch input:checked+span:before{transform:translateX(22px)}
