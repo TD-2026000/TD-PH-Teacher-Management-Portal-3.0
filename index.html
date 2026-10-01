@@ -9075,12 +9075,7 @@ reportStyle.textContent=`
   color:#111827 !important;
 }
 #parentEvaluationReport h2::after{
-  content:'Teacher Danyeal’s Private English Class' !important;
-  display:block !important;
-  font-size:14px !important;
-  font-weight:normal !important;
-  margin-top:8px !important;
-  color:#6b7280 !important;
+  content:none !important;
 }
 #parentEvaluationReport .section{
   break-inside:avoid !important;
@@ -9123,6 +9118,22 @@ reportStyle.textContent=`
 }
 `;
 report.prepend(reportStyle);
+
+/* Dynamic parent-facing header: use the Teacher Profile username. */
+const reportTitle=report.querySelector('h2');
+if(reportTitle){
+  const username=(document.getElementById('profileUsername')?.value || '').trim();
+  const cleanUsername=username || 'Teacher Danyeal';
+  const teacherLabel=/^teacher\b/i.test(cleanUsername)
+    ? cleanUsername
+    : `Teacher ${cleanUsername}`;
+
+  const reportSubtitle=document.createElement('div');
+  reportSubtitle.className='parent-report-subtitle';
+  reportSubtitle.textContent=`${teacherLabel}'s English Class Memo`;
+  reportSubtitle.style.cssText='font-size:14px;font-weight:normal;margin-top:8px;color:#6b7280;text-align:center;';
+  reportTitle.insertAdjacentElement('afterend',reportSubtitle);
+}
 
 reportHost.appendChild(report);
 document.body.appendChild(reportHost);
