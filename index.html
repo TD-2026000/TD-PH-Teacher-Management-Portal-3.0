@@ -3156,8 +3156,17 @@ Teacher
         <option value="bell">🔔 Bell</option>
         <option value="double">🔔 Double Bell</option>
         <option value="soft">🔔 Soft Tone</option>
+        <option value="marimba">🎵 Marimba</option>
+        <option value="piano">🎹 Piano</option>
+        <option value="digital">📟 Digital</option>
+        <option value="pulse">💓 Pulse</option>
+        <option value="alarm">🚨 Alert Alarm</option>
+        <option value="gentle">🌸 Gentle Reminder</option>
+        <option value="sparkle">✨ Sparkle</option>
+        <option value="arcade">🕹️ Arcade</option>
       </select>
-      <button type="button" class="sound-test-btn" onclick="testNotificationSound()">Test Sound</button>
+      <small class="notification-sound-note">Each class alert sound plays for 10 seconds.</small>
+      <button type="button" class="sound-test-btn" onclick="testNotificationSound()">Test 10-Second Sound</button>
     </div>
   </div>
 </div>
@@ -3326,6 +3335,7 @@ Last Evaluation
       <button type="button" onclick="setStudentSort('az')">A–Z</button>
       <button type="button" onclick="setStudentSort('za')">Z–A</button>
       <button type="button" onclick="setStudentSort('id')">Student ID</button>
+      <button type="button" onclick="setStudentSort('latest')">Latest Class</button>
     </div>
   </div>
 </div>
@@ -3388,11 +3398,8 @@ onclick="if(event.target===this) closeAddStudent()"
 </div>
 </div>
 
-<div class="student-section-heading">ACTIVE STUDENTS</div>
+<div class="student-section-heading">ALL STUDENTS</div>
 <div id="activeStudentList" class="student-card-list" style="margin-top:10px"></div>
-
-<div class="student-section-heading completed-heading">COMPLETED STUDENTS</div>
-<div id="completedStudentList" class="student-card-list" style="margin-top:10px"></div>
 
 <div id="studentList" style="display:none"></div>
 
@@ -8746,7 +8753,7 @@ const el=document.getElementById('studentProfileModal');
 if(el)el.classList.remove('show');
 }
 
-let studentSortMode='az';
+let studentSortMode='latest';
 
 function toggleStudentSortMenu(event){
   event.stopPropagation();
@@ -8771,13 +8778,38 @@ document.addEventListener('click',event=>{
   }
 });
 
+function getStudentLatestCompletedClassTime(student){
+  if(!student)return 0;
+  const completed=getAppointments().filter(a=>{
+    if(String(a.studentId||'')!==String(student.id||''))return false;
+    return String(a.status||'').toLowerCase()==='completed';
+  });
+  let latest=0;
+  completed.forEach(a=>{
+    const d=parseAppointmentDate(a.date||a.appointmentDate||a.classDate,a.time||a.appointmentTime||a.classTime||'00:00');
+    if(d&&!isNaN(d.getTime())) latest=Math.max(latest,d.getTime());
+  });
+  return latest;
+}
+
 function sortStudentsForDisplay(items){
-  return [...items].sort((a,b)=>{
-    if(studentSortMode==='id'){
-      return String(a.id||'').localeCompare(String(b.id||''),undefined,{numeric:true,sensitivity:'base'});
-    }
-    const result=String(a.name||'').localeCompare(String(b.name||''),undefined,{numeric:true,sensitivity:'base'});
-    return studentSortMode==='za' ? -result : result;
+  const list=[...items];
+  if(studentSortMode==='id'){
+    return list.sort((a,b)=>String(a.id||'').localeCompare(String(b.id||''),undefined,{numeric:true,sensitivity:'base'}));
+  }
+  if(studentSortMode==='za'){
+    return list.sort((a,b)=>String(b.name||'').localeCompare(String(a.name||''),undefined,{numeric:true,sensitivity:'base'}));
+  }
+  // Latest Class: most recently completed class first.
+  // Students with no completed class fall back to their enrollment date.
+  return list.sort((a,b)=>{
+    const aClass=getStudentLatestCompletedClassTime(a);
+    const bClass=getStudentLatestCompletedClassTime(b);
+    if(aClass!==bClass)return bClass-aClass;
+    const aEnroll=new Date(a.enrolledDate||a.enrolledAt||0).getTime()||0;
+    const bEnroll=new Date(b.enrolledDate||b.enrolledAt||0).getTime()||0;
+    if(aEnroll!==bEnroll)return bEnroll-aEnroll;
+    return String(a.name||'').localeCompare(String(b.name||''),undefined,{numeric:true,sensitivity:'base'});
   });
 }
 
@@ -8805,9 +8837,8 @@ function renderStudentCard(s){
 function renderStudents(){
   const students=getStudents();
   const activeList=document.getElementById('activeStudentList');
-  const completedList=document.getElementById('completedStudentList');
   const legacyList=document.getElementById('studentList');
-  if(!activeList||!completedList)return;
+  if(!activeList)return;
 
   const search=(document.getElementById('studentSearch')?.value||'').trim().toLowerCase();
   const filtered=students.filter(s=>{
@@ -8815,16 +8846,11 @@ function renderStudents(){
     return !search||text.includes(search);
   });
 
-  const active=sortStudentsForDisplay(filtered.filter(s=>(s.status||'Active')==='Active'));
-  const completed=sortStudentsForDisplay(filtered.filter(s=>(s.status||'Active')==='Completed'));
+  const allStudents=sortStudentsForDisplay(filtered);
 
-  activeList.innerHTML=active.length
-    ?active.map(renderStudentCard).join('')
-    :`<div class="empty" style="grid-column:1/-1">${search?'No active students match your search.':'No active students yet.'}</div>`;
-
-  completedList.innerHTML=completed.length
-    ?completed.map(renderStudentCard).join('')
-    :`<div class="empty" style="grid-column:1/-1">${search?'No completed students match your search.':'No completed students yet.'}</div>`;
+  activeList.innerHTML=allStudents.length
+    ?allStudents.map(renderStudentCard).join('')
+    :`<div class="empty" style="grid-column:1/-1">${search?'No students match your search.':'No students yet.'}</div>`;
 
   if(legacyList)legacyList.innerHTML='';
 }
@@ -11456,13 +11482,42 @@ async function requestNotificationPermission(){if('Notification' in window&&Noti
 function testNotificationSound(){playNotificationSound();}
 function playNotificationSound(){
  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
- const ctx=new C(); const now=ctx.currentTime;
- const patterns={chime:[523.25,659.25,783.99],bell:[783.99,659.25],double:[659.25,659.25,783.99],soft:[440,554.37]};
- const tones=patterns[portalSettings.sound]||patterns.chime;
- tones.forEach((freq,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.0001,now+i*.16);g.gain.exponentialRampToValueAtTime(.13,now+i*.16+.02);g.gain.exponentialRampToValueAtTime(.0001,now+i*.16+.14);o.connect(g);g.connect(ctx.destination);o.start(now+i*.16);o.stop(now+i*.16+.16)});
- setTimeout(()=>ctx.close().catch(()=>{}),900);
+ let ctx;try{ctx=new C();}catch(e){return;}
+ const duration=10;
+ const now=ctx.currentTime+0.03;
+ const sounds={
+   chime:{tones:[523.25,659.25,783.99,1046.5],step:.34,type:'sine',gain:.105},
+   bell:{tones:[783.99,659.25,523.25],step:.62,type:'sine',gain:.13},
+   double:{tones:[659.25,659.25,783.99,783.99],step:.42,type:'sine',gain:.12},
+   soft:{tones:[440,554.37,659.25],step:.58,type:'sine',gain:.085},
+   marimba:{tones:[261.63,329.63,392,523.25,392,329.63],step:.28,type:'triangle',gain:.095},
+   piano:{tones:[261.63,329.63,392,493.88,523.25,493.88,392,329.63],step:.38,type:'triangle',gain:.085},
+   digital:{tones:[880,1174.66,1567.98,1174.66],step:.22,type:'square',gain:.055},
+   pulse:{tones:[392,392,523.25,392],step:.5,type:'sine',gain:.095},
+   alarm:{tones:[880,660,880,660],step:.34,type:'square',gain:.07},
+   gentle:{tones:[349.23,440,523.25,659.25],step:.62,type:'sine',gain:.075},
+   sparkle:{tones:[1046.5,1318.51,1567.98,2093],step:.25,type:'sine',gain:.075},
+   arcade:{tones:[523.25,659.25,783.99,1046.5,783.99,659.25],step:.2,type:'square',gain:.05}
+ };
+ const cfg=sounds[portalSettings.sound]||sounds.chime;
+ let t=now;
+ while(t<now+duration-0.05){
+   cfg.tones.forEach((freq,i)=>{
+     const start=t+i*cfg.step;
+     if(start>=now+duration)return;
+     const end=Math.min(start+Math.min(cfg.step*.82,.5),now+duration);
+     const o=ctx.createOscillator(),g=ctx.createGain();
+     o.type=cfg.type;o.frequency.setValueAtTime(freq,start);
+     g.gain.setValueAtTime(.0001,start);
+     g.gain.exponentialRampToValueAtTime(cfg.gain,start+.025);
+     g.gain.exponentialRampToValueAtTime(.0001,Math.max(start+.08,end-.025));
+     o.connect(g);g.connect(ctx.destination);o.start(start);o.stop(end);
+   });
+   t+=cfg.tones.length*cfg.step;
+ }
+ setTimeout(()=>ctx.close().catch(()=>{}),10500);
 }
-function startClassNotificationWatcher(){if(notificationTimer)return;checkUpcomingClassNotifications();notificationTimer=setInterval(checkUpcomingClassNotifications,30000);}
+function startClassNotificationWatcher(){if(notificationTimer)return;checkUpcomingClassNotifications();notificationTimer=setInterval(checkUpcomingClassNotifications,15000);}
 function stopClassNotificationWatcher(){if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}}
 function checkUpcomingClassNotifications(){
  if(portalSettings.notifications===false)return;
@@ -11568,7 +11623,7 @@ html.portal-font-active,html.portal-font-active body,html.portal-font-active bod
 .settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-choice-note{font-size:11px;color:var(--portal-muted);margin:8px 0}.font-gallery{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:380px;overflow:auto;padding:2px}.font-choice{border:1px solid var(--portal-border);background:var(--portal-surface);color:var(--portal-text);border-radius:9px;padding:8px 9px;text-align:left;cursor:pointer;transition:.15s;min-width:0}.font-choice:hover{border-color:var(--portal-accent-dark);transform:translateY(-1px)}.font-choice:active{transform:scale(.985)}.font-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft)}.font-choice-name{display:block;font-family:Arial,sans-serif!important;font-size:9px;font-weight:800;opacity:.72;margin-bottom:2px}.font-choice-sample{display:block;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.font-gallery::-webkit-scrollbar{width:6px}.font-gallery::-webkit-scrollbar-thumb{background:var(--portal-accent);border-radius:10px}
 .font-preview{margin-top:8px;padding:10px;border-radius:9px;background:var(--portal-accent-soft);color:var(--portal-text);font-size:14px}
 .settings-action-btn,.sound-test-btn,.network-retest-btn{width:100%;border:1px solid var(--portal-accent-dark);background:var(--portal-accent);color:#111;border-radius:9px;padding:11px;font-weight:900;cursor:pointer}.sound-test-btn{margin-top:8px;width:auto;padding:8px 12px;font-size:12px}
-.notification-sound-row{margin-top:10px}.notification-sound-row label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.switch{position:relative;width:48px;height:26px;display:block;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#c7ced2;border-radius:30px;cursor:pointer;transition:.2s}.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--portal-accent-dark)}.switch input:checked+span:before{transform:translateX(22px)}
+.notification-sound-note{display:block;margin-top:6px;color:var(--portal-muted);font-size:10px;line-height:1.35}.notification-sound-row{margin-top:10px}.notification-sound-row label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.switch{position:relative;width:48px;height:26px;display:block;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#c7ced2;border-radius:30px;cursor:pointer;transition:.2s}.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--portal-accent-dark)}.switch input:checked+span:before{transform:translateX(22px)}
 
 .network-test-overlay{display:none;position:fixed;inset:0;z-index:20000;background:rgba(6,14,20,.92);align-items:center;justify-content:center;padding:20px}.network-test-overlay.show{display:flex}.network-test-card{position:relative;width:min(720px,95vw);background:#fff;border-radius:22px;padding:36px;text-align:center;color:#111;box-shadow:0 25px 80px rgba(0,0,0,.45)}.network-test-close{position:absolute;right:15px;top:12px;border:0;background:transparent;font-size:30px;cursor:pointer;color:#667085}.network-test-icon{font-size:42px}.network-test-card h2{margin:8px 0 4px;font-size:28px}.network-test-subtitle{color:#667085;margin:0 0 22px}.network-meter{height:10px;background:#e9eef0;border-radius:20px;overflow:hidden}.network-meter div{height:100%;width:0;background:var(--portal-accent);transition:width .35s ease}.network-status{font-weight:800;margin:14px 0 20px}.network-results{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}.network-results>div{background:#f6f8f9;border:1px solid #e1e7e9;border-radius:13px;padding:17px 8px}.network-results span{display:block;font-size:10px;font-weight:900;color:#667085;letter-spacing:.08em}.network-results strong{display:block;font-size:25px;margin-top:7px}.network-results small{color:#667085;font-size:10px}.network-retest-btn{width:auto;padding:11px 24px}
 
