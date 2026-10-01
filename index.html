@@ -457,7 +457,7 @@ button.secondary,
 }
 
 .secondary{
-  background:#ddd;
+  background:#00d9d9;
 }
 
 .status{
@@ -1409,6 +1409,45 @@ button.secondary,
   color:#8a0000;
 }
 
+.profile-gmail-row input.gmail-verified{
+  border-color:#63c78a;
+  box-shadow:0 0 0 2px rgba(99,199,138,.12);
+}
+
+#changeGmailModal input:disabled{
+  background:#f1f3f5;
+  color:#888;
+  cursor:not-allowed;
+}
+
+.email-success-modal{
+  border-top:5px solid #7bd88f;
+}
+
+.email-success-icon{
+  width:48px;
+  height:48px;
+  margin:0 auto 10px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#dff6df;
+  color:#258b45;
+  font-size:28px;
+  font-weight:800;
+}
+
+.email-login-note{
+  margin-top:12px;
+  padding:11px 12px;
+  border-radius:8px;
+  background:#e8f8eb;
+  color:#276b39;
+  font-size:13px;
+  line-height:1.5;
+}
+
 .logout-btn{
   border:0;
   border-radius:7px;
@@ -2082,7 +2121,7 @@ button.secondary,
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -2811,7 +2850,7 @@ onclick="if(event.target===this) closeAddStudent()"
         <button type="button" class="modal-save" onclick="submitStudentContract()">SUBMIT CONTRACT</button>
       </div>
       <div id="contractError" class="modal-error"></div>
-      <div class="small" style="margin-top:10px">Both signed files are saved under this student's contract record. After submission, the parent receives an email notification through EmailJS.</div>
+      <div class="small" style="margin-top:10px">Both signed files are saved under this student's contract record. No email is sent automatically.</div>
     </div>
   </div>
 </div>
@@ -3357,7 +3396,7 @@ Select a student and fill in the lesson details. The teacher's comment will be g
 class="primary"
 onclick="updateComment()"
 >
-Generate / Update Comment
+Generate/Update Comment
 </button>
 
 <button
@@ -3365,14 +3404,14 @@ id="submitBtn"
 class="primary"
 onclick="sendEvaluation()"
 >
-Submit & Email Parent
+Save Evaluation
 </button>
 
 <button
 class="secondary"
-onclick="window.print()"
+onclick="downloadEvaluationImage()"
 >
-Print / Save PDF
+Download/PDF
 </button>
 
 <button
@@ -3387,7 +3426,7 @@ Clear
 <div id="status" class="status"></div>
 
 <div class="small">
-EmailJS is connected. After you submit, the class memo will be emailed automatically to the parent and saved in Record of Evaluation.
+The evaluation is saved to Record of Evaluation. Use Download/PDF to download the evaluation as an image for the parent.
 </div>
 
 </div>
@@ -3516,13 +3555,47 @@ placeholder="Teacher Full Name"
 
 <div class="profile-field">
 
-<label>Email</label>
+<label>Gmail Account</label>
+
+<div class="profile-gmail-row">
 
 <input
 id="profileEmail"
 type="email"
 readonly
+class="profile-editable-readonly"
 >
+
+<div class="profile-gmail-menu-wrap">
+
+<button
+type="button"
+class="profile-gmail-dots"
+onclick="toggleGmailMenu(event)"
+aria-label="Gmail account options"
+>
+⋮
+</button>
+
+<div
+id="profileGmailMenu"
+class="profile-gmail-menu"
+>
+
+<button
+type="button"
+onclick="openChangeGmailModal(event)"
+>
+Change Email
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="small">Your latest confirmed Gmail account is used for login.</div>
 
 </div>
 
@@ -3575,10 +3648,11 @@ class="profile-status"
 
 <button
 type="button"
+id="profileEditSaveBtn"
 class="profile-save-btn"
-onclick="saveTeacherProfile()"
+onclick="toggleTeacherProfileEdit()"
 >
-Save Profile
+Edit Profile
 </button>
 
 </div>
@@ -3902,6 +3976,125 @@ Close
 
 
 <!-- =========================================================
+     CHANGE GMAIL ACCOUNT MODAL
+========================================================= -->
+
+<div
+id="changeGmailModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeChangeGmailModal()"
+>
+
+<div class="modal">
+
+<h3>Change Email</h3>
+
+<p>
+Enter your current Gmail first before changing to a new Gmail account.
+</p>
+
+<label>Current / Old Gmail</label>
+<input
+id="oldGmailInput"
+type="email"
+placeholder="Enter your current Gmail"
+autocomplete="email"
+oninput="checkOldGmailForChange()"
+>
+
+<label style="margin-top:10px">New Gmail</label>
+<input
+id="newGmailInput"
+type="email"
+placeholder="Enter your new Gmail"
+autocomplete="email"
+disabled
+>
+
+<label style="margin-top:10px">Confirm New Gmail</label>
+<input
+id="confirmNewGmailInput"
+type="email"
+placeholder="Re-enter your new Gmail"
+autocomplete="email"
+disabled
+>
+
+<div
+id="changeGmailError"
+class="modal-error"
+></div>
+
+<div class="small" style="margin-top:10px">
+After the new Gmail is confirmed, it becomes the Gmail account used for login.
+</div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-cancel"
+onclick="closeChangeGmailModal()"
+>
+Cancel
+</button>
+
+<button
+type="button"
+class="modal-save"
+onclick="changeTeacherGmail()"
+>
+Change Email
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     EMAIL CHANGE SUCCESS POPUP
+========================================================= -->
+
+<div
+id="emailChangeSuccessModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeEmailChangeSuccess()"
+>
+
+<div class="modal email-success-modal">
+
+<div class="email-success-icon">✓</div>
+
+<h3>Email Changed Successfully</h3>
+
+<p id="emailChangeSuccessMessage">
+Your new Gmail has been updated successfully.
+</p>
+
+<div class="email-login-note">
+<strong>Note:</strong> The new Gmail you entered is now the Gmail to use when you log in.
+If email confirmation is required, please confirm the new Gmail first.
+</div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+class="modal-save"
+onclick="closeEmailChangeSuccess()"
+>
+OK
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
      CHANGE PASSWORD MODAL
 ========================================================= -->
 
@@ -4090,12 +4283,6 @@ Clear All Records
 /* =========================================================
    CONFIGURATION
 ========================================================= */
-
-const EMAILJS_PUBLIC_KEY='c6EftsVJb2RHlRH_E';
-
-const EMAILJS_SERVICE_ID='service_wx3z91j';
-
-const EMAILJS_TEMPLATE_ID='template_3kqt32w';
 
 const STUDENTS_BASE_KEY='teacherDanyealStudents_v2';
 
@@ -4760,9 +4947,7 @@ if(event)
 event.stopPropagation();
 
 const panel=
-document.getElementById(
-'profilePanel'
-);
+document.getElementById('profilePanel');
 
 if(!panel)
 return;
@@ -4777,7 +4962,7 @@ closeProfilePanel();
 }else{
 
 loadTeacherProfile();
-
+setTeacherProfileEditMode(false);
 panel.classList.add('show');
 
 }
@@ -4787,14 +4972,13 @@ panel.classList.add('show');
 function closeProfilePanel(){
 
 const panel=
-document.getElementById(
-'profilePanel'
-);
+document.getElementById('profilePanel');
 
 if(panel)
 panel.classList.remove('show');
 
 closeProfileMoreMenu();
+closeGmailMenu();
 
 }
 
@@ -4804,9 +4988,7 @@ if(event)
 event.stopPropagation();
 
 const menu=
-document.getElementById(
-'profileMoreMenu'
-);
+document.getElementById('profileMoreMenu');
 
 if(!menu)
 return;
@@ -4818,16 +5000,136 @@ menu.classList.toggle('show');
 function closeProfileMoreMenu(){
 
 const menu=
-document.getElementById(
-'profileMoreMenu'
-);
+document.getElementById('profileMoreMenu');
 
 if(menu)
 menu.classList.remove('show');
 
 }
 
+function toggleGmailMenu(event){
+
+if(event)
+event.stopPropagation();
+
+const menu=
+document.getElementById('profileGmailMenu');
+
+if(!menu)
+return;
+
+menu.classList.toggle('show');
+
+}
+
+function closeGmailMenu(){
+
+const menu=
+document.getElementById('profileGmailMenu');
+
+if(menu)
+menu.classList.remove('show');
+
+}
+
+function checkOldGmailForChange(){
+
+const oldInput=document.getElementById('oldGmailInput');
+const newInput=document.getElementById('newGmailInput');
+const confirmInput=document.getElementById('confirmNewGmailInput');
+const error=document.getElementById('changeGmailError');
+
+if(!oldInput || !newInput || !confirmInput) return;
+
+const typed=(oldInput.value || '').trim().toLowerCase();
+const current=(currentUser?.email || '').trim().toLowerCase();
+const matched=!!typed && typed===current;
+
+newInput.disabled=!matched;
+confirmInput.disabled=!matched;
+
+if(matched){
+  oldInput.classList.add('gmail-verified');
+  if(error && error.textContent===
+    'The old Gmail does not match your current logged-in Gmail.') {
+    error.textContent='';
+    error.classList.remove('show');
+  }
+}else{
+  oldInput.classList.remove('gmail-verified');
+}
+
+}
+
 let pendingProfilePicture='';
+
+function setTeacherProfileEditMode(editing){
+
+const username=
+document.getElementById('profileUsername');
+
+const fullName=
+document.getElementById('profileFullName');
+
+const phone=
+document.getElementById('profilePhone');
+
+const gender=
+document.getElementById('profileGender');
+
+const pictureBtn=
+document.querySelector('.profile-picture-btn');
+
+[username,fullName,phone].forEach(el=>{
+if(!el)return;
+el.readOnly=!editing;
+el.classList.toggle('profile-editable-readonly',!editing);
+});
+
+if(gender){
+gender.disabled=!editing;
+gender.classList.toggle('profile-editable-readonly',!editing);
+}
+
+if(pictureBtn)
+pictureBtn.disabled=!editing;
+
+const button=
+document.getElementById('profileEditSaveBtn');
+
+if(button){
+button.textContent=
+editing ? 'Save Profile' : 'Edit Profile';
+button.dataset.editing=
+editing ? 'true' : 'false';
+}
+
+}
+
+function toggleTeacherProfileEdit(){
+
+const button=
+document.getElementById('profileEditSaveBtn');
+
+const editing=
+button?.dataset.editing==='true';
+
+if(editing){
+
+saveTeacherProfile();
+
+}else{
+
+setTeacherProfileEditMode(true);
+
+showProfileStatus(
+'Edit mode enabled. Update your profile, then click Save Profile.',
+true
+);
+
+}
+
+}
 
 function loadTeacherProfile(){
 
@@ -4855,43 +5157,31 @@ const gender=
 saved.gender ||
 '';
 
-document.getElementById(
-'profileUsername'
-).value=username;
+document.getElementById('profileUsername').value=username;
 
-document.getElementById(
-'profileFullName'
-).value=fullName;
+document.getElementById('profileFullName').value=fullName;
 
-document.getElementById(
-'profileEmail'
-).value=currentUser.email || '';
+document.getElementById('profileEmail').value=
+currentUser.email || '';
 
-document.getElementById(
-'profilePhone'
-).value=phone;
+document.getElementById('profilePhone').value=phone;
 
-document.getElementById(
-'profileGender'
-).value=gender;
+document.getElementById('profileGender').value=gender;
 
-document.getElementById(
-'profileHeaderName'
-).textContent=fullName;
+document.getElementById('profileHeaderName').textContent=fullName;
 
-document.getElementById(
-'profileHeaderEmail'
-).textContent=currentUser.email || '';
+document.getElementById('profileHeaderEmail').textContent=
+currentUser.email || '';
 
-document.getElementById(
-'currentTeacher'
-).textContent=fullName;
+document.getElementById('currentTeacher').textContent=fullName;
 
 pendingProfilePicture=saved.picture || '';
 
 setProfilePicture(
 pendingProfilePicture
 );
+
+setTeacherProfileEditMode(false);
 
 }
 
@@ -4901,129 +5191,379 @@ if(!currentUser)
 return;
 
 const username=
-document.getElementById(
-'profileUsername'
-).value.trim();
+document.getElementById('profileUsername').value.trim();
 
 const fullName=
-document.getElementById(
-'profileFullName'
-).value.trim();
+document.getElementById('profileFullName').value.trim();
 
 const phone=
-document.getElementById(
-'profilePhone'
-).value.trim();
+document.getElementById('profilePhone').value.trim();
 
 const gender=
-document.getElementById(
-'profileGender'
-).value;
+document.getElementById('profileGender').value;
 
 if(!username){
-
 return showProfileStatus(
 'Please enter a username.',
 false
 );
-
 }
 
 if(!fullName){
-
 return showProfileStatus(
 'Please enter your full name.',
 false
 );
-
 }
 
-const old=
-getTeacherProfile();
-
 const data={
-
 username,
-
 fullName,
-
 phone,
-
 gender,
-
 picture:
 pendingProfilePicture || ''
-
 };
 
 saveTeacherProfileData(data);
 
-/* Update the visible profile immediately — no page refresh needed */
-/* Immediately sync the small upper-left account area */
-const currentTeacherEl =
+const currentTeacherEl=
 document.getElementById('currentTeacher');
 
 if(currentTeacherEl){
-currentTeacherEl.textContent =
+currentTeacherEl.textContent=
 data.fullName || data.username || 'Teacher';
 }
 
-/* Sync the small upper-left profile picture immediately when Save Profile is clicked. */
-const topProfileIconEl =
+const topProfileIconEl=
 document.getElementById('profileIcon');
 
 if(topProfileIconEl){
-const topPicture =
+
+const topPicture=
 data.picture || data.profile_picture || '';
 
 if(topPicture){
-topProfileIconEl.innerHTML =
+topProfileIconEl.innerHTML=
 `<img src="${String(topPicture)}" alt="Profile Picture">`;
 }else{
 topProfileIconEl.textContent='👤';
 }
+
 }
 
-const profileHeaderNameEl =
+const profileHeaderNameEl=
 document.getElementById('profileHeaderName');
 
 if(profileHeaderNameEl){
-profileHeaderNameEl.textContent =
+profileHeaderNameEl.textContent=
 data.fullName || data.username || 'Teacher';
 }
 
 const dashboardUsernameEl=
-document.getElementById(
-'dashboardTeacherName'
-);
+document.getElementById('dashboardTeacherName');
 
 if(dashboardUsernameEl){
-dashboardUsernameEl.textContent =
+dashboardUsernameEl.textContent=
 data.username || 'Teacher';
 }
 
-/* Keep the dashboard profile picture synchronized immediately */
 const dashboardPhotoEl=
-document.getElementById(
-'dashboardTeacherPhoto'
-);
+document.getElementById('dashboardTeacherPhoto');
 
 if(dashboardPhotoEl){
-const savedPicture =
+
+const savedPicture=
 data.picture || data.profile_picture || '';
 
 if(savedPicture){
-dashboardPhotoEl.innerHTML =
+dashboardPhotoEl.innerHTML=
 `<img src="${String(savedPicture)}" alt="Teacher Profile Picture">`;
 }else{
 dashboardPhotoEl.textContent='👤';
 }
+
 }
+
+setTeacherProfileEditMode(false);
 
 showProfileStatus(
 'Profile saved successfully.',
 true
 );
+
+}
+
+function openChangeGmailModal(event){
+
+if(event)
+event.stopPropagation();
+
+closeGmailMenu();
+
+if(!currentUser)
+return;
+
+document.getElementById('oldGmailInput').value='';
+document.getElementById('newGmailInput').value='';
+document.getElementById('confirmNewGmailInput').value='';
+document.getElementById('newGmailInput').disabled=true;
+document.getElementById('confirmNewGmailInput').disabled=true;
+document.getElementById('oldGmailInput').classList.remove('gmail-verified');
+
+const error=
+document.getElementById('changeGmailError');
+
+if(error){
+error.textContent='';
+error.classList.remove('show');
+}
+
+document.getElementById('changeGmailModal')
+.classList.add('show');
+
+setTimeout(()=>{
+document.getElementById('oldGmailInput')?.focus();
+},50);
+
+}
+
+function closeChangeGmailModal(){
+
+const modal=
+document.getElementById('changeGmailModal');
+
+if(modal)
+modal.classList.remove('show');
+
+}
+
+async function changeTeacherGmail(){
+
+if(!currentUser)
+return;
+
+const oldGmail=
+document.getElementById('oldGmailInput').value.trim();
+
+const newGmail=
+document.getElementById('newGmailInput').value.trim();
+
+const confirmGmail=
+document.getElementById('confirmNewGmailInput').value.trim();
+
+const error=
+document.getElementById('changeGmailError');
+
+const showError=msg=>{
+error.textContent=msg;
+error.classList.add('show');
+};
+
+if(!oldGmail)
+return showError('Please enter your current / old Gmail.');
+
+if(oldGmail.toLowerCase()!==(currentUser.email || '').toLowerCase()){
+return showError(
+'The old Gmail does not match your current logged-in Gmail.'
+);
+}
+
+if(!newGmail)
+return showError('Please enter your new Gmail.');
+
+if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newGmail)){
+return showError('Please enter a valid Gmail address.');
+}
+
+if(newGmail.toLowerCase()==oldGmail.toLowerCase()){
+return showError(
+'The new Gmail must be different from the current Gmail.'
+);
+}
+
+if(newGmail.toLowerCase()!==confirmGmail.toLowerCase()){
+return showError(
+'The new Gmail and confirmation do not match.'
+);
+}
+
+const button=
+document.querySelector('#changeGmailModal .modal-save');
+
+button.disabled=true;
+button.textContent='Updating...';
+
+const {data,error:updateError}=
+await supabaseClient.auth.updateUser({
+email:newGmail
+});
+
+if(updateError){
+
+showError(updateError.message);
+
+button.disabled=false;
+button.textContent='Change Email';
+
+return;
+
+}
+
+/*
+  Supabase may require email confirmation before the new address
+  becomes the active login email. The current account remains usable
+  until that confirmation is completed.
+*/
+
+if(data?.user){
+currentUser=data.user;
+}
+
+document.getElementById('profileEmail').value=
+currentUser.email || newGmail;
+
+document.getElementById('profileHeaderEmail').textContent=
+currentUser.email || newGmail;
+
+closeChangeGmailModal();
+
+showEmailChangeSuccess(newGmail);
+
+}
+
+function showEmailChangeSuccess(newGmail){
+
+const message=document.getElementById('emailChangeSuccessMessage');
+if(message){
+  message.innerHTML=
+    `Your new Gmail <strong>${newGmail}</strong> has been submitted successfully.`;
+}
+
+const modal=document.getElementById('emailChangeSuccessModal');
+if(modal) modal.classList.add('show');
+
+}
+
+function closeEmailChangeSuccess(){
+
+const modal=document.getElementById('emailChangeSuccessModal');
+if(modal) modal.classList.remove('show');
+
+}
+
+function setProfilePicture(src){
+
+const small=
+document.getElementById('profileIcon');
+
+const large=
+document.getElementById('profilePictureLarge');
+
+if(src){
+
+const safeSrc=String(src);
+
+if(small){
+small.innerHTML=
+`<img src="${safeSrc}" alt="Profile Picture">`;
+}
+
+if(large){
+large.innerHTML=
+`<img src="${safeSrc}" alt="Profile Picture">`;
+}
+
+}else{
+
+if(small)
+small.textContent='👤';
+
+if(large)
+large.textContent='👤';
+
+}
+
+}
+
+function openProfilePicturePicker(event){
+
+if(event)
+event.stopPropagation();
+
+const input=
+document.getElementById('profilePictureInput');
+
+if(!input)
+return;
+
+input.value='';
+input.click();
+
+}
+
+function handleProfilePicture(event){
+
+const input=event && event.target;
+
+const file=
+input && input.files
+?input.files[0]
+:null;
+
+if(!file)
+return;
+
+if(!file.type || !file.type.startsWith('image/')){
+
+showProfileStatus(
+'Please select an image file.',
+false
+);
+
+return;
+
+}
+
+const reader=
+new FileReader();
+
+reader.onload=function(){
+
+const result=reader.result;
+
+if(!result)
+return;
+
+pendingProfilePicture=result;
+
+const large=
+document.getElementById('profilePictureLarge');
+
+if(large){
+
+large.innerHTML=
+`<img src="${String(result)}" alt="Profile Picture">`;
+
+}
+
+showProfileStatus(
+'Profile picture selected. Click Save Profile to apply it.',
+true
+);
+
+};
+
+reader.onerror=function(){
+
+showProfileStatus(
+'Unable to read the selected picture.',
+false
+);
+
+};
+
+reader.readAsDataURL(file);
 
 }
 
@@ -8609,21 +9149,13 @@ return showStatus(
 false
 );
 
-if(
-!document.getElementById(
-'date'
-).value
-)
+if(!document.getElementById('date').value)
 return showStatus(
 'Please select the class date.',
 false
 );
 
-if(
-!document.getElementById(
-'time'
-).value
-)
+if(!document.getElementById('time').value)
 return showStatus(
 'Please select the class time.',
 false
@@ -8635,21 +9167,17 @@ document.getElementById(
 ).textContent.trim();
 
 if(!currentComment){
-
 return showStatus(
-'Please generate a teacher comment before sending.',
+'Please generate a teacher comment before saving.',
 false
 );
-
 }
 
 const [rating]=
 getRating(scoreValue);
 
 const starText=n=>
-'★'.repeat(
-Number(n)||0
-)+
+'★'.repeat(Number(n)||0)+
 '☆'.repeat(
 Math.max(
 0,
@@ -8658,14 +9186,10 @@ Math.max(
 );
 
 const dateValue=
-document.getElementById(
-'date'
-).value;
+document.getElementById('date').value;
 
 const timeValue=
-document.getElementById(
-'time'
-).value;
+document.getElementById('time').value;
 
 const templateParams={
 
@@ -8674,9 +9198,7 @@ parent_email:email,
 student_name:name,
 
 student_id:
-document.getElementById(
-'studentId'
-).value,
+document.getElementById('studentId').value,
 
 score:
 `${scoreValue}/100`,
@@ -8687,83 +9209,40 @@ date:
 `${dateValue} ${timeValue}`,
 
 duration:
-document.getElementById(
-'duration'
-).value.trim() ||
+document.getElementById('duration').value.trim() ||
 'N/A',
 
 lesson_topic:
-document.getElementById(
-'lessonTopic'
-).value.trim() ||
+document.getElementById('lessonTopic').value.trim() ||
 'N/A',
 
 teacher:
-document.getElementById(
-'teacher'
-).value.trim() ||
+document.getElementById('teacher').value.trim() ||
 'Teacher Danyeal',
 
 vocabulary:
-document.getElementById(
-'vocabulary'
-).value.trim() ||
+document.getElementById('vocabulary').value.trim() ||
 'No vocabulary/lesson notes provided.',
 
 improvement:
-document.getElementById(
-'improvement'
-).value.trim() ||
+document.getElementById('improvement').value.trim() ||
 'No specific improvement areas noted.',
 
-participation:
-starText(
-stars.participation
-),
+participation:starText(stars.participation),
+pronunciation:starText(stars.pronunciation),
+behavior:starText(stars.behavior),
+speaking:starText(stars.speaking),
+understanding:starText(stars.understanding),
+listening:starText(stars.listening),
 
-pronunciation:
-starText(
-stars.pronunciation
-),
-
-behavior:
-starText(
-stars.behavior
-),
-
-speaking:
-starText(
-stars.speaking
-),
-
-understanding:
-starText(
-stars.understanding
-),
-
-listening:
-starText(
-stars.listening
-),
-
-teacher_comment:
-currentComment
+teacher_comment:currentComment
 
 };
-
-
-/*
-   IMPORTANT:
-   evaluationSavedAt is the exact moment the evaluation
-   was successfully saved after EmailJS sends successfully.
-   This is now the PRIMARY sorting timestamp.
-*/
 
 const evaluationSavedAt=
 new Date().toISOString();
 
 const record={
-
 ...templateParams,
 
 dateTime:
@@ -8773,45 +9252,12 @@ createdAt:
 evaluationSavedAt,
 
 evaluationSavedAt:
-
 evaluationSavedAt
 
 };
 
-if(!window.emailjs){
-
-return showStatus(
-'Email service is still loading. Please wait a moment and try again.',
-false
-);
-
-}
-
-emailjs.init({
-
-publicKey:
-EMAILJS_PUBLIC_KEY
-
-});
-
 submitBtn.disabled=true;
-
-submitBtn.textContent=
-'Sending Memo...';
-
-showStatus(
-'Sending the class memo to the parent...',
-true
-);
-
-emailjs
-.send(
-EMAILJS_SERVICE_ID,
-EMAILJS_TEMPLATE_ID,
-templateParams
-)
-
-.then(()=>{
+submitBtn.textContent='Saving...';
 
 const evals=
 getEvaluations();
@@ -8821,43 +9267,66 @@ evals.push(record);
 saveEvaluations(evals);
 
 showStatus(
-`Class Memo sent successfully to ${email}. Evaluation saved to Record of Evaluation.`,
+`Evaluation for ${name} saved successfully. You can now use Print / Save PDF.`,
 true
 );
 
 renderDashboard();
-
-/*
-   Immediately re-render the student evaluation list.
-   Because the newly saved evaluation has the newest
-   evaluationSavedAt timestamp, this student moves to top.
-*/
 renderRecords();
 
-})
-
-.catch(error=>{
-
-console.error(
-'EmailJS error:',
-error
-);
-
-showStatus(
-'The memo could not be sent. The evaluation was not saved yet.',
-false
-);
-
-})
-
-.finally(()=>{
-
+setTimeout(()=>{
 submitBtn.disabled=false;
+submitBtn.textContent='Save Evaluation';
+},500);
 
-submitBtn.textContent=
-'Submit & Email Parent';
+}
 
+/* =========================================================
+   DOWNLOAD EVALUATION AS IMAGE
+========================================================= */
+
+async function downloadEvaluationImage(){
+
+const evaluationPage=document.getElementById('evaluationPage');
+
+if(!evaluationPage)
+return showStatus('Evaluation page not found.',false);
+
+if(typeof html2canvas==='undefined')
+return showStatus('Image download is still loading. Please try again.',false);
+
+const studentName=(document.getElementById('studentName')?.value || 'Student')
+.trim()
+.replace(/[^a-z0-9]+/gi,'-')
+.replace(/^-+|-+$/g,'') || 'Student';
+
+showStatus('Preparing evaluation image...',true);
+
+try{
+
+const canvas=await html2canvas(evaluationPage,{
+scale:2,
+useCORS:true,
+backgroundColor:'#ffffff',
+logging:false,
+ignoreElements:(element)=>{
+return element.classList.contains('buttons') ||
+element.classList.contains('page-back-wrap') ||
+element.id==='status';
+}
 });
+
+const link=document.createElement('a');
+link.download=`Teacher-Danyeal-Evaluation-${studentName}.png`;
+link.href=canvas.toDataURL('image/png');
+link.click();
+
+showStatus('Evaluation image downloaded successfully.',true);
+
+}catch(error){
+console.error('Evaluation image download failed:',error);
+showStatus('Unable to download the evaluation image. Please try again.',false);
+}
 
 }
 
@@ -9980,7 +10449,70 @@ function cancelStudentContract(){
   const e=document.getElementById('contractError');if(e)e.textContent='';
   renderContractStudentLists();
 }
-async function submitStudentContract(){const e=document.getElementById('contractError');if(e)e.textContent='';const student=getStudents().find(s=>s.id===contractSelectedStudentId);if(!student)return showContractError('Please select a student first.');if(!student.email)return showContractError('This student does not have a Parent Gmail address. Please edit the student information first.');if(!contractFileData.teacher||!contractFileData.parent)return showContractError("Please upload both signed contract files: Teacher's Signed Contract and Parent's Signed Contract.");const contracts=getStudentContracts(),submittedAt=new Date().toISOString();contracts[student.id]={studentId:student.id,studentName:student.name,parentEmail:student.email,teacherFileName:contractFileData.teacher.name,teacherFileType:contractFileData.teacher.type,teacherFileData:contractFileData.teacher.data,parentFileName:contractFileData.parent.name,parentFileType:contractFileData.parent.type,parentFileData:contractFileData.parent.data,submittedAt,status:'Submitted'};saveStudentContracts(contracts);renderContractStudentLists();if(!window.emailjs){showContractError('Contract saved, but EmailJS is still loading. Please try again to send the parent email.');return;}try{emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{parent_email:student.email,student_name:student.name||'',student_id:student.id||'',contract_status:'Student Contract Submitted',contract_submitted_at:new Date(submittedAt).toLocaleString(),teacher_contract_file_name:contractFileData.teacher.name||'',parent_contract_file_name:contractFileData.parent.name||'',contract_message:`The signed Student Contract for ${student.name||'the student'} has been successfully submitted and recorded. Thank you for completing the contract.`});const st=document.getElementById('contractStatusText');if(st)st.textContent=`${student.name} — Submitted & Email Sent`;showContractSuccess(`Student Contract for ${student.name} was saved and an email notification was sent to ${student.email}.`);}catch(err){const st=document.getElementById('contractStatusText');if(st)st.textContent=`${student.name} — Submitted / Email Pending`;showContractSuccess(`Student Contract for ${student.name} was saved successfully. EmailJS could not send the notification yet: ${err?.text||err?.message||'unknown error'}`);}}
+async function submitStudentContract(){
+
+const e=
+document.getElementById('contractError');
+
+if(e)
+e.textContent='';
+
+const student=
+getStudents().find(
+s=>s.id===contractSelectedStudentId
+);
+
+if(!student)
+return showContractError(
+'Please select a student first.'
+);
+
+if(!student.email)
+return showContractError(
+'This student does not have a Parent Gmail address. Please edit the student information first.'
+);
+
+if(!contractFileData.teacher || !contractFileData.parent)
+return showContractError(
+"Please upload both signed contract files: Teacher's Signed Contract and Parent's Signed Contract."
+);
+
+const contracts=
+getStudentContracts();
+
+const submittedAt=
+new Date().toISOString();
+
+contracts[student.id]={
+studentId:student.id,
+studentName:student.name,
+parentEmail:student.email,
+teacherFileName:contractFileData.teacher.name,
+teacherFileType:contractFileData.teacher.type,
+teacherFileData:contractFileData.teacher.data,
+parentFileName:contractFileData.parent.name,
+parentFileType:contractFileData.parent.type,
+parentFileData:contractFileData.parent.data,
+submittedAt,
+status:'Submitted'
+};
+
+saveStudentContracts(contracts);
+
+renderContractStudentLists();
+
+const st=
+document.getElementById('contractStatusText');
+
+if(st)
+st.textContent=
+`${student.name} — Submitted & Saved`;
+
+showContractSuccess(
+`Student Contract for ${student.name} was saved successfully. No email was sent automatically.`
+);
+
+}
 function showContractError(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='';e.style.background='';e.style.borderColor='';}}
 function showContractSuccess(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='#067647';e.style.background='#ecfdf3';e.style.borderColor='#abefc6';e.style.padding='10px';e.style.borderRadius='8px';}}
 </script>
