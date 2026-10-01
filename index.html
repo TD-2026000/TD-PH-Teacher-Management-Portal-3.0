@@ -2169,6 +2169,18 @@ button.secondary,
 .contract-picker-list{display:grid;gap:10px;max-height:60vh;overflow:auto;margin-top:16px}.contract-picker-item{width:100%;text-align:left;border:1px solid #d9dee7;background:#fff;border-radius:12px;padding:14px 16px;cursor:pointer}.contract-picker-item:hover{border-color:#2563eb;background:#f8fbff}.contract-picker-item strong{display:block;font-size:15px}.contract-picker-item span{display:block;font-size:12px;color:#667085;margin-top:4px}
 
 .appointment-actions .rebook{border:1px solid #7b61ff;background:#fff;color:#5b43c7;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}.appointment-actions .rebook:hover{background:#f3f0ff}
+
+/* Download/PDF stays locked until the evaluation is successfully saved. */
+#downloadEvalBtn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+#downloadEvalBtn:not(:disabled){
+  opacity:1;
+  cursor:pointer;
+  pointer-events:auto;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -3459,8 +3471,10 @@ Save Evaluation
 </button>
 
 <button
+id="downloadEvalBtn"
 class="secondary"
 onclick="downloadEvaluationImage()"
+disabled
 >
 Download/PDF
 </button>
@@ -8958,8 +8972,13 @@ evals.push(record);
 
 saveEvaluations(evals);
 
+const downloadBtn=document.getElementById('downloadEvalBtn');
+if(downloadBtn){
+  downloadBtn.disabled=false;
+}
+
 showStatus(
-`Evaluation for ${name} saved successfully. You can now use Print / Save PDF.`,
+`Evaluation for ${name} saved successfully. You can now use Download/PDF.`,
 true
 );
 
@@ -8978,6 +8997,11 @@ submitBtn.textContent='Save Evaluation';
 ========================================================= */
 
 async function downloadEvaluationImage(){
+
+const downloadBtn=document.getElementById('downloadEvalBtn');
+if(downloadBtn && downloadBtn.disabled){
+  return showStatus('Please save the evaluation first before downloading it.',false);
+}
 
 const evaluationPage=document.getElementById('evaluationPage');
 
@@ -9198,6 +9222,11 @@ if(reportHost) reportHost.remove();
 ========================================================= */
 
 function resetForm(){
+
+const downloadBtn=document.getElementById('downloadEvalBtn');
+if(downloadBtn){
+  downloadBtn.disabled=true;
+}
 
 document.getElementById(
 'studentSelect'
