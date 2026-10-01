@@ -1896,29 +1896,52 @@ button.secondary,
 }
 .student-search-wrap{flex:1;min-width:240px}
 .student-filter-wrap{width:190px;max-width:100%}
-.student-card-list{display:grid;gap:12px}
-.student-card{
-  border:1px solid #ccc;border-radius:12px;background:#fff;padding:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,.05)
-}
-.student-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.student-card-name{font-size:18px;font-weight:900}
-.student-card-id{font-size:12px;color:#666;margin-top:3px}
-.student-status-badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#dff6df;font-size:11px;font-weight:800}
-.student-status-badge.inactive{background:#eee}
-.student-status-badge.completed{background:#dcecff}
-.student-card-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:13px}
-.student-meta-box{border:1px solid #e0e0e0;border-radius:8px;padding:9px;background:#fafafa}
-.student-meta-box label{font-size:10px;color:#666;margin-bottom:3px}
-.student-meta-box div{font-size:13px;font-weight:700;word-break:break-word}
-.student-progress{margin-top:12px}
-.student-progress-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;margin-bottom:5px}
-.student-progress-track{height:9px;background:#e8e8e8;border-radius:999px;overflow:hidden}
-.student-progress-fill{height:100%;background:#00d9d9;border-radius:999px}
-.student-card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
-.student-card-actions button{border:0;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:800;cursor:pointer;background:#eee}
+.student-card-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
+.student-card{border:1px solid #ddd;border-radius:16px;background:#fff;padding:18px 14px;box-shadow:0 3px 12px rgba(0,0,0,.07);cursor:pointer;text-align:center;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;min-height:245px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.student-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(0,0,0,.11);border-color:#00bfc0}
+.student-card-top{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%}
+.student-avatar-circle{width:108px;height:108px;border-radius:50%;background:#e9fafa;border:3px solid #00d9d9;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:32px;font-weight:900;color:#087b7b;flex:0 0 auto}
+.student-avatar-circle img{width:100%;height:100%;object-fit:cover;display:block}
+.student-card-name{font-size:17px;font-weight:900;color:#111;line-height:1.25;word-break:break-word}
+.student-card-id{font-size:12px;color:#666;margin-top:2px;font-weight:400}
+.student-card .student-status-badge{margin-top:4px}
+.student-card-meta{display:none}
+.student-card .student-progress{display:none}
+.student-card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;justify-content:center;width:100%}
+.student-card-actions button{border:0;border-radius:8px;padding:8px 11px;font-size:12px;font-weight:800;cursor:pointer;background:#eee}
 .student-card-actions .primary-action{background:#00d9d9}
 .student-card-actions .danger-action{background:#ffe1e1;color:#a00000}
+.student-profile-modal{width:95vw;max-width:1450px;max-height:92vh;overflow:auto}
+.edit-student-landscape-modal{width:95vw;max-width:1450px;max-height:92vh;overflow-y:auto}
+.edit-student-landscape{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;align-items:start}
+.edit-student-picture-panel{border:1px solid #ddd;border-radius:14px;background:#fafafa;padding:20px;text-align:center;position:sticky;top:0}
+.edit-student-picture{width:155px;height:155px;margin:0 auto 14px;border-radius:50%;overflow:hidden;border:4px solid #00d9d9;background:#e9fafa;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900;color:#087b7b}
+.edit-student-picture img{width:100%;height:100%;object-fit:cover}
+.edit-picture-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.edit-student-fields{min-width:0}
+.edit-student-fields-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.edit-student-field{min-width:0}
+.edit-student-field.full{grid-column:1/-1}
+.edit-student-field label{display:block;margin-bottom:5px;font-weight:700;font-size:13px}
+@media(max-width:900px){.edit-student-landscape{grid-template-columns:1fr}.edit-student-picture-panel{position:static}.edit-student-fields-grid{grid-template-columns:1fr}}
+.student-profile-landscape{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;align-items:start}
+.student-profile-side{border:1px solid #ddd;border-radius:14px;background:#fafafa;padding:18px;text-align:center}
+.student-profile-avatar{width:145px;height:145px;margin:0 auto 12px;border-radius:50%;overflow:hidden;border:4px solid #00d9d9;background:#e9fafa;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;color:#087b7b}
+.student-profile-avatar img{width:100%;height:100%;object-fit:cover}
+.student-profile-name{font-size:23px;font-weight:900;line-height:1.2}
+.student-profile-id{font-size:13px;color:#666;margin-top:5px}
+.student-profile-main{min-width:0}
+.student-profile-section{border:1px solid #ddd;border-radius:12px;background:#fff;padding:13px;margin-bottom:12px}
+.student-profile-section h4{margin:0 0 10px;font-size:15px}
+.student-profile-info-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.student-profile-info-box{border:1px solid #e2e2e2;border-radius:8px;padding:9px;background:#fafafa;min-width:0}
+.student-profile-info-box label{display:block;font-size:10px;color:#666;margin-bottom:3px}
+.student-profile-info-box div{font-size:13px;font-weight:700;word-break:break-word;line-height:1.4}
+.student-class-table{width:100%;border-collapse:collapse;font-size:12px}
+.student-class-table th,.student-class-table td{border:1px solid #ddd;padding:8px;text-align:left;vertical-align:top}
+.student-class-table th{background:#f3f3f3;font-weight:900}
+@media(max-width:900px){.student-profile-landscape{grid-template-columns:1fr}.student-profile-side{display:flex;align-items:center;text-align:left;gap:15px}.student-profile-avatar{margin:0;width:100px;height:100px}.student-profile-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.student-card-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.student-card{padding:14px 8px;min-height:220px}.student-avatar-circle{width:85px;height:85px}.student-profile-info-grid{grid-template-columns:1fr}}
 .student-add-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .student-add-grid .full{grid-column:1/-1}
 .schedule-checks{display:flex;gap:8px;flex-wrap:wrap}
@@ -3496,7 +3519,7 @@ Log Out
      STUDENT PROFILE MODAL
 ========================================================= -->
 <div id="studentProfileModal" class="modal-backdrop" onclick="if(event.target===this) closeStudentProfile()">
-<div class="modal record-view-modal">
+<div class="modal student-profile-modal">
 <h3 id="studentProfileTitle">Student Profile</h3>
 <div id="studentProfileContent"></div>
 <div class="modal-actions">
@@ -3515,101 +3538,47 @@ class="modal-backdrop"
 onclick="if(event.target===this) closeEditStudent()"
 >
 
-<div class="modal">
+<div class="modal edit-student-landscape-modal">
 
 <h3>Edit Student</h3>
+<p>Update the student's saved information.</p>
 
-<p>
-Update the student's saved information.
-</p>
+<input type="hidden" id="editOriginalId">
 
-<input
-type="hidden"
-id="editOriginalId"
->
+<div class="edit-student-landscape">
+  <div class="edit-student-picture-panel">
+    <div id="editStudentPicturePreview" class="edit-student-picture">👤</div>
+    <div style="font-weight:800;margin-bottom:10px">Student Profile Picture</div>
+    <div class="edit-picture-buttons">
+      <button type="button" class="modal-save" onclick="openStudentPicturePicker()">Change Picture</button>
+      <button type="button" class="modal-cancel" onclick="removeStudentEditPicture()">Remove</button>
+    </div>
+    <input id="editStudentPictureInput" type="file" accept="image/*" style="display:none" onchange="handleStudentEditPicture(event)">
+    <div class="small" style="margin-top:10px">Choose a profile picture for this student.</div>
+  </div>
 
-<label>Student Name</label>
+  <div class="edit-student-fields">
+    <div class="edit-student-fields-grid">
+      <div class="edit-student-field"><label>Student Name</label><input id="editStudentName" placeholder="Student name"></div>
+      <div class="edit-student-field"><label>Parent's Email</label><input id="editStudentEmail" type="email" placeholder="parent@email.com"></div>
+      <div class="edit-student-field"><label>Student ID</label><input id="editStudentId" placeholder="Student ID"></div>
+      <div class="edit-student-field"><label>Age</label><input id="editStudentAge" type="number" min="1" max="100" placeholder="Age"></div>
+      <div class="edit-student-field"><label>Parent/Guardian Name</label><input id="editStudentParentName" placeholder="Parent/Guardian name"></div>
+      <div class="edit-student-field"><label>English Level</label><select id="editStudentLevel"><option value="">Select level</option><option>Beginner</option><option>Elementary</option><option>Pre-Intermediate</option><option>Intermediate</option><option>Upper-Intermediate</option><option>Advanced</option></select></div>
+      <div class="edit-student-field"><label>Class Duration</label><select id="editStudentDuration"><option value="30 Minutes">30 Minutes</option><option value="40 Minutes">40 Minutes</option><option value="50 Minutes">50 Minutes</option></select></div>
+      <div class="edit-student-field"><label>Package</label><input id="editStudentPackage" placeholder="e.g. 20 Classes"></div>
+      <div class="edit-student-field"><label>Start Date</label><input id="editStudentStartDate" type="date"><div class="small" style="margin-top:4px">The saved start date of the student's current package.</div></div>
+      <div class="edit-student-field"><label>Status</label><select id="editStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select></div>
+      <div class="edit-student-field full"><label>Preferred Class Schedule</label><div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div><div id="editSchedulePicker" class="schedule-picker"></div></div>
+    </div>
+  </div>
+</div>
 
-<input
-id="editStudentName"
-placeholder="Student name"
->
-
-<label style="margin-top:10px">
-Parent's Email
-</label>
-
-<input
-id="editStudentEmail"
-type="email"
-placeholder="parent@email.com"
->
-
-<label style="margin-top:10px">
-Student ID
-</label>
-
-<input
-id="editStudentId"
-placeholder="Student ID"
->
-
-<label style="margin-top:10px">Age</label>
-<input id="editStudentAge" type="number" min="1" max="100" placeholder="Age">
-
-<label style="margin-top:10px">Parent/Guardian Name</label>
-<input id="editStudentParentName" placeholder="Parent/Guardian name">
-
-<label style="margin-top:10px">English Level</label>
-<select id="editStudentLevel">
-<option value="">Select level</option>
-<option>Beginner</option><option>Elementary</option><option>Pre-Intermediate</option><option>Intermediate</option><option>Upper-Intermediate</option><option>Advanced</option>
-</select>
-
-<label style="margin-top:10px">Class Duration</label>
-<select id="editStudentDuration">
-<option value="30 Minutes">30 Minutes</option>
-<option value="40 Minutes">40 Minutes</option>
-<option value="50 Minutes">50 Minutes</option>
-</select>
-
-<label style="margin-top:10px">Package</label>
-<input id="editStudentPackage" placeholder="e.g. 20 Classes">
-
-<label style="margin-top:10px">Start Date</label>
-<input id="editStudentStartDate" type="date">
-<div class="small" style="margin-top:4px">The saved start date of the student's current package.</div>
-
-<label style="margin-top:10px">Status</label>
-<select id="editStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select>
-
-<label style="margin-top:10px">Preferred Class Schedule</label>
-<div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div>
-<div id="editSchedulePicker" class="schedule-picker"></div>
-
-<div
-id="editStudentError"
-class="modal-error"
-></div>
+<div id="editStudentError" class="modal-error"></div>
 
 <div class="modal-actions">
-
-<button
-type="button"
-class="modal-cancel"
-onclick="closeEditStudent()"
->
-Cancel
-</button>
-
-<button
-type="button"
-class="modal-save"
-onclick="saveEditedStudent()"
->
-Save Changes
-</button>
-
+<button type="button" class="modal-cancel" onclick="closeEditStudent()">Cancel</button>
+<button type="button" class="modal-save" onclick="saveEditedStudent()">Save Changes</button>
 </div>
 
 </div>
@@ -6098,6 +6067,41 @@ m=>m.classList.remove('show')
    EDIT STUDENT
 ========================================================= */
 
+let editStudentPendingPicture='';
+
+function openStudentPicturePicker(){
+ const input=document.getElementById('editStudentPictureInput');
+ if(input){input.value='';input.click();}
+}
+
+function renderEditStudentPicture(){
+ const el=document.getElementById('editStudentPicturePreview');
+ if(!el)return;
+ if(editStudentPendingPicture){
+   el.innerHTML=`<img src="${escapeAttr(editStudentPendingPicture)}" alt="Student Profile Picture">`;
+ }else{
+   const name=document.getElementById('editStudentName')?.value||'';
+   el.textContent=getStudentInitials(name)||'👤';
+ }
+}
+
+function handleStudentEditPicture(event){
+ const file=event?.target?.files?.[0];
+ if(!file)return;
+ if(!file.type.startsWith('image/')){
+   showStudentStatus('Please select an image file.',false);
+   return;
+ }
+ const reader=new FileReader();
+ reader.onload=()=>{editStudentPendingPicture=reader.result||'';renderEditStudentPicture();};
+ reader.readAsDataURL(file);
+}
+
+function removeStudentEditPicture(){
+ editStudentPendingPicture='';
+ renderEditStudentPicture();
+}
+
 function openEditStudent(id){
 
 closeStudentMenus();
@@ -6124,6 +6128,8 @@ const savedStartDate=
 student.startDate ||
 (student.createdAt?String(student.createdAt).slice(0,10):getLocalDateString(new Date()));
 document.getElementById('editStudentStartDate').value=savedStartDate;
+editStudentPendingPicture=student.picture||student.profilePicture||student.photo||student.avatar||'';
+renderEditStudentPicture();
 
 document.getElementById('editStudentStatus').value=student.status||'Active';
 
@@ -6190,7 +6196,8 @@ getSchedulePickerData('edit').details,
 getSchedulePickerData('edit').selected,
 document.getElementById('editStudentDuration').value
 ),
-startDate:editedStartDate
+startDate:editedStartDate,
+picture:editStudentPendingPicture
 };
 
 const currentPackageForEdit=getCurrentStudentPackage(editedStudent);
@@ -7039,11 +7046,13 @@ const reason=item.cancelReason||'';
 const safeId=escapeAttr(item.id);
 let actionButtons='';
 if(status==='Scheduled'){
-actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button><button class="absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">Absent</button>`;
+/* Before the class end time: only Edit and Cancel are available. */
+actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button>`;
 }else if(status==='Completed'){
-actionButtons=`<div class="appointment-more-wrap"><button class="appointment-more-btn" type="button" aria-label="More actions" onclick="toggleAppointmentMoreMenu(event,'${safeId}')">⋮</button><div id="appointmentMore_${safeId}" class="appointment-more-menu"><button class="absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">Absent</button></div></div>`;
+/* After the class end time: show only the 3-dot menu. Present confirms/completes the class; Absent marks it absent in red. */
+actionButtons=`<div class="appointment-more-wrap"><button class="appointment-more-btn" type="button" aria-label="More actions" onclick="toggleAppointmentMoreMenu(event,'${safeId}')">⋮</button><div id="appointmentMore_${safeId}" class="appointment-more-menu"><button type="button" onclick="markAppointmentPresent('${safeId}')">Present</button><button class="absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">Absent</button></div></div>`;
 }else{
-actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button>`;
+actionButtons='';
 }
 return `<div class="appointment-detail-row">
 <div class="appointment-detail-time">${escapeHtml(formatAppointmentTime(item.time))} – ${escapeHtml(formatAppointmentTime(addMinutesToTime(item.time,durationToMinutes(item.duration))))}</div>
@@ -7121,6 +7130,16 @@ if(menu)menu.classList.toggle('show');
 document.addEventListener('click',()=>{
 document.querySelectorAll('.appointment-more-menu.show').forEach(menu=>menu.classList.remove('show'));
 });
+
+function markAppointmentPresent(id){
+const appointments=getAppointments();
+const index=appointments.findIndex(a=>a.id===id);
+if(index<0)return;
+const item=appointments[index];
+appointments[index]={...item,status:'Completed',attendance:'Present',presentAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+saveAppointments(appointments);
+renderAppointments();
+}
 
 function openAppointmentReasonModal(id,action){
 const item=getAppointments().find(a=>a.id===id);
@@ -7391,57 +7410,99 @@ function openStudentProfile(id){
 const student=getStudents().find(s=>s.id===id);
 if(!student)return;
 const p=getStudentProgress(student);
-const schedule=scheduleDataToText(
-student.scheduleDetails,
-student.preferredSchedule,
-student.duration
-);
+const schedule=scheduleDataToText(student.scheduleDetails,student.preferredSchedule,student.duration);
 const content=document.getElementById('studentProfileContent');
 const title=document.getElementById('studentProfileTitle');
-if(title) title.textContent=student.name||'Student Profile';
+if(title)title.textContent=`${student.name||'Student'} — Profile`;
 if(!content)return;
 
+const avatar=getStudentAvatarHtml(student,'student-profile-avatar');
+const appointments=getAppointments().filter(a=>a.studentId===student.id).sort((a,b)=>{
+ const da=getAppointmentDateTime(a),db=getAppointmentDateTime(b);
+ return (db?db.getTime():0)-(da?da.getTime():0);
+});
+const recentAppointments=appointments.slice(0,30);
+const currentPackage=getCurrentStudentPackage(student);
+const currentStart=(currentPackage&&currentPackage.startDate)||student.startDate||'—';
+const evaluations=getStudentEvaluations(student.id);
+
 content.innerHTML=`
-<div class="student-detail-summary">
- <div class="student-detail-stat"><b>${p.purchased}</b><span>Classes Purchased</span></div>
- <div class="student-detail-stat"><b>${p.completed}</b><span>Classes Completed</span></div>
- <div class="student-detail-stat"><b>${p.remaining}</b><span>Classes Remaining</span></div>
-</div>
-<div class="student-progress" style="margin-bottom:14px">
- <div class="student-progress-head"><span>Course Progress</span><span>${p.percent}%</span></div>
- <div class="student-progress-track"><div class="student-progress-fill" style="width:${p.percent}%"></div></div>
-</div>
-<div class="student-detail-grid">
- <div class="student-detail-box"><label>Student ID</label><div>${escapeHtml(student.id)}</div></div>
- <div class="student-detail-box"><label>Status</label><div>${escapeHtml(student.status||'Active')}</div></div>
- <div class="student-detail-box"><label>Age</label><div>${escapeHtml(student.age||'Not set')}</div></div>
- <div class="student-detail-box"><label>English Level</label><div>${escapeHtml(student.level||'Not set')}</div></div>
- <div class="student-detail-box"><label>Parent/Guardian</label><div>${escapeHtml(student.parentName||'Not set')}</div></div>
- <div class="student-detail-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'Not set')}</div></div>
- <div class="student-detail-box"><label>Class Duration</label><div>${escapeHtml(student.duration||'25 Minutes')}</div></div>
- <div class="student-detail-box"><label>Package</label><div>${escapeHtml(student.packageName||'Not set')}</div></div>
- <div class="student-detail-box full"><label>Preferred Class Schedule</label><div>${escapeHtml(schedule)}</div></div>
- <div class="student-detail-box full"><label>Class Time</label><div>${escapeHtml(student.classTime||'Not set')}</div></div>
-</div>
-<div class="package-history">
- <div class="package-history-title">PACKAGE HISTORY</div>
- ${(p.history||[]).slice().reverse().map((pkg,idx)=>{
-   const pkgCount=Math.max(0,parseInt(pkg.classCount,10)||getPackageClassCount(pkg.packageName));
-   const pkgCompleted=getAppointments().filter(a=>a.studentId===student.id&&a.packageId===pkg.id&&a.type==='Regular Class'&&a.status==='Completed').length;
-   const pkgStatus=pkg.id===student.currentPackageId?'Active':(pkg.status||'Completed');
-   return `<div class="package-history-item"><div><b>${escapeHtml(pkg.packageName||`${pkgCount} Classes`)}</b><div class="package-history-meta">${pkgCompleted} / ${pkgCount} completed · Started ${escapeHtml(pkg.startDate||'—')}</div></div><span class="package-history-badge ${pkg.id===student.currentPackageId?'':'old'}">${escapeHtml(pkgStatus)}</span></div>`;
- }).join('') || '<div class="small">No package history yet.</div>'}
-</div>
-<div class="student-card-actions">
- <button type="button" class="primary-action" onclick="closeStudentProfile();openEditStudent('${escapeAttr(student.id)}')">Edit Student</button>
- <button type="button" class="primary-action" onclick="closeStudentProfile();openRenewPackage('${escapeAttr(student.id)}')">Renew Package</button>
- <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">Evaluation History</button>
- <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">Class Records</button>
+<div class="student-profile-landscape">
+ <div class="student-profile-side">
+  ${avatar}
+  <div style="min-width:0;flex:1">
+   <div class="student-profile-name">${escapeHtml(student.name||'Unnamed Student')}</div>
+   <div class="student-profile-id">Student ID: ${escapeHtml(student.id||'—')}</div>
+   <div style="margin-top:10px"><span class="student-status-badge ${escapeAttr((student.status||'Active').toLowerCase())}">${escapeHtml(student.status||'Active')}</span></div>
+   <div class="student-card-actions" style="margin-top:14px">
+    <button type="button" class="primary-action" onclick="closeStudentProfile();openEditStudent('${escapeAttr(student.id)}')">Edit Student</button>
+    <button type="button" class="primary-action" onclick="closeStudentProfile();openRenewPackage('${escapeAttr(student.id)}')">Renew Package</button>
+   </div>
+  </div>
+ </div>
+
+ <div class="student-profile-main">
+  <div class="student-profile-section">
+   <h4>STUDENT INFORMATION</h4>
+   <div class="student-profile-info-grid">
+    <div class="student-profile-info-box"><label>Student ID</label><div>${escapeHtml(student.id||'—')}</div></div>
+    <div class="student-profile-info-box"><label>Age</label><div>${escapeHtml(student.age||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>English Level</label><div>${escapeHtml(student.level||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Status</label><div>${escapeHtml(student.status||'Active')}</div></div>
+    <div class="student-profile-info-box"><label>Parent / Guardian</label><div>${escapeHtml(student.parentName||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Class Duration</label><div>${escapeHtml(student.duration||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Package</label><div>${escapeHtml(student.packageName||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Start Date</label><div>${escapeHtml(currentStart)}</div></div>
+    <div class="student-profile-info-box" style="grid-column:span 3"><label>Preferred Class Schedule</label><div>${escapeHtml(schedule)}</div></div>
+   </div>
+  </div>
+
+  <div class="student-profile-section">
+   <h4>CLASS SUMMARY</h4>
+   <div class="student-detail-summary" style="margin:0">
+    <div class="student-detail-stat"><b>${p.purchased}</b><span>Classes Purchased</span></div>
+    <div class="student-detail-stat"><b>${p.completed}</b><span>Classes Completed</span></div>
+    <div class="student-detail-stat"><b>${p.remaining}</b><span>Classes Remaining</span></div>
+   </div>
+   <div class="student-progress" style="margin-top:12px">
+    <div class="student-progress-head"><span>Course Progress</span><span>${p.percent}%</span></div>
+    <div class="student-progress-track"><div class="student-progress-fill" style="width:${p.percent}%"></div></div>
+   </div>
+  </div>
+
+  <div class="student-profile-section">
+   <h4>CLASSES / APPOINTMENTS (${appointments.length})</h4>
+   ${recentAppointments.length?`<div style="overflow:auto"><table class="student-class-table"><thead><tr><th>Date</th><th>Day</th><th>Time</th><th>Type</th><th>Duration</th></tr></thead><tbody>${recentAppointments.map(a=>{
+     const dt=getAppointmentDateTime(a); const date=dt?getLocalDateString(dt):a.date||'—';
+     const time=a.time|| (dt?dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'—');
+     const day=dt?dt.toLocaleDateString([], {weekday:'long'}):(a.day||'—');
+     return `<tr><td>${escapeHtml(date)}</td><td>${escapeHtml(day)}</td><td>${escapeHtml(time)}</td><td>${escapeHtml(a.type||'Regular Class')}</td><td>${escapeHtml(a.duration||student.duration||'—')}</td></tr>`;
+   }).join('')}</tbody></table></div>`:'<div class="small">No classes or appointments recorded yet.</div>'}
+  </div>
+
+  <div class="student-profile-section">
+   <h4>PACKAGE HISTORY</h4>
+   ${(p.history||[]).slice().reverse().map(pkg=>{
+    const pkgCount=Math.max(0,parseInt(pkg.classCount,10)||getPackageClassCount(pkg.packageName));
+    const pkgCompleted=getAppointments().filter(a=>a.studentId===student.id&&a.packageId===pkg.id&&a.type==='Regular Class'&&a.status==='Completed').length;
+    const pkgStatus=pkg.id===student.currentPackageId?'Active':(pkg.status||'Completed');
+    return `<div class="package-history-item"><div><b>${escapeHtml(pkg.packageName||`${pkgCount} Classes`)}</b><div class="package-history-meta">${pkgCompleted} / ${pkgCount} completed · Started ${escapeHtml(pkg.startDate||'—')}${pkg.renewalDate?` · Renewed ${escapeHtml(pkg.renewalDate)}`:''}</div></div><span class="package-history-badge ${pkg.id===student.currentPackageId?'':'old'}">${escapeHtml(pkgStatus)}</span></div>`;
+   }).join('')||'<div class="small">No package history yet.</div>'}
+  </div>
+
+  <div class="student-profile-section">
+   <h4>EVALUATIONS (${evaluations.length})</h4>
+   <div class="small">${evaluations.length?`This student has ${evaluations.length} saved evaluation record${evaluations.length===1?'':'s'}.`:'No evaluation records yet.'}</div>
+   <div class="student-card-actions" style="justify-content:flex-start">
+    <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View Class Records</button>
+   </div>
+  </div>
+ </div>
 </div>`;
 
 document.getElementById('studentProfileModal').classList.add('show');
 }
-
 function getRenewalStartDate(student, renewalDate){
 if(!student||!renewalDate)return '';
 const current=getCurrentStudentPackage(student);
@@ -7704,40 +7765,27 @@ const filtered=students.filter(s=>{
 });
 
 if(!filtered.length){
-list.innerHTML=`<div class="empty">${students.length?'No students match your search or filter.':'No students yet. Add your first student above.'}</div>`;
-return;
+ list.innerHTML=`<div class="empty" style="grid-column:1/-1">${students.length?'No students match your search or filter.':'No students yet. Add your first student above.'}</div>`;
+ return;
 }
 
 list.innerHTML=filtered.map(s=>{
- const p=getStudentProgress(s);
- const schedule=scheduleDataToText(
-s.scheduleDetails,
-s.preferredSchedule,
-s.duration
-);
  const status=s.status||'Active';
  const statusClass=status.toLowerCase();
- return `<div class="student-card">
+ const avatar=getStudentAvatarHtml(s,'student-avatar-circle');
+ return `<div class="student-card" role="button" tabindex="0" onclick="openStudentProfile('${escapeAttr(s.id)}')" onkeydown="if(event.key==='Enter'||event.key===' ')openStudentProfile('${escapeAttr(s.id)}')">
   <div class="student-card-top">
-   <div><div class="student-card-name">${escapeHtml(s.name)}</div><div class="student-card-id">Student ID: ${escapeHtml(s.id)}</div></div>
-   <span class="student-status-badge ${escapeAttr(statusClass)}">${escapeHtml(status)}</span>
-  </div>
-  <div class="student-card-meta">
-   <div class="student-meta-box"><label>English Level</label><div>${escapeHtml(s.level||'Not set')}</div></div>
-   <div class="student-meta-box"><label>Class Duration</label><div>${escapeHtml(s.duration||'25 Minutes')}</div></div>
-   <div class="student-meta-box"><label>Schedule</label><div>${escapeHtml(schedule)}</div></div>
-   <div class="student-meta-box"><label>Parent Gmail</label><div>${escapeHtml(s.email||'Not set')}</div></div>
+   ${avatar}
+   <div>
+    <div class="student-card-name">${escapeHtml(s.name||'Unnamed Student')}</div>
+    <div class="student-card-id">Student ID: ${escapeHtml(s.id||'—')}</div>
+    <span class="student-status-badge ${escapeAttr(statusClass)}">${escapeHtml(status)}</span>
+   </div>
   </div>
   <div class="student-progress">
-   <div class="student-progress-head"><span>Classes: ${p.completed} / ${p.purchased}</span><span>${p.remaining} remaining</span></div>
-   <div class="student-progress-track"><div class="student-progress-fill" style="width:${p.percent}%"></div></div>
-  </div>
-  <div class="student-card-actions">
-   <button type="button" class="primary-action" onclick="openStudentProfile('${escapeAttr(s.id)}')">View Profile</button>
-   <button type="button" onclick="openStudentClassRecord('${escapeAttr(s.id)}')">Class Records</button>
-   <button type="button" onclick="openEditStudent('${escapeAttr(s.id)}')">Edit</button>
-   <button type="button" class="primary-action" onclick="openRenewPackage('${escapeAttr(s.id)}')">Renew</button>
-   <button type="button" class="danger-action" onclick="openDeleteStudent('${escapeAttr(s.id)}')">Delete</button>
+   <div class="student-card-actions">
+    <button type="button" class="primary-action" onclick="event.stopPropagation();openStudentProfile('${escapeAttr(s.id)}')">Student Profile</button>
+   </div>
   </div>
  </div>`;
 }).join('');
