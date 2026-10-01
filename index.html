@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TD-PH Teacher Management Portal</title>
+<title>Teacher Management Portal</title>
 
 <style>
 *{box-sizing:border-box}
@@ -732,6 +732,58 @@ button.secondary,
 
 .class-record-btn:hover{
   background:#00c8c8;
+}
+
+.class-record-actions{
+  position:relative;
+  flex-shrink:0;
+}
+
+.class-record-dots{
+  width:38px;
+  height:38px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  background:#fff;
+  font-size:20px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.class-record-menu{
+  display:none;
+  position:absolute;
+  right:0;
+  top:44px;
+  min-width:110px;
+  padding:5px;
+  background:#fff;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  z-index:20;
+}
+
+.class-record-menu.show{display:block;}
+
+.class-record-menu button{
+  width:100%;
+  border:0;
+  background:#fff;
+  padding:9px 10px;
+  text-align:left;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.class-record-menu .delete-record-option{
+  color:#b42318;
+}
+
+#downloadEvaluationBtn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
 }
 
 .evaluation-record-count{
@@ -2170,16 +2222,11 @@ button.secondary,
 
 .appointment-actions .rebook{border:1px solid #7b61ff;background:#fff;color:#5b43c7;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}.appointment-actions .rebook:hover{background:#f3f0ff}
 
-/* Download/PDF stays locked until the evaluation is successfully saved. */
-#downloadEvalBtn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-  pointer-events:none;
-}
-#downloadEvalBtn:not(:disabled){
-  opacity:1;
-  cursor:pointer;
-  pointer-events:auto;
+
+/* Automatically emphasize parent-facing evaluation inputs */
+#vocabulary,
+#improvement {
+  font-weight: 700;
 }
 </style>
 
@@ -3471,7 +3518,7 @@ Save Evaluation
 </button>
 
 <button
-id="downloadEvalBtn"
+id="downloadEvaluationBtn"
 class="secondary"
 onclick="downloadEvaluationImage()"
 disabled
@@ -7882,9 +7929,10 @@ content.innerHTML=`
   </div>
 
   <div class="student-profile-section">
-   <h4>EVALUATIONS (${evaluations.length})</h4>
+   <h4>RECORD OF EVALUATION (${evaluations.length})</h4>
    <div class="small">${evaluations.length?`This student has ${evaluations.length} saved evaluation record${evaluations.length===1?'':'s'}.`:'No evaluation records yet.'}</div>
-   <div class="student-card-actions" style="justify-content:flex-start">
+   ${evaluations.length?`<div style="display:grid;gap:8px;margin-top:10px">${evaluations.slice(0,10).map((ev,i)=>`<div style="border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><b>Evaluation ${evaluations.length-i}</b><div class="small" style="margin-top:3px">${escapeHtml(ev.lesson_topic||'N/A')} · ${escapeHtml(formatDateTime(ev.evaluationSavedAt||ev.createdAt||ev.dateTime))}</div></div><div class="class-record-actions"><button type="button" class="view-record-btn" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View</button><button type="button" class="class-record-dots" aria-label="Evaluation options" onclick="event.stopPropagation();toggleStudentProfileEvaluationMenu('${escapeAttr(student.id)}','${escapeAttr(String(i))}')">⋮</button><div id="studentProfileEvaluationMenu-${encodeURIComponent(String(student.id))}-${i}" class="class-record-menu"><button type="button" class="delete-record-option" onclick="deleteStudentProfileEvaluation('${escapeAttr(student.id)}','${escapeAttr(String(i))}')">Delete</button></div></div></div>`).join('')}</div>`:''}
+   <div class="student-card-actions" style="justify-content:flex-start;margin-top:10px">
     <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View Class Records</button>
    </div>
   </div>
@@ -8270,6 +8318,8 @@ select.value=current;
 
 function selectStudent(){
 
+markEvaluationUnsaved();
+
 const id=
 document.getElementById(
 'studentSelect'
@@ -8449,6 +8499,8 @@ return score;
 
 function setStars(field,n){
 
+markEvaluationUnsaved();
+
 stars[field]=n;
 
 const el=document.querySelector(
@@ -8548,6 +8600,23 @@ document.getElementById(
 'improvement'
 ).value.trim();
 
+/* Convert one-item-per-line teacher inputs into a natural comma-separated phrase. */
+const formatCommentItems=(value)=>{
+  const items=String(value||'')
+    .split(/\n+/)
+    .map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim())
+    .map(item=>item.replace(/[.]+$/,''))
+    .filter(Boolean);
+
+  if(!items.length) return '';
+  if(items.length===1) return items[0];
+  if(items.length===2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0,-1).join(', ')}, and ${items[items.length-1]}`;
+};
+
+const vocabPhrase=formatCommentItems(vocab);
+const improvementPhrase=formatCommentItems(improvement);
+
 const score=
 document.getElementById(
 'score'
@@ -8568,13 +8637,13 @@ let parts=[];
 
 const vocabStart=[
 
-`${name} learned and practiced ${vocab} during today's lesson.`,
+`${name} learned and practiced ${vocabPhrase || 'the target language'} during today's lesson.`,
 
-`${name} actively worked on ${vocab} in today's English lesson.`,
+`${name} actively worked on ${vocabPhrase || 'the target language'} in today's English lesson.`,
 
-`During today's class, ${name} practiced and reviewed ${vocab}.`,
+`During today's class, ${name} practiced and reviewed ${vocabPhrase || 'the target language'}.`,
 
-`${name} made progress today while learning and practicing ${vocab}.`
+`${name} made progress today while learning and practicing ${vocabPhrase || 'the target language'}.`
 
 ];
 
@@ -8592,13 +8661,13 @@ const vocabEmpty=[
 
 const imp=[
 
-`For continued progress, ${name} should continue practicing ${improvement}.`,
+`For continued progress, ${name} should continue practicing ${improvementPhrase || 'the target skills'}.`,
 
-`To continue improving, ${name} can focus on ${improvement}.`,
+`To continue improving, ${name} can focus on ${improvementPhrase || 'the target skills'}.`,
 
-`For the next lessons, ${name} is encouraged to work on ${improvement}.`,
+`For the next lessons, ${name} is encouraged to work on ${improvementPhrase || 'the target skills'}.`,
 
-`A helpful next step for ${name} is to continue working on ${improvement}.`
+`A helpful next step for ${name} is to continue working on ${improvementPhrase || 'the target skills'}.`
 
 ];
 
@@ -8709,6 +8778,38 @@ return parts.join(' ');
 }
 
 
+function escapeHtml(text){
+  return String(text||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+function buildBoldCommentHtml(commentText){
+  let html=escapeHtml(commentText);
+  const values=[];
+  ['vocabulary','improvement'].forEach(id=>{
+    const field=document.getElementById(id);
+    if(!field) return;
+    String(field.value||'').split(/\n+/)
+      .map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim())
+      .map(item=>item.replace(/[.]+$/,'').trim())
+      .filter(Boolean)
+      .forEach(item=>values.push(item));
+  });
+  // Bold longer entries first so shorter entries do not split them.
+  values.sort((a,b)=>b.length-a.length);
+  values.forEach(item=>{
+    const safe=escapeHtml(item);
+    if(!safe) return;
+    const escaped=safe.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    html=html.replace(new RegExp(escaped,'g'),`<strong>${safe}</strong>`);
+  });
+  return html;
+}
+
 function generateComment(){
 
 commentVersion=0;
@@ -8718,8 +8819,8 @@ document.getElementById(
 'commentPreview'
 );
 
-box.textContent=
-buildComment(0);
+const comment=buildComment(0);
+box.innerHTML=buildBoldCommentHtml(comment);
 
 return box.textContent;
 
@@ -8736,10 +8837,8 @@ document.getElementById(
 'commentPreview'
 );
 
-box.textContent=
-buildComment(
-commentVersion
-);
+const comment=buildComment(commentVersion);
+box.innerHTML=buildBoldCommentHtml(comment);
 
 return box.textContent;
 
@@ -8775,25 +8874,29 @@ generateComment();
 'vocabulary',
 'improvement'
 ].forEach(
-id=>
-document.getElementById(id)
-.addEventListener(
-'input',
-()=>{
+id=>{
+  const field=document.getElementById(id);
+  if(!field) return;
 
-if(
-document.getElementById(
-'studentName'
-).value
-){
+  field.addEventListener('input',()=>{
+    // Keep the evaluation marked as unsaved while the teacher is editing.
+    markEvaluationUnsaved();
 
-generateComment();
+    // Live-update the automatic teacher comment on every keystroke.
+    // The Generate/Update Comment button remains available for a manual
+    // alternate version when the teacher wants different wording.
+    generateComment();
+  });
+});
 
-}
+['date','time','lessonTopic','duration','teacher'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input',markEvaluationUnsaved);
+  if(el) el.addEventListener('change',markEvaluationUnsaved);
+});
 
-}
-)
-);
+const studentSelectForSaveState=document.getElementById('studentSelect');
+if(studentSelectForSaveState) studentSelectForSaveState.addEventListener('change',markEvaluationUnsaved);
 
 
 /* =========================================================
@@ -8964,6 +9067,8 @@ evaluationSavedAt
 
 submitBtn.disabled=true;
 submitBtn.textContent='Saving...';
+const downloadBtnBeforeSave=document.getElementById('downloadEvaluationBtn');
+if(downloadBtnBeforeSave) downloadBtnBeforeSave.disabled=true;
 
 const evals=
 getEvaluations();
@@ -8972,13 +9077,11 @@ evals.push(record);
 
 saveEvaluations(evals);
 
-const downloadBtn=document.getElementById('downloadEvalBtn');
-if(downloadBtn){
-  downloadBtn.disabled=false;
-}
+const downloadBtn=document.getElementById('downloadEvaluationBtn');
+if(downloadBtn) downloadBtn.disabled=false;
 
 showStatus(
-`Evaluation for ${name} saved successfully. You can now use Download/PDF.`,
+`Evaluation for ${name} saved successfully. You can now use Print / Save PDF.`,
 true
 );
 
@@ -8998,9 +9101,9 @@ submitBtn.textContent='Save Evaluation';
 
 async function downloadEvaluationImage(){
 
-const downloadBtn=document.getElementById('downloadEvalBtn');
+const downloadBtn=document.getElementById('downloadEvaluationBtn');
 if(downloadBtn && downloadBtn.disabled){
-  return showStatus('Please save the evaluation first before downloading it.',false);
+  return showStatus('Please save the evaluation first before downloading the report.',false);
 }
 
 const evaluationPage=document.getElementById('evaluationPage');
@@ -9069,6 +9172,27 @@ if(studentSelect){
 
 /* Convert form controls to formal, non-editable report values. */
 report.querySelectorAll('input, select, textarea').forEach(control=>{
+  if(control.id==='vocabulary' || control.id==='improvement'){
+    const items=(control.value||'').split(/\n+/).map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
+    const list=document.createElement('ul');
+    list.style.margin='0';
+    list.style.paddingLeft='24px';
+    list.style.lineHeight='1.65';
+    if(items.length){
+      items.forEach(item=>{
+        const li=document.createElement('li');
+        li.textContent=item;
+        list.appendChild(li);
+      });
+    }else{
+      const li=document.createElement('li');
+      li.textContent='—';
+      list.appendChild(li);
+    }
+    control.replaceWith(list);
+    return;
+  }
+
   let value='';
   if(control.tagName==='SELECT'){
     value=control.options[control.selectedIndex]?.textContent?.trim() || '';
@@ -9218,15 +9342,22 @@ if(reportHost) reportHost.remove();
 }
 
 /* =========================================================
+   EVALUATION SAVE STATE
+========================================================= */
+
+function markEvaluationUnsaved(){
+  const btn=document.getElementById('downloadEvaluationBtn');
+  if(btn) btn.disabled=true;
+}
+
+/* =========================================================
    RESET EVALUATION FORM
 ========================================================= */
 
 function resetForm(){
 
-const downloadBtn=document.getElementById('downloadEvalBtn');
-if(downloadBtn){
-  downloadBtn.disabled=true;
-}
+const downloadBtn=document.getElementById('downloadEvaluationBtn');
+if(downloadBtn) downloadBtn.disabled=true;
 
 document.getElementById(
 'studentSelect'
@@ -9766,6 +9897,7 @@ formatDateTime(dateTime)
 
 </div>
 
+<div class="class-record-actions">
 <button
 type="button"
 class="view-record-btn"
@@ -9773,6 +9905,18 @@ onclick="viewEvaluationRecord('${escapeAttr(student.id)}','${escapeAttr(String(i
 >
 View
 </button>
+<button
+type="button"
+class="class-record-dots"
+aria-label="Evaluation options"
+onclick="event.stopPropagation();toggleEvaluationRecordMenu('${escapeAttr(student.id)}','${escapeAttr(String(index))}')"
+>
+⋮
+</button>
+<div id="evaluationRecordMenu-${encodeURIComponent(String(student.id))}-${index}" class="class-record-menu">
+<button type="button" class="delete-record-option" onclick="deleteEvaluationRecord('${escapeAttr(student.id)}','${escapeAttr(String(index))}')">Delete</button>
+</div>
+</div>
 
 </div>
 
@@ -9798,6 +9942,66 @@ document.getElementById(
 
 
 /* =========================================================
+   EVALUATION RECORD ACTIONS
+========================================================= */
+
+function toggleEvaluationRecordMenu(studentId,index){
+  const menu=document.getElementById(`evaluationRecordMenu-${encodeURIComponent(String(studentId))}-${index}`);
+  if(!menu) return;
+  document.querySelectorAll('.class-record-menu.show').forEach(m=>{ if(m!==menu) m.classList.remove('show'); });
+  menu.classList.toggle('show');
+}
+
+function toggleStudentProfileEvaluationMenu(studentId,index){
+  const menu=document.getElementById(`studentProfileEvaluationMenu-${encodeURIComponent(String(studentId))}-${index}`);
+  if(!menu) return;
+  document.querySelectorAll('.class-record-menu.show').forEach(m=>{ if(m!==menu) m.classList.remove('show'); });
+  menu.classList.toggle('show');
+}
+
+function deleteStudentProfileEvaluation(studentId,index){
+  const records=getStudentEvaluations(studentId);
+  const evaluation=records[Number(index)];
+  if(!evaluation) return;
+
+  const ok=window.confirm(`Delete this evaluation record for ${evaluation.student_name||'this student'}?`);
+  if(!ok) return;
+
+  const savedAt=evaluation.evaluationSavedAt || evaluation.createdAt || evaluation.dateTime || '';
+  const all=getEvaluations();
+  const remaining=all.filter(item=>!(String(item.student_id||'').trim()===String(studentId).trim() && (item.evaluationSavedAt||item.createdAt||item.dateTime||'')===savedAt));
+  saveEvaluations(remaining);
+
+  renderRecords();
+  renderDashboard();
+  openStudentProfile(studentId);
+}
+
+function deleteEvaluationRecord(studentId,index){
+  const records=getStudentEvaluations(studentId);
+  const evaluation=records[Number(index)];
+  if(!evaluation) return;
+
+  const ok=window.confirm(`Delete this evaluation record for ${evaluation.student_name||'this student'}?`);
+  if(!ok) return;
+
+  const savedAt=evaluation.evaluationSavedAt || evaluation.createdAt || evaluation.dateTime || '';
+  const all=getEvaluations();
+  const remaining=all.filter(item=>!(String(item.student_id||'').trim()===String(studentId).trim() && (item.evaluationSavedAt||item.createdAt||item.dateTime||'')===savedAt));
+  saveEvaluations(remaining);
+
+  renderRecords();
+  renderDashboard();
+  openStudentClassRecord(studentId);
+}
+
+document.addEventListener('click',event=>{
+  if(!event.target.closest('.class-record-actions')){
+    document.querySelectorAll('.class-record-menu.show').forEach(menu=>menu.classList.remove('show'));
+  }
+});
+
+/* =========================================================
    CLOSE STUDENT CLASS RECORD
 ========================================================= */
 
@@ -9813,6 +10017,12 @@ modal.classList.remove('show');
 
 }
 
+
+function evaluationBulletsHtml(value,emptyText){
+  const items=String(value||'').split(/\n+/).map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
+  if(!items.length) return `<div>${escapeHtml(emptyText||'—')}</div>`;
+  return `<ul style="margin:0;padding-left:22px">${items.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+}
 
 /* =========================================================
    VIEW INDIVIDUAL EVALUATION
@@ -10010,10 +10220,7 @@ WHAT WE LEARNED TODAY / VOCABULARY
 </div>
 
 <div class="record-detail-section-body">
-${escapeHtml(
-evaluation.vocabulary ||
-'No vocabulary/lesson notes provided.'
-)}
+${evaluationBulletsHtml(evaluation.vocabulary,'No vocabulary/lesson notes provided.')}
 </div>
 
 </div>
@@ -10026,10 +10233,7 @@ NEEDS IMPROVEMENT / AREAS TO PRACTICE
 </div>
 
 <div class="record-detail-section-body">
-${escapeHtml(
-evaluation.improvement ||
-'No specific improvement areas noted.'
-)}
+${evaluationBulletsHtml(evaluation.improvement,'No specific improvement areas noted.')}
 </div>
 
 </div>
@@ -10411,6 +10615,9 @@ function showContractSuccess(msg){const e=document.getElementById('contractError
 
 
 <style>
+
+/* Teacher-entered evaluation notes are intentionally bold for parent visibility. */
+#vocabulary, #improvement { font-weight: 700 !important; }
 </style>
 </body>
 </html>
