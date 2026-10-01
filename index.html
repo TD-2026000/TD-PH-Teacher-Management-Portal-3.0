@@ -2534,39 +2534,6 @@ a,
 }
 
 /* =========================================================
-   RAINBOW MODE — EVALUATION / CLASS RECORD ALSO PARTICIPATE
-========================================================= */
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+1) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+1) .view-record-btn{background:var(--rainbow-red)!important;border-color:var(--rainbow-red)!important;color:#fff!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+2) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+2) .view-record-btn{background:var(--rainbow-orange)!important;border-color:var(--rainbow-orange)!important;color:#111!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+3) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+3) .view-record-btn{background:var(--rainbow-yellow)!important;border-color:var(--rainbow-yellow)!important;color:#111!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+4) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+4) .view-record-btn{background:var(--rainbow-green)!important;border-color:var(--rainbow-green)!important;color:#111!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+5) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+5) .view-record-btn{background:var(--rainbow-blue)!important;border-color:var(--rainbow-blue)!important;color:#fff!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+6) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n+6) .view-record-btn{background:var(--rainbow-purple)!important;border-color:var(--rainbow-purple)!important;color:#fff!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n) .class-record-btn,
-body.portal-rainbow .class-record-item:nth-of-type(7n) .view-record-btn{background:var(--rainbow-pink)!important;border-color:var(--rainbow-pink)!important;color:#fff!important}
-
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+1),
-body.portal-rainbow .class-record-item:nth-of-type(7n+1) .class-record-item-header{background:#fff1f1!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+2),
-body.portal-rainbow .class-record-item:nth-of-type(7n+2) .class-record-item-header{background:#fff5e8!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+3),
-body.portal-rainbow .class-record-item:nth-of-type(7n+3) .class-record-item-header{background:#fffde5!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+4),
-body.portal-rainbow .class-record-item:nth-of-type(7n+4) .class-record-item-header{background:#effff5!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+5),
-body.portal-rainbow .class-record-item:nth-of-type(7n+5) .class-record-item-header{background:#eef7ff!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n+6),
-body.portal-rainbow .class-record-item:nth-of-type(7n+6) .class-record-item-header{background:#f6efff!important}
-body.portal-rainbow .evaluation-student-card:nth-of-type(7n),
-body.portal-rainbow .class-record-item:nth-of-type(7n) .class-record-item-header{background:#fff0f7!important}
-
-/* =========================================================
    STUDENT CONTRACT — KEEP THE ACTUAL FILL / SIGN DOCUMENT WHITE
    This intentionally overrides the global theme for readability.
 ========================================================= */
@@ -2628,129 +2595,91 @@ body.portal-rainbow .class-record-item:nth-of-type(7n) .class-record-item-header
 
 <style id="td-student-profile-info-theme-fix">
 /* STUDENT PROFILE + STUDENT RECORDS: follow the selected global theme. */
-body:not(.portal-rainbow) .student-card,
-body:not(.portal-rainbow) .student-profile-side,
-body:not(.portal-rainbow) .student-profile-section,
-body:not(.portal-rainbow) .student-profile-info-box,
-body:not(.portal-rainbow) .student-row,
-body:not(.portal-rainbow) .student-detail-box,
-body:not(.portal-rainbow) .student-detail-stat{
+body .student-card,
+body .student-profile-side,
+body .student-profile-section,
+body .student-profile-info-box,
+body .student-row,
+body .student-detail-box,
+body .student-detail-stat{
   border-color:var(--global-border)!important;
 }
 
-body:not(.portal-rainbow) .student-card{
+body .student-card{
   background:var(--portal-surface,#fff)!important;
 }
-body:not(.portal-rainbow) .student-card:hover{
+body .student-card:hover{
   border-color:var(--global-accent)!important;
   box-shadow:0 7px 20px color-mix(in srgb,var(--global-accent) 18%,transparent)!important;
 }
-body:not(.portal-rainbow) .student-avatar-circle,
-body:not(.portal-rainbow) .student-profile-avatar,
-body:not(.portal-rainbow) .edit-student-picture{
+body .student-avatar-circle,
+body .student-profile-avatar,
+body .edit-student-picture{
   background:var(--global-accent-soft)!important;
   border-color:var(--global-accent)!important;
   color:var(--global-accent-dark)!important;
 }
-body:not(.portal-rainbow) .student-card-name,
-body:not(.portal-rainbow) .student-profile-name{
+body .student-card-name,
+body .student-profile-name{
   color:var(--portal-text,#111)!important;
 }
-body:not(.portal-rainbow) .student-card-id,
-body:not(.portal-rainbow) .student-profile-id{
+body .student-card-id,
+body .student-profile-id{
   color:var(--global-accent-dark)!important;
 }
-body:not(.portal-rainbow) .student-profile-side{
+body .student-profile-side{
   background:var(--global-accent-pale)!important;
 }
-body:not(.portal-rainbow) .student-profile-section{
+body .student-profile-section{
   background:var(--portal-surface,#fff)!important;
 }
-body:not(.portal-rainbow) .student-profile-info-box{
+body .student-profile-info-box{
   background:var(--global-accent-pale)!important;
 }
-body:not(.portal-rainbow) .student-profile-info-box label{
+body .student-profile-info-box label{
   color:var(--global-accent-dark)!important;
 }
-body:not(.portal-rainbow) .student-profile-section h4,
-body:not(.portal-rainbow) .student-section-heading{
+body .student-profile-section h4,
+body .student-section-heading{
   color:var(--global-accent-dark)!important;
 }
-body:not(.portal-rainbow) .student-card-actions button,
-body:not(.portal-rainbow) .student-card-actions .primary-action,
-body:not(.portal-rainbow) .student-card-actions .danger-action,
-body:not(.portal-rainbow) .student-detail-actions button{
+body .student-card-actions button,
+body .student-card-actions .primary-action,
+body .student-card-actions .danger-action,
+body .student-detail-actions button{
   background:var(--global-accent)!important;
   border-color:var(--global-accent-dark)!important;
   color:var(--global-text-on-accent)!important;
 }
-body:not(.portal-rainbow) .student-card-actions button:hover,
-body:not(.portal-rainbow) .student-detail-actions button:hover{
+body .student-card-actions button:hover,
+body .student-detail-actions button:hover{
   background:var(--global-accent-dark)!important;
   color:#fff!important;
 }
-body:not(.portal-rainbow) .student-class-table th{
+body .student-class-table th{
   background:var(--global-accent-soft)!important;
   color:var(--global-accent-dark)!important;
   border-color:var(--global-border)!important;
 }
-body:not(.portal-rainbow) .student-class-table td{
+body .student-class-table td{
   border-color:var(--global-border)!important;
 }
-body:not(.portal-rainbow) .student-sort-trigger{
+body .student-sort-trigger{
   border-color:var(--global-border)!important;
   background:var(--global-accent-pale)!important;
   color:var(--global-accent-dark)!important;
 }
-body:not(.portal-rainbow) .student-sort-trigger:hover{
+body .student-sort-trigger:hover{
   border-color:var(--global-accent)!important;
   background:var(--global-accent-soft)!important;
 }
-body:not(.portal-rainbow) .student-sort-menu,
-body:not(.portal-rainbow) .student-sort-menu button{
+body .student-sort-menu,
+body .student-sort-menu button{
   border-color:var(--global-border)!important;
 }
-body:not(.portal-rainbow) .student-sort-menu button:hover{
+body .student-sort-menu button:hover{
   background:var(--global-accent-soft)!important;
 }
-
-/* Rainbow mode: student records/profile also participate in the rainbow system. */
-body.portal-rainbow .student-card:nth-child(7n+1),
-body.portal-rainbow .student-profile-section:nth-child(7n+1){border-color:var(--rainbow-red)!important}
-body.portal-rainbow .student-card:nth-child(7n+2),
-body.portal-rainbow .student-profile-section:nth-child(7n+2){border-color:var(--rainbow-orange)!important}
-body.portal-rainbow .student-card:nth-child(7n+3),
-body.portal-rainbow .student-profile-section:nth-child(7n+3){border-color:var(--rainbow-yellow)!important}
-body.portal-rainbow .student-card:nth-child(7n+4),
-body.portal-rainbow .student-profile-section:nth-child(7n+4){border-color:var(--rainbow-green)!important}
-body.portal-rainbow .student-card:nth-child(7n+5),
-body.portal-rainbow .student-profile-section:nth-child(7n+5){border-color:var(--rainbow-blue)!important}
-body.portal-rainbow .student-card:nth-child(7n+6),
-body.portal-rainbow .student-profile-section:nth-child(7n+6){border-color:var(--rainbow-purple)!important}
-body.portal-rainbow .student-card:nth-child(7n),
-body.portal-rainbow .student-profile-section:nth-child(7n){border-color:var(--rainbow-pink)!important}
-
-body.portal-rainbow .student-card{
-  background:#fff!important;
-}
-body.portal-rainbow .student-avatar-circle,
-body.portal-rainbow .student-profile-avatar,
-body.portal-rainbow .edit-student-picture{
-  background:linear-gradient(135deg,#fff0f7,#fff8d8,#eafff1,#eaf4ff,#f2eaff)!important;
-  border-color:var(--rainbow-blue)!important;
-  color:var(--rainbow-blue)!important;
-}
-body.portal-rainbow .student-card-actions button,
-body.portal-rainbow .student-detail-actions button{
-  border-width:1px!important;
-}
-body.portal-rainbow .student-card:nth-child(7n+1) .student-card-actions button{background:var(--rainbow-red)!important;color:#fff!important;border-color:var(--rainbow-red)!important}
-body.portal-rainbow .student-card:nth-child(7n+2) .student-card-actions button{background:var(--rainbow-orange)!important;color:#111!important;border-color:var(--rainbow-orange)!important}
-body.portal-rainbow .student-card:nth-child(7n+3) .student-card-actions button{background:var(--rainbow-yellow)!important;color:#111!important;border-color:var(--rainbow-yellow)!important}
-body.portal-rainbow .student-card:nth-child(7n+4) .student-card-actions button{background:var(--rainbow-green)!important;color:#111!important;border-color:var(--rainbow-green)!important}
-body.portal-rainbow .student-card:nth-child(7n+5) .student-card-actions button{background:var(--rainbow-blue)!important;color:#fff!important;border-color:var(--rainbow-blue)!important}
-body.portal-rainbow .student-card:nth-child(7n+6) .student-card-actions button{background:var(--rainbow-purple)!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
-body.portal-rainbow .student-card:nth-child(7n) .student-card-actions button{background:var(--rainbow-pink)!important;color:#fff!important;border-color:var(--rainbow-pink)!important}
 </style>
 
 <style id="portal-font-theme-runtime-fix">
@@ -2773,64 +2702,6 @@ html.portal-font-active .font-choice{
   font-family:inherit;
 }
 
-/* Strong visual design-theme layers. They are decorative and do not replace the selected palette. */
-body.portal-theme-panda .card,
-body.portal-theme-panda .panel,
-body.portal-theme-panda .student-card,
-body.portal-theme-panda .dashboard-summary-card,
-body.portal-theme-panda .teacher-dashboard-card,
-body.portal-theme-panda .appointment-card{
-  border-radius:20px !important;
-  box-shadow:0 4px 14px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.035) !important;
-}
-body.portal-theme-stitch .card,
-body.portal-theme-stitch .panel,
-body.portal-theme-stitch .student-card,
-body.portal-theme-stitch .dashboard-summary-card,
-body.portal-theme-stitch .teacher-dashboard-card,
-body.portal-theme-stitch .appointment-card{
-  border-radius:24px !important;
-}
-body.portal-theme-hello-kitty .card,
-body.portal-theme-hello-kitty .panel,
-body.portal-theme-hello-kitty .student-card,
-body.portal-theme-hello-kitty .dashboard-summary-card,
-body.portal-theme-hello-kitty .teacher-dashboard-card{
-  border-radius:18px !important;
-  box-shadow:0 5px 18px rgba(255,105,180,.12) !important;
-}
-body.portal-theme-sanrio .card,
-body.portal-theme-sanrio .panel,
-body.portal-theme-sanrio .student-card,
-body.portal-theme-sanrio .dashboard-summary-card,
-body.portal-theme-sanrio .teacher-dashboard-card{
-  border-radius:20px !important;
-  box-shadow:0 5px 18px rgba(155,108,255,.10) !important;
-}
-body.portal-theme-doraemon .card,
-body.portal-theme-doraemon .panel,
-body.portal-theme-doraemon .student-card,
-body.portal-theme-doraemon .dashboard-summary-card,
-body.portal-theme-doraemon .teacher-dashboard-card{
-  border-radius:18px !important;
-  box-shadow:0 4px 16px rgba(66,165,255,.13) !important;
-}
-body.portal-theme-nature .card,
-body.portal-theme-nature .panel,
-body.portal-theme-nature .student-card,
-body.portal-theme-nature .dashboard-summary-card,
-body.portal-theme-nature .teacher-dashboard-card{
-  border-radius:16px !important;
-  box-shadow:0 5px 18px rgba(66,201,120,.12) !important;
-}
-body.portal-theme-larva .card,
-body.portal-theme-larva .panel,
-body.portal-theme-larva .student-card,
-body.portal-theme-larva .dashboard-summary-card,
-body.portal-theme-larva .teacher-dashboard-card{
-  border-radius:22px !important;
-  box-shadow:0 5px 18px rgba(255,159,67,.12) !important;
-}
 </style>
 
 </head>
@@ -3249,12 +3120,6 @@ Teacher
       <div><strong>Color Wheel</strong><small>Choose any overall accent color</small></div>
       <input id="customAccentColor" type="color" value="#00e5e5" aria-label="Choose custom accent color" onchange="applyCustomAccent(this.value)">
     </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-section-title">WEBSITE DESIGN THEME</div>
-    <div class="theme-choice-note">Choose a design style for the portal. This changes the decorative look, shapes, patterns, icons and UI feel without replacing your selected color palette.</div>
-    <div id="designThemeGrid" class="design-theme-grid" aria-label="Website design themes"></div>
   </div>
 
   <div class="settings-section">
@@ -11388,18 +11253,8 @@ const PORTAL_PALETTES=[
  {name:'Yellow',accent:'#ffe45c',dark:'#d4a800',soft:'#fffbea'},
  {name:'Green',accent:'#55d68a',dark:'#16a34a',soft:'#ebfff3'},
  {name:'Teal',accent:'#2dd4bf',dark:'#0f9f8d',soft:'#e9fffb'},
- {name:'Rainbow',rainbow:true,accent:'#ff4d8d',dark:'#7c3aed',soft:'#fff0f7'}
 ];
-const DESIGN_THEMES=[
- {id:'default',name:'Default',icon:'✨',desc:'Clean portal design'},
- {id:'panda',name:'Panda',icon:'🐼',desc:'Cute black-and-white panda feel'},
- {id:'stitch',name:'Stitch',icon:'🌺',desc:'Playful island-cute style'},
- {id:'hello-kitty',name:'Hello Kitty',icon:'🎀',desc:'Sweet bow and kawaii style'},
- {id:'sanrio',name:'Sanrio Characters',icon:'💗',desc:'Cute character-inspired mix'},
- {id:'doraemon',name:'Doraemon',icon:'🔔',desc:'Playful blue gadget-inspired look'},
- {id:'nature',name:'Nature',icon:'🌿',desc:'Leaves, calm organic shapes'},
- {id:'larva',name:'Larva',icon:'🐛',desc:'Fun cartoon-like playful style'}
-];
+
 
 const PORTAL_FONTS=[
  ['Arial','Arial, Helvetica, sans-serif'],
@@ -11467,16 +11322,15 @@ const PORTAL_FONTS=[
  ['Indie Flower','"Indie Flower", cursive'],
  ['ABeeZee','ABeeZee, Arial, sans-serif']
 ];
-let portalSettings={accent:'#00e5e5',accentDark:'#00bcbc',accentSoft:'#e7ffff',theme:'light',font:'Arial',notifications:true,sound:'chime',designTheme:'default'};
+let portalSettings={accent:'#00e5e5',accentDark:'#00bcbc',accentSoft:'#e7ffff',theme:'light',font:'Arial',notifications:true,sound:'chime'};
 let notificationTimer=null;
 let notifiedClasses={};
 
 function loadPortalSettings(){
  try{portalSettings={...portalSettings,...JSON.parse(localStorage.getItem(PORTAL_SETTINGS_KEY)||'{}')};}catch(e){}
- if(portalSettings.rainbow)applyRainbowTheme(false);else applyAccent(portalSettings.accent,portalSettings.accentDark,portalSettings.accentSoft,false);
+ applyAccent(portalSettings.accent,portalSettings.accentDark,portalSettings.accentSoft,false);
  setPortalTheme(portalSettings.theme,false);
  applyPortalFont(portalSettings.font,false);
- applyDesignTheme(portalSettings.designTheme||'default',false);
  const toggle=document.getElementById('portalNotificationToggle'); if(toggle)toggle.checked=portalSettings.notifications!==false;
  const sound=document.getElementById('portalNotificationSound'); if(sound)sound.value=portalSettings.sound||'chime';
  const color=document.getElementById('customAccentColor'); if(color)color.value=portalSettings.accent||'#00e5e5';
@@ -11486,19 +11340,9 @@ function loadPortalSettings(){
 function savePortalSettings(){localStorage.setItem(PORTAL_SETTINGS_KEY,JSON.stringify(portalSettings));}
 function renderPaletteButtons(){
  const grid=document.getElementById('paletteGrid'); if(!grid)return;
- grid.innerHTML=PORTAL_PALETTES.map((p,i)=>{const active=p.rainbow?(portalSettings.rainbow?'active':''):(portalSettings.accent.toLowerCase()===p.accent.toLowerCase()&&!portalSettings.rainbow?'active':'');const swatch=p.rainbow?'linear-gradient(90deg,#ff4d4d,#ff9f43,#ffe14a,#4ddf7c,#42a5ff,#9b6cff,#ff4d8d)':`linear-gradient(135deg,${p.accent},${p.dark})`;return `<button type="button" class="palette-btn ${active}" onclick="choosePortalPalette(${i})"><div class="palette-swatch" style="background:${swatch}"></div>${p.name}</button>`}).join('');
+ grid.innerHTML=PORTAL_PALETTES.map((p,i)=>{const active=portalSettings.accent.toLowerCase()===p.accent.toLowerCase();const swatch=`linear-gradient(135deg,${p.accent},${p.dark})`;return `<button type="button" class="palette-btn ${active?'active':''}" onclick="choosePortalPalette(${i})"><div class="palette-swatch" style="background:${swatch}"></div>${p.name}</button>`}).join('');
 }
-function choosePortalPalette(index){const p=PORTAL_PALETTES[index];if(!p)return;if(p.rainbow){applyRainbowTheme(true);}else{applyAccent(p.accent,p.dark,p.soft,true);}renderPaletteButtons();}
-function applyRainbowTheme(persist=true){
- portalSettings.rainbow=true;
- document.body.classList.add('portal-rainbow');
- const root=document.documentElement;
- root.style.setProperty('--rainbow-red','#ff4d4d');root.style.setProperty('--rainbow-orange','#ff9f43');root.style.setProperty('--rainbow-yellow','#f4d03f');root.style.setProperty('--rainbow-green','#42c978');root.style.setProperty('--rainbow-blue','#42a5ff');root.style.setProperty('--rainbow-purple','#9b6cff');root.style.setProperty('--rainbow-pink','#ff4d8d');
- root.style.setProperty('--portal-accent','#ff4d8d');root.style.setProperty('--portal-accent-dark','#9b2c6b');root.style.setProperty('--portal-accent-soft','#fff0f7');
- root.style.setProperty('--global-accent','#ff4d8d');root.style.setProperty('--global-accent-dark','#9b2c6b');root.style.setProperty('--global-accent-soft','#fff0f7');root.style.setProperty('--global-accent-mid','#ffc4dc');root.style.setProperty('--global-accent-pale','#fff8fb');root.style.setProperty('--global-text-on-accent','#ffffff');root.style.setProperty('--global-border','#ff9fba');
- applyGlobalThemeSweep();
- if(persist)savePortalSettings();
-}
+function choosePortalPalette(index){const p=PORTAL_PALETTES[index];if(!p)return;applyAccent(p.accent,p.dark,p.soft,true);renderPaletteButtons();}
 
 function applyCustomAccent(color){
  if(!color)return;
@@ -11506,7 +11350,6 @@ function applyCustomAccent(color){
  applyAccent(color,dark,soft,true);renderPaletteButtons();
 }
 function applyAccent(accent,dark,soft,persist=true){
- portalSettings.rainbow=false;document.body.classList.remove('portal-rainbow');
  portalSettings.accent=accent;portalSettings.accentDark=dark;portalSettings.accentSoft=soft;
  const root=document.documentElement;root.style.setProperty('--portal-accent',accent);root.style.setProperty('--portal-accent-dark',dark);root.style.setProperty('--portal-accent-soft',soft);
  const mid=mixHex(accent,'#ffffff',.55), pale=mixHex(accent,'#ffffff',.94), text=contrastText(accent);
@@ -11556,26 +11399,6 @@ function setPortalTheme(mode,persist=true){
  updateModeButtons();if(persist)savePortalSettings();
 }
 function updateModeButtons(){document.getElementById('lightModeBtn')?.classList.toggle('active',portalSettings.theme==='light');document.getElementById('darkModeBtn')?.classList.toggle('active',portalSettings.theme==='dark');}
-function renderDesignThemeChoices(){
- const grid=document.getElementById('designThemeGrid');
- if(!grid)return;
- grid.innerHTML=DESIGN_THEMES.map(t=>`<button type="button" class="design-theme-choice ${portalSettings.designTheme===t.id?'active':''}" data-design-theme="${escapeHtml(t.id)}" title="Use ${escapeHtml(t.name)} theme"><span class="design-theme-icon">${t.icon}</span><span><span class="design-theme-name">${escapeHtml(t.name)}</span><small>${escapeHtml(t.desc)}</small></span></button>`).join('');
- grid.querySelectorAll('.design-theme-choice').forEach(btn=>{
-   btn.addEventListener('click',()=>applyDesignTheme(btn.dataset.designTheme,true));
- });
-}
-function applyDesignTheme(themeId,persist=true){
- const valid=DESIGN_THEMES.some(t=>t.id===themeId)?themeId:'default';
- portalSettings.designTheme=valid;
- document.body.classList.remove(...DESIGN_THEMES.map(t=>'portal-theme-'+t.id));
- document.body.classList.add('portal-theme-'+valid);
- document.documentElement.dataset.designTheme=valid;
- const theme=DESIGN_THEMES.find(t=>t.id===valid)||DESIGN_THEMES[0];
- document.documentElement.style.setProperty('--design-theme-icon',JSON.stringify(theme.icon));
- renderDesignThemeChoices();
- if(persist)savePortalSettings();
-}
-
 function populatePortalFonts(){const sel=document.getElementById('portalFontSelect');if(!sel)return;sel.innerHTML=PORTAL_FONTS.map(([name,stack])=>`<option value="${escapeHtml(name)}" style="font-family:${escapeHtml(stack)}">${escapeHtml(name)}</option>`).join('');sel.value=portalSettings.font||'Arial';renderFontGallery();updateFontPreview();}
 function renderFontGallery(){
  const gallery=document.getElementById('fontGallery');
@@ -11675,7 +11498,7 @@ async function runNetworkTest(){
 }
 
 (function initPortalSettings(){
- const boot=()=>{populatePortalFonts();renderDesignThemeChoices();loadPortalSettings();};
+ const boot=()=>{populatePortalFonts();loadPortalSettings();};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePortalSettings();closeNetworkTest();}});
  document.addEventListener('click',e=>{const p=document.getElementById('portalSettingsPanel');const b=document.getElementById('settingsGearBtn');if(p&&p.classList.contains('show')&&!p.contains(e.target)&&!b?.contains(e.target))closePortalSettings();});
@@ -11753,60 +11576,6 @@ html.portal-font-active,html.portal-font-active body,html.portal-font-active bod
 .topbar,.section-title,.dashboard-menu-btn,.nav button.active,.appointment-month-day.selected,.modal-header,.student-add-modal-header,.profile-panel-header{background:var(--portal-accent) !important}
 .dashboard-menu-btn:hover{background:var(--portal-accent-dark) !important}.nav button.active{border-color:var(--portal-accent-dark)!important}.page a,.link-button{color:var(--portal-accent-dark)}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--portal-accent-dark);outline-offset:1px}
-
-/* =========================================================
-   WEBSITE DESIGN THEMES — decorative style only
-   The selected color palette remains the main color system.
-   Contract document stays clean white.
-========================================================= */
-.theme-choice-note{font-size:11px;line-height:1.45;color:var(--portal-muted);margin:-3px 0 10px}
-.design-theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.design-theme-choice{position:relative;display:flex;align-items:center;gap:9px;min-height:66px;padding:9px;border:1px solid var(--portal-border);border-radius:13px;background:var(--portal-surface);color:var(--portal-text);cursor:pointer;text-align:left;transition:.16s ease;overflow:hidden}
-.design-theme-choice:hover{transform:translateY(-2px);border-color:var(--portal-accent-dark);box-shadow:0 5px 15px rgba(0,0,0,.08)}
-.design-theme-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft);box-shadow:0 0 0 2px rgba(255,255,255,.8),0 0 0 4px var(--portal-accent)}
-.design-theme-icon{width:39px;height:39px;display:flex;align-items:center;justify-content:center;flex:0 0 39px;border-radius:12px;font-size:24px;background:var(--portal-accent-soft);box-shadow:inset 0 0 0 1px var(--portal-border)}
-.design-theme-name{display:block;font-size:11px;font-weight:900;line-height:1.15}
-.design-theme-choice small{display:block;font-size:8px;line-height:1.2;color:var(--portal-muted);margin-top:3px}
-
-/* Panda — monochrome playful shapes */
-body.portal-theme-panda{background-image:radial-gradient(circle at 12px 12px,rgba(0,0,0,.055) 0 7px,transparent 8px),radial-gradient(circle at 38px 34px,rgba(0,0,0,.04) 0 6px,transparent 7px);background-size:52px 52px}
-body.portal-theme-panda .card,body.portal-theme-panda .panel,body.portal-theme-panda .dashboard-summary-card,body.portal-theme-panda .teacher-dashboard-card{border-radius:18px}
-body.portal-theme-panda .topbar{box-shadow:0 5px 0 rgba(0,0,0,.06)}
-
-/* Stitch — island flowers / playful rounded UI */
-body.portal-theme-stitch{background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.55) 0 5px,transparent 6px),radial-gradient(circle at 60px 44px,rgba(255,255,255,.35) 0 4px,transparent 5px);background-size:80px 65px}
-body.portal-theme-stitch .card,body.portal-theme-stitch .panel,body.portal-theme-stitch .dashboard-summary-card,body.portal-theme-stitch .teacher-dashboard-card{border-radius:22px}
-body.portal-theme-stitch .section-title,body.portal-theme-stitch .modal-header{border-radius:15px 15px 6px 6px}
-
-/* Hello Kitty — bows / soft kawaii cards */
-body.portal-theme-hello-kitty{background-image:radial-gradient(circle at 18px 18px,rgba(255,105,180,.08) 0 8px,transparent 9px);background-size:48px 48px}
-body.portal-theme-hello-kitty .card,body.portal-theme-hello-kitty .panel,body.portal-theme-hello-kitty .dashboard-summary-card,body.portal-theme-hello-kitty .teacher-dashboard-card{border-radius:20px;box-shadow:0 7px 20px rgba(255,105,180,.10)}
-body.portal-theme-hello-kitty .section-title:before{content:'🎀 ';}
-
-/* Sanrio Characters — playful mixed kawaii shapes */
-body.portal-theme-sanrio{background-image:radial-gradient(circle at 15px 15px,rgba(255,182,193,.13) 0 7px,transparent 8px),radial-gradient(circle at 45px 32px,rgba(135,206,250,.12) 0 7px,transparent 8px),radial-gradient(circle at 28px 52px,rgba(152,251,152,.10) 0 6px,transparent 7px);background-size:64px 64px}
-body.portal-theme-sanrio .card,body.portal-theme-sanrio .panel,body.portal-theme-sanrio .dashboard-summary-card,body.portal-theme-sanrio .teacher-dashboard-card{border-radius:20px}
-body.portal-theme-sanrio .section-title:before{content:'💗 ';}
-
-/* Doraemon — rounded gadget-inspired UI */
-body.portal-theme-doraemon{background-image:radial-gradient(circle at 22px 22px,rgba(66,165,255,.10) 0 10px,transparent 11px);background-size:55px 55px}
-body.portal-theme-doraemon .card,body.portal-theme-doraemon .panel,body.portal-theme-doraemon .dashboard-summary-card,body.portal-theme-doraemon .teacher-dashboard-card{border-radius:24px}
-body.portal-theme-doraemon .settings-gear-btn{border-radius:50%}
-
-/* Nature — organic leaf shapes */
-body.portal-theme-nature{background-image:radial-gradient(ellipse at 15px 20px,rgba(34,139,34,.09) 0 7px,transparent 8px),radial-gradient(ellipse at 45px 42px,rgba(46,139,87,.07) 0 8px,transparent 9px);background-size:70px 60px}
-body.portal-theme-nature .card,body.portal-theme-nature .panel,body.portal-theme-nature .dashboard-summary-card,body.portal-theme-nature .teacher-dashboard-card{border-radius:17px}
-body.portal-theme-nature .section-title:before{content:'🌿 ';}
-
-/* Larva — bubbly, playful rounded cards */
-body.portal-theme-larva{background-image:radial-gradient(circle at 15px 18px,rgba(255,193,7,.12) 0 8px,transparent 9px),radial-gradient(circle at 50px 35px,rgba(255,99,71,.10) 0 7px,transparent 8px);background-size:65px 55px}
-body.portal-theme-larva .card,body.portal-theme-larva .panel,body.portal-theme-larva .dashboard-summary-card,body.portal-theme-larva .teacher-dashboard-card{border-radius:25px}
-body.portal-theme-larva .dashboard-menu-btn,body.portal-theme-larva .nav button{border-radius:16px}
-
-/* Keep the formal student contract document clean regardless of design theme. */
-body[class*="portal-theme-"] .contract-document,
-body[class*="portal-theme-"] .contract-document *{background-image:none!important}
-body[class*="portal-theme-"] .contract-document{background:#fff!important;color:#111!important;border-color:#d9d9d9!important}
 
 /* =========================================================
    DARK MODE — READABILITY / CONTRAST LAYER
@@ -12083,66 +11852,6 @@ body.portal-dark .panel-header{
   border-color:#394950!important;
 }
 body.portal-dark{background:#11181c;color:#edf4f6}.portal-dark .card,.portal-dark .page,.portal-dark .userbar,.portal-dark .nav,.portal-dark .portal-settings-panel,.portal-dark .portal-settings-header{background:#182126!important;color:#edf4f6!important}.portal-dark .nav{border-color:#2c3940}.portal-dark .profile-trigger,.portal-dark .settings-gear-btn,.portal-dark .dashboard-summary-card,.portal-dark .teacher-dashboard-card,.portal-dark .card,.portal-dark input,.portal-dark select,.portal-dark textarea,.portal-dark .settings-select,.portal-dark .settings-section,.portal-dark .mode-btn,.portal-dark .custom-color-row,.portal-dark .notification-row{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark input::placeholder,.portal-dark textarea::placeholder{color:#9aaab2}.portal-dark .settings-gear-btn{color:#fff}.portal-dark .nav button{background:#26343b;color:#edf4f6}.portal-dark .dashboard-menu-btn{color:var(--global-text-on-accent)!important}.portal-dark .portal-settings-header,.portal-dark .portal-settings-panel{background:#182126!important}.portal-dark .font-preview{color:#fff;background:#26343b}.portal-dark .small,.portal-dark .muted,.portal-dark label{color:#b4c2c8}.portal-dark .appointment-month-day{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark .appointment-month-day.has-bookings{background:#14383b!important}.portal-dark .appointment-month-day.other-month{background:#182126!important}.portal-dark .table-wrap,.portal-dark table,.portal-dark th,.portal-dark td{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}
-
-/* FULL RAINBOW THEME: every visual UI surface gets its own rainbow shade. */
-body.portal-rainbow .topbar{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+1){background:var(--rainbow-red)!important;color:#fff!important;border-color:var(--rainbow-red)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+2){background:var(--rainbow-orange)!important;color:#111!important;border-color:var(--rainbow-orange)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+3){background:var(--rainbow-yellow)!important;color:#111!important;border-color:var(--rainbow-yellow)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+4){background:var(--rainbow-green)!important;color:#111!important;border-color:var(--rainbow-green)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+5){background:var(--rainbow-blue)!important;color:#fff!important;border-color:var(--rainbow-blue)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n+6){background:var(--rainbow-purple)!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close):nth-of-type(7n){background:var(--rainbow-pink)!important;color:#fff!important;border-color:var(--rainbow-pink)!important}
-body.portal-rainbow .dashboard-menu-btn,body.portal-rainbow .section-title,body.portal-rainbow .modal-header,body.portal-rainbow .student-add-modal-header,body.portal-rainbow .profile-panel-header,body.portal-rainbow .settings-gear-btn{background:var(--rainbow-blue)!important;color:#fff!important}
-body.portal-rainbow .dashboard-menu-btn:nth-child(2n),body.portal-rainbow .section-title:nth-child(2n),body.portal-rainbow .modal-header:nth-child(2n){background:var(--rainbow-purple)!important}
-body.portal-rainbow .dashboard-menu-btn:nth-child(3n),body.portal-rainbow .section-title:nth-child(3n),body.portal-rainbow .modal-header:nth-child(3n){background:var(--rainbow-pink)!important}
-body.portal-rainbow .card,body.portal-rainbow .dashboard-card,body.portal-rainbow .stat-card,body.portal-rainbow .panel,body.portal-rainbow .settings-card,body.portal-rainbow .appointment-card,body.portal-rainbow .student-card,body.portal-rainbow .record-card,body.portal-rainbow .info-card{border-color:var(--rainbow-blue)!important}
-body.portal-rainbow .card:nth-of-type(7n+1),body.portal-rainbow .dashboard-card:nth-of-type(7n+1),body.portal-rainbow .panel:nth-of-type(7n+1){background:linear-gradient(135deg,#fff5f5,var(--rainbow-red))!important}
-body.portal-rainbow .card:nth-of-type(7n+2),body.portal-rainbow .dashboard-card:nth-of-type(7n+2),body.portal-rainbow .panel:nth-of-type(7n+2){background:linear-gradient(135deg,#fff8ed,var(--rainbow-orange))!important}
-body.portal-rainbow .card:nth-of-type(7n+3),body.portal-rainbow .dashboard-card:nth-of-type(7n+3),body.portal-rainbow .panel:nth-of-type(7n+3){background:linear-gradient(135deg,#fffde8,var(--rainbow-yellow))!important}
-body.portal-rainbow .card:nth-of-type(7n+4),body.portal-rainbow .dashboard-card:nth-of-type(7n+4),body.portal-rainbow .panel:nth-of-type(7n+4){background:linear-gradient(135deg,#f0fff5,var(--rainbow-green))!important}
-body.portal-rainbow .card:nth-of-type(7n+5),body.portal-rainbow .dashboard-card:nth-of-type(7n+5),body.portal-rainbow .panel:nth-of-type(7n+5){background:linear-gradient(135deg,#eff8ff,var(--rainbow-blue))!important}
-body.portal-rainbow .card:nth-of-type(7n+6),body.portal-rainbow .dashboard-card:nth-of-type(7n+6),body.portal-rainbow .panel:nth-of-type(7n+6){background:linear-gradient(135deg,#f7f0ff,var(--rainbow-purple))!important}
-body.portal-rainbow .card:nth-of-type(7n),body.portal-rainbow .dashboard-card:nth-of-type(7n),body.portal-rainbow .panel:nth-of-type(7n){background:linear-gradient(135deg,#fff0f7,var(--rainbow-pink))!important}
-body.portal-rainbow .appointment-month-day.has-bookings{background:#fff0f7!important;border-color:var(--rainbow-pink)!important}
-body.portal-rainbow .appointment-month-day.selected{background:#eee5ff!important;border-color:var(--rainbow-purple)!important}
-body.portal-rainbow .appointment-month-day.today{background:#eaf4ff!important;border-color:var(--rainbow-blue)!important}
-body.portal-rainbow input:focus,body.portal-rainbow select:focus,body.portal-rainbow textarea:focus{border-color:var(--rainbow-pink)!important;box-shadow:0 0 0 3px #ffd9e8!important}
-body.portal-rainbow a{color:var(--rainbow-purple)!important}
-body.portal-rainbow .badge,body.portal-rainbow .status-badge,body.portal-rainbow .tag,body.portal-rainbow .chip{border-color:var(--rainbow-pink)!important}
-body.portal-rainbow .badge:nth-of-type(6n+1),body.portal-rainbow .status-badge:nth-of-type(6n+1),body.portal-rainbow .tag:nth-of-type(6n+1),body.portal-rainbow .chip:nth-of-type(6n+1){background:#ffd9d9!important}
-body.portal-rainbow .badge:nth-of-type(6n+2),body.portal-rainbow .status-badge:nth-of-type(6n+2),body.portal-rainbow .tag:nth-of-type(6n+2),body.portal-rainbow .chip:nth-of-type(6n+2){background:#ffe4bf!important}
-body.portal-rainbow .badge:nth-of-type(6n+3),body.portal-rainbow .status-badge:nth-of-type(6n+3),body.portal-rainbow .tag:nth-of-type(6n+3),body.portal-rainbow .chip:nth-of-type(6n+3){background:#fff2a8!important}
-body.portal-rainbow .badge:nth-of-type(6n+4),body.portal-rainbow .status-badge:nth-of-type(6n+4),body.portal-rainbow .tag:nth-of-type(6n+4),body.portal-rainbow .chip:nth-of-type(6n+4){background:#c9f5d8!important}
-body.portal-rainbow .badge:nth-of-type(6n+5),body.portal-rainbow .status-badge:nth-of-type(6n+5),body.portal-rainbow .tag:nth-of-type(6n+5),body.portal-rainbow .chip:nth-of-type(6n+5){background:#cfe7ff!important}
-body.portal-rainbow .badge:nth-of-type(6n),body.portal-rainbow .status-badge:nth-of-type(6n),body.portal-rainbow .tag:nth-of-type(6n),body.portal-rainbow .chip:nth-of-type(6n){background:#e5d2ff!important}
-
-/* Rainbow theme: intentionally gives major UI regions different coordinated rainbow colors. */
-body.portal-rainbow .topbar{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important}
-body.portal-rainbow .section-title{background:var(--rainbow-purple)!important}
-body.portal-rainbow .dashboard-menu-btn{background:var(--rainbow-blue)!important;color:#fff!important}
-body.portal-rainbow .dashboard-menu-btn:hover{background:var(--rainbow-purple)!important}
-body.portal-rainbow .nav button.active{background:var(--rainbow-green)!important;border-color:var(--rainbow-green)!important;color:#111!important}
-body.portal-rainbow .modal-header,body.portal-rainbow .student-add-modal-header{background:var(--rainbow-orange)!important;color:#111!important}
-body.portal-rainbow .profile-panel-header{background:var(--rainbow-pink)!important;color:#fff!important}
-body.portal-rainbow .settings-gear-btn{background:var(--rainbow-purple)!important;color:#fff!important}
-body.portal-rainbow button:not(.palette-btn):not(.network-test-close){border-color:var(--rainbow-blue)!important}
-body.portal-rainbow .appointment-month-weekday{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important;color:#111!important}
-body.portal-rainbow .appointment-month-day.has-bookings{background:#fff0f7!important;border-color:var(--rainbow-pink)!important}
-body.portal-rainbow .appointment-month-day.has-bookings:hover{background:#ffd1e4!important}
-body.portal-rainbow .appointment-month-day.selected{background:#e9dcff!important;box-shadow:inset 0 0 0 3px var(--rainbow-purple)!important}
-body.portal-rainbow .appointment-month-day.today{box-shadow:inset 0 0 0 2px var(--rainbow-blue)!important}
-body.portal-rainbow .appointment-today-badge{background:var(--rainbow-green)!important;color:#111!important}
-body.portal-rainbow .appointment-booking-count{background:#fff0c9!important;border-color:var(--rainbow-orange)!important;color:#a94d00!important}
-body.portal-rainbow .appointment-actions .edit{background:var(--rainbow-blue)!important;color:#fff!important}
-body.portal-rainbow .appointment-actions .complete{background:#e2f8ea!important;color:#168247!important;border-color:var(--rainbow-green)!important}
-body.portal-rainbow .appointment-mode-option.active{background:#e9dcff!important;border-color:var(--rainbow-purple)!important}
-body.portal-rainbow .settings-action-btn,body.portal-rainbow .sound-test-btn,body.portal-rainbow .network-retest-btn{background:linear-gradient(90deg,var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
-body.portal-rainbow .font-preview{background:#eaf7ff!important;border-color:var(--rainbow-blue)!important}
-body.portal-rainbow .td-theme-sweep-bg{background:var(--rainbow-blue)!important}
-body.portal-rainbow .td-theme-sweep-bg-light{background:#fff7fb!important}
-body.portal-rainbow .td-theme-sweep-border{border-color:var(--rainbow-pink)!important}
-body.portal-rainbow .td-theme-sweep-text{color:var(--rainbow-purple)!important}
 @media(max-width:600px){.portal-settings-panel{top:60px;right:10px}.mode-grid,.network-results{grid-template-columns:1fr}.network-test-card{padding:28px 18px}}
 
 
