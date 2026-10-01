@@ -2077,6 +2077,8 @@ button.secondary,
 
 .contract-list-section{margin-top:18px}.contract-list-title{font-size:15px;font-weight:800;margin:0 0 10px}.contract-student-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid #d9dee7;border-radius:12px;background:#fff;margin-bottom:10px;box-shadow:0 3px 12px rgba(16,24,40,.05)}.contract-student-card.pending{border-left:5px solid #f59e0b;background:#fffaf0}.contract-student-card.completed{border-left:5px solid #12b76a;background:#f6fffa}.contract-student-meta strong{display:block;font-size:15px}.contract-student-meta span{display:block;font-size:12px;color:#667085;margin-top:3px}.contract-badge{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;padding:4px 8px;border-radius:999px;margin-top:7px}.contract-badge.pending{background:#fef0c7;color:#92400e}.contract-badge.completed{background:#dcfae6;color:#067647}.contract-list-empty{padding:18px;border:1px dashed #cbd5e1;border-radius:12px;color:#667085;text-align:center;background:#fafafa}.contract-list-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:700px){.contract-student-card{align-items:flex-start;flex-direction:column}.contract-list-actions{width:100%}}
 .contract-picker-list{display:grid;gap:10px;max-height:60vh;overflow:auto;margin-top:16px}.contract-picker-item{width:100%;text-align:left;border:1px solid #d9dee7;background:#fff;border-radius:12px;padding:14px 16px;cursor:pointer}.contract-picker-item:hover{border-color:#2563eb;background:#f8fbff}.contract-picker-item strong{display:block;font-size:15px}.contract-picker-item span{display:block;font-size:12px;color:#667085;margin-top:4px}
+
+.appointment-actions .rebook{border:1px solid #7b61ff;background:#fff;color:#5b43c7;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}.appointment-actions .rebook:hover{background:#f3f0ff}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -6449,6 +6451,7 @@ true
 let appointmentMonthDate=new Date();
 let selectedAppointmentDate=getLocalDateString(new Date());
 let editingAppointmentId='';
+let rebookingAppointment=false;
 
 function appointmentStorageKey(){
 return currentUser
@@ -6909,6 +6912,7 @@ box.textContent=message;
 
 function openAppointmentModal(appointmentId=''){
 editingAppointmentId=appointmentId||'';
+rebookingAppointment=false;
 const modal=document.getElementById('appointmentModal');
 if(!modal)return;
 populateAppointmentStudentSelect();
@@ -6952,10 +6956,32 @@ updateAppointmentSummary();
 if(appointmentId)onAppointmentStudentChange();
 }
 
+
+function rebookAppointment(id){
+const item=getAppointments().find(a=>a.id===id);
+if(!item||((item.status||'Scheduled')!=='Scheduled'))return;
+editingAppointmentId=id;
+rebookingAppointment=true;
+openAppointmentModal(id);
+const dateInput=document.getElementById('appointmentDate');
+const timeSelect=document.getElementById('appointmentTime');
+const title=document.getElementById('appointmentModalTitle');
+const saveBtn=document.getElementById('appointmentSaveBtn');
+if(dateInput)dateInput.disabled=false;
+if(timeSelect)timeSelect.disabled=false;
+if(title)title.textContent='Rebook Appointment';
+if(saveBtn)saveBtn.textContent='Save Rebooked Class';
+setAppointmentScheduleMode('manual');
+updateAppointmentAutoInfo();
+updateAppointmentEndTime();
+updateAppointmentSummary();
+}
+
 function closeAppointmentModal(){
 const modal=document.getElementById('appointmentModal');
 if(modal)modal.classList.remove('show');
 editingAppointmentId='';
+rebookingAppointment=false;
 }
 
 function getStudentAppointmentCount(studentId){
@@ -7037,10 +7063,15 @@ const record={...old,studentId:student.id,studentName:student.name,date,time,dur
 const index=appointments.findIndex(a=>a.id===editingAppointmentId);
 if(index>=0)appointments[index]=record;
 saveAppointments(appointments);
+const wasRebook=rebookingAppointment;
 closeAppointmentModal();
 selectedAppointmentDate=date;
-apptShowMessage(`Appointment updated for ${student.name}.`);
-renderAppointments();renderDashboard();
+const movedDate=new Date(`${date}T00:00:00`);
+appointmentMonthDate=new Date(movedDate.getFullYear(),movedDate.getMonth(),1);
+apptShowMessage(wasRebook?`Appointment rebooked for ${student.name}. The old booking was moved to ${date} at ${formatAppointmentTime(time)}.`:`Appointment updated for ${student.name}.`);
+renderAppointments();
+renderDashboard();
+renderStudents();
 return;
 }
 if(mode==='preferred'){
@@ -7157,8 +7188,8 @@ const reason=item.cancelReason||'';
 const safeId=escapeAttr(item.id);
 let actionButtons='';
 if(status==='Scheduled'){
-/* Before the class end time: only Edit and Cancel are available. */
-actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button>`;
+/* Before the class end time: Edit, Cancel, and Rebook are available. */
+actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button><button class="rebook" type="button" onclick="rebookAppointment('${safeId}')">Rebook</button>`;
 }else if(status==='Completed'){
 /* After the class end time: show only the 3-dot menu. Present confirms/completes the class; Absent marks it absent in red. */
 actionButtons=`<div class="appointment-more-wrap"><button class="appointment-more-btn" type="button" aria-label="More actions" onclick="toggleAppointmentMoreMenu(event,'${safeId}')">⋮</button><div id="appointmentMore_${safeId}" class="appointment-more-menu"><button type="button" onclick="markAppointmentPresent('${safeId}')">Present</button><button class="absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">Absent</button></div></div>`;
@@ -7549,6 +7580,7 @@ content.innerHTML=`
     <button type="button" class="primary-action" onclick="closeStudentProfile();openEditStudent('${escapeAttr(student.id)}')">Edit Student</button>
     <button type="button" class="primary-action" onclick="closeStudentProfile();openRenewPackage('${escapeAttr(student.id)}')">Renew Package</button>
     <button type="button" class="primary-action" onclick="closeStudentProfile();openStudentContract('${escapeAttr(student.id)}')">Student Contract</button>
+    <button type="button" class="danger-action" onclick="closeStudentProfile();openDeleteStudent('${escapeAttr(student.id)}')">Delete Student</button>
    </div>
   </div>
  </div>
