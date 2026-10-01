@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ABeeZee:wght@400;600;700&family=Abril+Fatface&family=Anton&family=Archivo:wght@400;600;700&family=Barlow:wght@400;600;700&family=Bebas+Neue:wght@400;600;700&family=Bangers&family=Cabin:wght@400;600;700&family=Caveat:wght@400;600;700&family=Cinzel:wght@400;600;700&family=Comfortaa:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=DM+Sans:wght@400;600;700&family=Exo+2:wght@400;600;700&family=Fira+Sans:wght@400;600;700&family=Great+Vibes&family=Indie+Flower&family=Inter:wght@400;600;700&family=Josefin+Sans:wght@400;600;700&family=Karla:wght@400;600;700&family=Lato:wght@400;600;700&family=Lexend:wght@400;600;700&family=Libre+Baskerville:wght@400;600;700&family=Lobster&family=Manrope:wght@400;600;700&family=Merriweather:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Mulish:wght@400;600;700&family=Nunito:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Oswald:wght@400;600;700&family=Outfit:wght@400;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400;600;700&family=Poppins:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Quicksand:wght@400;600;700&family=Raleway:wght@400;600;700&family=Righteous&family=Roboto:wght@400;600;700&family=Roboto+Slab:wght@400;600;700&family=Rubik:wght@400;600;700&family=Sora:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&family=Ubuntu:wght@400;600;700&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Teacher Management Portal</title>
@@ -2622,6 +2625,133 @@ body.portal-rainbow .class-record-item:nth-of-type(7n) .class-record-item-header
 }
 </style>
 
+
+<style id="td-student-profile-info-theme-fix">
+/* STUDENT PROFILE + STUDENT RECORDS: follow the selected global theme. */
+body:not(.portal-rainbow) .student-card,
+body:not(.portal-rainbow) .student-profile-side,
+body:not(.portal-rainbow) .student-profile-section,
+body:not(.portal-rainbow) .student-profile-info-box,
+body:not(.portal-rainbow) .student-row,
+body:not(.portal-rainbow) .student-detail-box,
+body:not(.portal-rainbow) .student-detail-stat{
+  border-color:var(--global-border)!important;
+}
+
+body:not(.portal-rainbow) .student-card{
+  background:var(--portal-surface,#fff)!important;
+}
+body:not(.portal-rainbow) .student-card:hover{
+  border-color:var(--global-accent)!important;
+  box-shadow:0 7px 20px color-mix(in srgb,var(--global-accent) 18%,transparent)!important;
+}
+body:not(.portal-rainbow) .student-avatar-circle,
+body:not(.portal-rainbow) .student-profile-avatar,
+body:not(.portal-rainbow) .edit-student-picture{
+  background:var(--global-accent-soft)!important;
+  border-color:var(--global-accent)!important;
+  color:var(--global-accent-dark)!important;
+}
+body:not(.portal-rainbow) .student-card-name,
+body:not(.portal-rainbow) .student-profile-name{
+  color:var(--portal-text,#111)!important;
+}
+body:not(.portal-rainbow) .student-card-id,
+body:not(.portal-rainbow) .student-profile-id{
+  color:var(--global-accent-dark)!important;
+}
+body:not(.portal-rainbow) .student-profile-side{
+  background:var(--global-accent-pale)!important;
+}
+body:not(.portal-rainbow) .student-profile-section{
+  background:var(--portal-surface,#fff)!important;
+}
+body:not(.portal-rainbow) .student-profile-info-box{
+  background:var(--global-accent-pale)!important;
+}
+body:not(.portal-rainbow) .student-profile-info-box label{
+  color:var(--global-accent-dark)!important;
+}
+body:not(.portal-rainbow) .student-profile-section h4,
+body:not(.portal-rainbow) .student-section-heading{
+  color:var(--global-accent-dark)!important;
+}
+body:not(.portal-rainbow) .student-card-actions button,
+body:not(.portal-rainbow) .student-card-actions .primary-action,
+body:not(.portal-rainbow) .student-card-actions .danger-action,
+body:not(.portal-rainbow) .student-detail-actions button{
+  background:var(--global-accent)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:var(--global-text-on-accent)!important;
+}
+body:not(.portal-rainbow) .student-card-actions button:hover,
+body:not(.portal-rainbow) .student-detail-actions button:hover{
+  background:var(--global-accent-dark)!important;
+  color:#fff!important;
+}
+body:not(.portal-rainbow) .student-class-table th{
+  background:var(--global-accent-soft)!important;
+  color:var(--global-accent-dark)!important;
+  border-color:var(--global-border)!important;
+}
+body:not(.portal-rainbow) .student-class-table td{
+  border-color:var(--global-border)!important;
+}
+body:not(.portal-rainbow) .student-sort-trigger{
+  border-color:var(--global-border)!important;
+  background:var(--global-accent-pale)!important;
+  color:var(--global-accent-dark)!important;
+}
+body:not(.portal-rainbow) .student-sort-trigger:hover{
+  border-color:var(--global-accent)!important;
+  background:var(--global-accent-soft)!important;
+}
+body:not(.portal-rainbow) .student-sort-menu,
+body:not(.portal-rainbow) .student-sort-menu button{
+  border-color:var(--global-border)!important;
+}
+body:not(.portal-rainbow) .student-sort-menu button:hover{
+  background:var(--global-accent-soft)!important;
+}
+
+/* Rainbow mode: student records/profile also participate in the rainbow system. */
+body.portal-rainbow .student-card:nth-child(7n+1),
+body.portal-rainbow .student-profile-section:nth-child(7n+1){border-color:var(--rainbow-red)!important}
+body.portal-rainbow .student-card:nth-child(7n+2),
+body.portal-rainbow .student-profile-section:nth-child(7n+2){border-color:var(--rainbow-orange)!important}
+body.portal-rainbow .student-card:nth-child(7n+3),
+body.portal-rainbow .student-profile-section:nth-child(7n+3){border-color:var(--rainbow-yellow)!important}
+body.portal-rainbow .student-card:nth-child(7n+4),
+body.portal-rainbow .student-profile-section:nth-child(7n+4){border-color:var(--rainbow-green)!important}
+body.portal-rainbow .student-card:nth-child(7n+5),
+body.portal-rainbow .student-profile-section:nth-child(7n+5){border-color:var(--rainbow-blue)!important}
+body.portal-rainbow .student-card:nth-child(7n+6),
+body.portal-rainbow .student-profile-section:nth-child(7n+6){border-color:var(--rainbow-purple)!important}
+body.portal-rainbow .student-card:nth-child(7n),
+body.portal-rainbow .student-profile-section:nth-child(7n){border-color:var(--rainbow-pink)!important}
+
+body.portal-rainbow .student-card{
+  background:#fff!important;
+}
+body.portal-rainbow .student-avatar-circle,
+body.portal-rainbow .student-profile-avatar,
+body.portal-rainbow .edit-student-picture{
+  background:linear-gradient(135deg,#fff0f7,#fff8d8,#eafff1,#eaf4ff,#f2eaff)!important;
+  border-color:var(--rainbow-blue)!important;
+  color:var(--rainbow-blue)!important;
+}
+body.portal-rainbow .student-card-actions button,
+body.portal-rainbow .student-detail-actions button{
+  border-width:1px!important;
+}
+body.portal-rainbow .student-card:nth-child(7n+1) .student-card-actions button{background:var(--rainbow-red)!important;color:#fff!important;border-color:var(--rainbow-red)!important}
+body.portal-rainbow .student-card:nth-child(7n+2) .student-card-actions button{background:var(--rainbow-orange)!important;color:#111!important;border-color:var(--rainbow-orange)!important}
+body.portal-rainbow .student-card:nth-child(7n+3) .student-card-actions button{background:var(--rainbow-yellow)!important;color:#111!important;border-color:var(--rainbow-yellow)!important}
+body.portal-rainbow .student-card:nth-child(7n+4) .student-card-actions button{background:var(--rainbow-green)!important;color:#111!important;border-color:var(--rainbow-green)!important}
+body.portal-rainbow .student-card:nth-child(7n+5) .student-card-actions button{background:var(--rainbow-blue)!important;color:#fff!important;border-color:var(--rainbow-blue)!important}
+body.portal-rainbow .student-card:nth-child(7n+6) .student-card-actions button{background:var(--rainbow-purple)!important;color:#fff!important;border-color:var(--rainbow-purple)!important}
+body.portal-rainbow .student-card:nth-child(7n) .student-card-actions button{background:var(--rainbow-pink)!important;color:#fff!important;border-color:var(--rainbow-pink)!important}
+</style>
 </head>
 
 <body>
@@ -3041,6 +3171,12 @@ Teacher
   </div>
 
   <div class="settings-section">
+    <div class="settings-section-title">WEBSITE DESIGN THEME</div>
+    <div class="theme-choice-note">Choose a design style for the portal. This changes the decorative look, shapes, patterns, icons and UI feel without replacing your selected color palette.</div>
+    <div id="designThemeGrid" class="design-theme-grid" aria-label="Website design themes"></div>
+  </div>
+
+  <div class="settings-section">
     <div class="settings-section-title">APPEARANCE</div>
     <div class="mode-grid">
       <button type="button" id="lightModeBtn" class="mode-btn" onclick="setPortalTheme('light')">☀️ <span>Light Mode</span></button>
@@ -3051,6 +3187,8 @@ Teacher
   <div class="settings-section">
     <div class="settings-section-title">FONT</div>
     <select id="portalFontSelect" class="settings-select" onchange="applyPortalFont(this.value)" aria-label="Choose website font"></select>
+    <div class="font-choice-note"><strong>Double click to apply.</strong> Choose from 64 font styles. Each option shows its actual preview.</div>
+    <div id="fontGallery" class="font-gallery" aria-label="Font style previews"></div>
     <div id="fontPreview" class="font-preview">Teacher Management Portal — Font Preview</div>
   </div>
 
@@ -11171,10 +11309,84 @@ const PORTAL_PALETTES=[
  {name:'Teal',accent:'#2dd4bf',dark:'#0f9f8d',soft:'#e9fffb'},
  {name:'Rainbow',rainbow:true,accent:'#ff4d8d',dark:'#7c3aed',soft:'#fff0f7'}
 ];
-const PORTAL_FONTS=[
- ['Arial','Arial, Helvetica, sans-serif'],['Helvetica','Helvetica, Arial, sans-serif'],['Georgia','Georgia, serif'],['Times New Roman','"Times New Roman", serif'],['Trebuchet MS','"Trebuchet MS", sans-serif'],['Verdana','Verdana, sans-serif'],['Tahoma','Tahoma, sans-serif'],['Courier New','"Courier New", monospace'],['Lucida Console','"Lucida Console", monospace'],['Palatino Linotype','"Palatino Linotype", Palatino, serif'],['Garamond','Garamond, serif'],['Cambria','Cambria, Georgia, serif'],['Calibri','Calibri, Arial, sans-serif'],['Segoe UI','"Segoe UI", Arial, sans-serif'],['Roboto','Roboto, Arial, sans-serif'],['Open Sans','"Open Sans", Arial, sans-serif'],['Poppins','Poppins, Arial, sans-serif'],['Montserrat','Montserrat, Arial, sans-serif'],['Nunito','Nunito, Arial, sans-serif'],['Inter','Inter, Arial, sans-serif']
+const DESIGN_THEMES=[
+ {id:'default',name:'Default',icon:'✨',desc:'Clean portal design'},
+ {id:'panda',name:'Panda',icon:'🐼',desc:'Cute black-and-white panda feel'},
+ {id:'stitch',name:'Stitch',icon:'🌺',desc:'Playful island-cute style'},
+ {id:'hello-kitty',name:'Hello Kitty',icon:'🎀',desc:'Sweet bow and kawaii style'},
+ {id:'sanrio',name:'Sanrio Characters',icon:'💗',desc:'Cute character-inspired mix'},
+ {id:'doraemon',name:'Doraemon',icon:'🔔',desc:'Playful blue gadget-inspired look'},
+ {id:'nature',name:'Nature',icon:'🌿',desc:'Leaves, calm organic shapes'},
+ {id:'larva',name:'Larva',icon:'🐛',desc:'Fun cartoon-like playful style'}
 ];
-let portalSettings={accent:'#00e5e5',accentDark:'#00bcbc',accentSoft:'#e7ffff',theme:'light',font:'Arial',notifications:true,sound:'chime'};
+
+const PORTAL_FONTS=[
+ ['Arial','Arial, Helvetica, sans-serif'],
+ ['Helvetica','Helvetica, Arial, sans-serif'],
+ ['Verdana','Verdana, sans-serif'],
+ ['Tahoma','Tahoma, sans-serif'],
+ ['Trebuchet MS','"Trebuchet MS", sans-serif'],
+ ['Georgia','Georgia, serif'],
+ ['Times New Roman','"Times New Roman", serif'],
+ ['Courier New','"Courier New", monospace'],
+ ['Lucida Console','"Lucida Console", monospace'],
+ ['Palatino Linotype','"Palatino Linotype", Palatino, serif'],
+ ['Garamond','Garamond, serif'],
+ ['Cambria','Cambria, Georgia, serif'],
+ ['Calibri','Calibri, Arial, sans-serif'],
+ ['Segoe UI','"Segoe UI", Arial, sans-serif'],
+ ['Roboto','Roboto, Arial, sans-serif'],
+ ['Open Sans','"Open Sans", Arial, sans-serif'],
+ ['Poppins','Poppins, Arial, sans-serif'],
+ ['Montserrat','Montserrat, Arial, sans-serif'],
+ ['Nunito','Nunito, Arial, sans-serif'],
+ ['Inter','Inter, Arial, sans-serif'],
+ ['Lato','Lato, Arial, sans-serif'],
+ ['Raleway','Raleway, Arial, sans-serif'],
+ ['Oswald','Oswald, Arial, sans-serif'],
+ ['Playfair Display','"Playfair Display", Georgia, serif'],
+ ['Merriweather','Merriweather, Georgia, serif'],
+ ['Dancing Script','"Dancing Script", cursive'],
+ ['Pacifico','Pacifico, cursive'],
+ ['Lobster','Lobster, cursive'],
+ ['Abril Fatface','"Abril Fatface", Georgia, serif'],
+ ['Quicksand','Quicksand, Arial, sans-serif'],
+ ['Ubuntu','Ubuntu, Arial, sans-serif'],
+ ['Rubik','Rubik, Arial, sans-serif'],
+ ['Comfortaa','Comfortaa, Arial, sans-serif'],
+ ['Bebas Neue','"Bebas Neue", Impact, sans-serif'],
+ ['DM Sans','"DM Sans", Arial, sans-serif'],
+ ['Manrope','Manrope, Arial, sans-serif'],
+ ['Fira Sans','"Fira Sans", Arial, sans-serif'],
+ ['Source Sans 3','"Source Sans 3", Arial, sans-serif'],
+ ['Cormorant Garamond','"Cormorant Garamond", Georgia, serif'],
+ ['Josefin Sans','"Josefin Sans", Arial, sans-serif'],
+ ['Caveat','Caveat, cursive'],
+ ['Bangers','Bangers, cursive'],
+ ['Cinzel','Cinzel, Georgia, serif'],
+ ['Roboto Slab','"Roboto Slab", Georgia, serif'],
+ ['Libre Baskerville','"Libre Baskerville", Georgia, serif'],
+ ['Crimson Text','"Crimson Text", Georgia, serif'],
+ ['Nunito Sans','"Nunito Sans", Arial, sans-serif'],
+ ['Mulish','Mulish, Arial, sans-serif'],
+ ['Karla','Karla, Arial, sans-serif'],
+ ['Cabin','Cabin, Arial, sans-serif'],
+ ['Barlow','Barlow, Arial, sans-serif'],
+ ['Exo 2','"Exo 2", Arial, sans-serif'],
+ ['Archivo','Archivo, Arial, sans-serif'],
+ ['Space Grotesk','"Space Grotesk", Arial, sans-serif'],
+ ['Sora','Sora, Arial, sans-serif'],
+ ['Lexend','Lexend, Arial, sans-serif'],
+ ['Outfit','Outfit, Arial, sans-serif'],
+ ['Plus Jakarta Sans','"Plus Jakarta Sans", Arial, sans-serif'],
+ ['Righteous','Righteous, cursive'],
+ ['Anton','Anton, Impact, sans-serif'],
+ ['Great Vibes','"Great Vibes", cursive'],
+ ['Permanent Marker','"Permanent Marker", cursive'],
+ ['Indie Flower','"Indie Flower", cursive'],
+ ['ABeeZee','ABeeZee, Arial, sans-serif']
+];
+let portalSettings={accent:'#00e5e5',accentDark:'#00bcbc',accentSoft:'#e7ffff',theme:'light',font:'Arial',notifications:true,sound:'chime',designTheme:'default'};
 let notificationTimer=null;
 let notifiedClasses={};
 
@@ -11183,6 +11395,7 @@ function loadPortalSettings(){
  if(portalSettings.rainbow)applyRainbowTheme(false);else applyAccent(portalSettings.accent,portalSettings.accentDark,portalSettings.accentSoft,false);
  setPortalTheme(portalSettings.theme,false);
  applyPortalFont(portalSettings.font,false);
+ applyDesignTheme(portalSettings.designTheme||'default',false);
  const toggle=document.getElementById('portalNotificationToggle'); if(toggle)toggle.checked=portalSettings.notifications!==false;
  const sound=document.getElementById('portalNotificationSound'); if(sound)sound.value=portalSettings.sound||'chime';
  const color=document.getElementById('customAccentColor'); if(color)color.value=portalSettings.accent||'#00e5e5';
@@ -11262,8 +11475,37 @@ function setPortalTheme(mode,persist=true){
  updateModeButtons();if(persist)savePortalSettings();
 }
 function updateModeButtons(){document.getElementById('lightModeBtn')?.classList.toggle('active',portalSettings.theme==='light');document.getElementById('darkModeBtn')?.classList.toggle('active',portalSettings.theme==='dark');}
-function populatePortalFonts(){const sel=document.getElementById('portalFontSelect');if(!sel)return;sel.innerHTML=PORTAL_FONTS.map(([name,stack])=>`<option value="${name}" data-stack="${escapeHtml(stack)}">${name}</option>`).join('');sel.value=portalSettings.font||'Arial';updateFontPreview();}
-function applyPortalFont(name,persist=true){const found=PORTAL_FONTS.find(x=>x[0]===name)||PORTAL_FONTS[0];portalSettings.font=found[0];document.body.style.fontFamily=found[1];const sel=document.getElementById('portalFontSelect');if(sel)sel.value=found[0];updateFontPreview();if(persist)savePortalSettings();}
+function renderDesignThemeChoices(){
+ const grid=document.getElementById('designThemeGrid'); if(!grid)return;
+ grid.innerHTML=DESIGN_THEMES.map(t=>`<button type="button" class="design-theme-choice ${portalSettings.designTheme===t.id?'active':''}" onclick="applyDesignTheme('${t.id}',true)" title="Use ${escapeHtml(t.name)} theme"><span class="design-theme-icon">${t.icon}</span><span class="design-theme-name">${escapeHtml(t.name)}</span><small>${escapeHtml(t.desc)}</small></button>`).join('');
+}
+function applyDesignTheme(themeId,persist=true){
+ const valid=DESIGN_THEMES.some(t=>t.id===themeId)?themeId:'default';
+ portalSettings.designTheme=valid;
+ document.body.classList.remove(...DESIGN_THEMES.map(t=>'portal-theme-'+t.id));
+ document.body.classList.add('portal-theme-'+valid);
+ const root=document.documentElement;
+ const theme=DESIGN_THEMES.find(t=>t.id===valid)||DESIGN_THEMES[0];
+ root.style.setProperty('--design-theme-icon', JSON.stringify(theme.icon));
+ renderDesignThemeChoices();
+ if(persist)savePortalSettings();
+}
+
+function populatePortalFonts(){const sel=document.getElementById('portalFontSelect');if(!sel)return;sel.innerHTML=PORTAL_FONTS.map(([name,stack])=>`<option value="${escapeHtml(name)}" style="font-family:${escapeHtml(stack)}">${escapeHtml(name)}</option>`).join('');sel.value=portalSettings.font||'Arial';renderFontGallery();updateFontPreview();}
+function renderFontGallery(){const gallery=document.getElementById('fontGallery');if(!gallery)return;gallery.innerHTML=PORTAL_FONTS.map(([name,stack],i)=>`<button type="button" class="font-choice ${portalSettings.font===name?'active':''}" style="font-family:${escapeHtml(stack)} !important" ondblclick="applyPortalFont(${JSON.stringify(name)})" title="Double click to apply ${escapeHtml(name)}"><span class="font-choice-name">${escapeHtml(name)}</span><span class="font-choice-sample" style="font-family:${escapeHtml(stack)} !important">Teacher Danyeal</span></button>`).join('');}
+function applyPortalFont(name,persist=true){
+ const found=PORTAL_FONTS.find(x=>x[0]===name)||PORTAL_FONTS[0];
+ portalSettings.font=found[0];
+ document.documentElement.style.setProperty('--portal-font',found[1]);
+ document.documentElement.classList.add('portal-font-active');
+ document.body.classList.add('portal-font-active');
+ document.documentElement.style.setProperty('font-family',found[1],'important');
+ document.body.style.setProperty('font-family',found[1],'important');
+ try{document.fonts.load('16px "'+found[0].replace(/"/g,'\\"')+'"').then(()=>{document.documentElement.style.setProperty('--portal-font',found[1]);});}catch(e){}
+ const sel=document.getElementById('portalFontSelect');if(sel)sel.value=found[0];
+ renderFontGallery();updateFontPreview();
+ if(persist)savePortalSettings();
+}
 function updateFontPreview(){const el=document.getElementById('fontPreview');if(!el)return;const found=PORTAL_FONTS.find(x=>x[0]===portalSettings.font)||PORTAL_FONTS[0];el.style.fontFamily=found[1];}
 function togglePortalSettings(e){if(e)e.stopPropagation();document.getElementById('portalSettingsPanel')?.classList.toggle('show');document.getElementById('portalSettingsPanel')?.setAttribute('aria-hidden',String(!document.getElementById('portalSettingsPanel')?.classList.contains('show')))}
 function closePortalSettings(){document.getElementById('portalSettingsPanel')?.classList.remove('show');document.getElementById('portalSettingsPanel')?.setAttribute('aria-hidden','true')}
@@ -11315,7 +11557,7 @@ async function runNetworkTest(){
 }
 
 (function initPortalSettings(){
- const boot=()=>{populatePortalFonts();loadPortalSettings();};
+ const boot=()=>{populatePortalFonts();renderDesignThemeChoices();loadPortalSettings();};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePortalSettings();closeNetworkTest();}});
  document.addEventListener('click',e=>{const p=document.getElementById('portalSettingsPanel');const b=document.getElementById('settingsGearBtn');if(p&&p.classList.contains('show')&&!p.contains(e.target)&&!b?.contains(e.target))closePortalSettings();});
@@ -11381,7 +11623,9 @@ async function runNetworkTest(){
 .custom-color-row strong,.notification-row strong{display:block;font-size:13px}.custom-color-row small,.notification-row small{display:block;color:var(--portal-muted);font-size:10px;margin-top:3px}
 #customAccentColor{width:54px;height:34px;border:0;background:transparent;cursor:pointer;padding:0}
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mode-btn{border:1px solid var(--portal-border);background:var(--portal-surface-2);color:var(--portal-text);padding:11px 8px;border-radius:10px;font-weight:800;cursor:pointer}.mode-btn.active{background:var(--portal-accent);border-color:var(--portal-accent-dark);color:#111}
-.settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-preview{margin-top:8px;padding:10px;border-radius:9px;background:var(--portal-accent-soft);color:var(--portal-text);font-size:14px}
+html.portal-font-active,html.portal-font-active body,html.portal-font-active body *{font-family:var(--portal-font)!important}.portal-font-active .font-choice-sample{font-family:var(--portal-font)!important}.portal-font-active .font-choice-name{font-family:Arial,sans-serif!important}
+.settings-select{width:100%;border:1px solid var(--portal-border);border-radius:9px;background:var(--portal-surface);color:var(--portal-text);padding:10px;font-size:13px}.font-choice-note{font-size:11px;color:var(--portal-muted);margin:8px 0}.font-gallery{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:380px;overflow:auto;padding:2px}.font-choice{border:1px solid var(--portal-border);background:var(--portal-surface);color:var(--portal-text);border-radius:9px;padding:8px 9px;text-align:left;cursor:pointer;transition:.15s;min-width:0}.font-choice:hover{border-color:var(--portal-accent-dark);transform:translateY(-1px)}.font-choice:active{transform:scale(.985)}.font-choice::after{content:'Double click to apply';display:block;font-family:Arial,sans-serif!important;font-size:8px;font-weight:800;opacity:.52;margin-top:5px}.font-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft)}.font-choice-name{display:block;font-family:Arial,sans-serif!important;font-size:9px;font-weight:800;opacity:.72;margin-bottom:2px}.font-choice-sample{display:block;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.font-gallery::-webkit-scrollbar{width:6px}.font-gallery::-webkit-scrollbar-thumb{background:var(--portal-accent);border-radius:10px}
+.font-preview{margin-top:8px;padding:10px;border-radius:9px;background:var(--portal-accent-soft);color:var(--portal-text);font-size:14px}
 .settings-action-btn,.sound-test-btn,.network-retest-btn{width:100%;border:1px solid var(--portal-accent-dark);background:var(--portal-accent);color:#111;border-radius:9px;padding:11px;font-weight:900;cursor:pointer}.sound-test-btn{margin-top:8px;width:auto;padding:8px 12px;font-size:12px}
 .notification-sound-row{margin-top:10px}.notification-sound-row label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.switch{position:relative;width:48px;height:26px;display:block;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#c7ced2;border-radius:30px;cursor:pointer;transition:.2s}.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--portal-accent-dark)}.switch input:checked+span:before{transform:translateX(22px)}
 
@@ -11392,7 +11636,335 @@ async function runNetworkTest(){
 .dashboard-menu-btn:hover{background:var(--portal-accent-dark) !important}.nav button.active{border-color:var(--portal-accent-dark)!important}.page a,.link-button{color:var(--portal-accent-dark)}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--portal-accent-dark);outline-offset:1px}
 
-body.portal-dark{background:#11181c;color:#edf4f6}.portal-dark .card,.portal-dark .page,.portal-dark .userbar,.portal-dark .nav,.portal-dark .portal-settings-panel,.portal-dark .portal-settings-header{background:#182126!important;color:#edf4f6!important}.portal-dark .nav{border-color:#2c3940}.portal-dark .profile-trigger,.portal-dark .settings-gear-btn,.portal-dark .dashboard-summary-card,.portal-dark .teacher-dashboard-card,.portal-dark .card,.portal-dark input,.portal-dark select,.portal-dark textarea,.portal-dark .settings-select,.portal-dark .settings-section,.portal-dark .mode-btn,.portal-dark .custom-color-row,.portal-dark .notification-row{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark input::placeholder,.portal-dark textarea::placeholder{color:#9aaab2}.portal-dark .settings-gear-btn{color:#fff}.portal-dark .nav button{background:#26343b;color:#edf4f6}.portal-dark .dashboard-menu-btn{color:#111}.portal-dark .portal-settings-header,.portal-dark .portal-settings-panel{background:#182126!important}.portal-dark .font-preview{color:#fff;background:#26343b}.portal-dark .small,.portal-dark .muted,.portal-dark label{color:#b4c2c8}.portal-dark .appointment-month-day{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark .appointment-month-day.has-bookings{background:#14383b!important}.portal-dark .appointment-month-day.other-month{background:#182126!important}.portal-dark .table-wrap,.portal-dark table,.portal-dark th,.portal-dark td{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}
+/* =========================================================
+   WEBSITE DESIGN THEMES — decorative style only
+   The selected color palette remains the main color system.
+   Contract document stays clean white.
+========================================================= */
+.theme-choice-note{font-size:11px;line-height:1.45;color:var(--portal-muted);margin:-3px 0 10px}
+.design-theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.design-theme-choice{position:relative;display:flex;align-items:center;gap:9px;min-height:66px;padding:9px;border:1px solid var(--portal-border);border-radius:13px;background:var(--portal-surface);color:var(--portal-text);cursor:pointer;text-align:left;transition:.16s ease;overflow:hidden}
+.design-theme-choice:hover{transform:translateY(-2px);border-color:var(--portal-accent-dark);box-shadow:0 5px 15px rgba(0,0,0,.08)}
+.design-theme-choice.active{border:2px solid var(--portal-accent-dark);background:var(--portal-accent-soft);box-shadow:0 0 0 2px rgba(255,255,255,.8),0 0 0 4px var(--portal-accent)}
+.design-theme-icon{width:39px;height:39px;display:flex;align-items:center;justify-content:center;flex:0 0 39px;border-radius:12px;font-size:24px;background:var(--portal-accent-soft);box-shadow:inset 0 0 0 1px var(--portal-border)}
+.design-theme-name{display:block;font-size:11px;font-weight:900;line-height:1.15}
+.design-theme-choice small{display:block;font-size:8px;line-height:1.2;color:var(--portal-muted);margin-top:3px}
+
+/* Panda — monochrome playful shapes */
+body.portal-theme-panda{background-image:radial-gradient(circle at 12px 12px,rgba(0,0,0,.055) 0 7px,transparent 8px),radial-gradient(circle at 38px 34px,rgba(0,0,0,.04) 0 6px,transparent 7px);background-size:52px 52px}
+body.portal-theme-panda .card,body.portal-theme-panda .panel,body.portal-theme-panda .dashboard-summary-card,body.portal-theme-panda .teacher-dashboard-card{border-radius:18px}
+body.portal-theme-panda .topbar{box-shadow:0 5px 0 rgba(0,0,0,.06)}
+
+/* Stitch — island flowers / playful rounded UI */
+body.portal-theme-stitch{background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.55) 0 5px,transparent 6px),radial-gradient(circle at 60px 44px,rgba(255,255,255,.35) 0 4px,transparent 5px);background-size:80px 65px}
+body.portal-theme-stitch .card,body.portal-theme-stitch .panel,body.portal-theme-stitch .dashboard-summary-card,body.portal-theme-stitch .teacher-dashboard-card{border-radius:22px}
+body.portal-theme-stitch .section-title,body.portal-theme-stitch .modal-header{border-radius:15px 15px 6px 6px}
+
+/* Hello Kitty — bows / soft kawaii cards */
+body.portal-theme-hello-kitty{background-image:radial-gradient(circle at 18px 18px,rgba(255,105,180,.08) 0 8px,transparent 9px);background-size:48px 48px}
+body.portal-theme-hello-kitty .card,body.portal-theme-hello-kitty .panel,body.portal-theme-hello-kitty .dashboard-summary-card,body.portal-theme-hello-kitty .teacher-dashboard-card{border-radius:20px;box-shadow:0 7px 20px rgba(255,105,180,.10)}
+body.portal-theme-hello-kitty .section-title:before{content:'🎀 ';}
+
+/* Sanrio Characters — playful mixed kawaii shapes */
+body.portal-theme-sanrio{background-image:radial-gradient(circle at 15px 15px,rgba(255,182,193,.13) 0 7px,transparent 8px),radial-gradient(circle at 45px 32px,rgba(135,206,250,.12) 0 7px,transparent 8px),radial-gradient(circle at 28px 52px,rgba(152,251,152,.10) 0 6px,transparent 7px);background-size:64px 64px}
+body.portal-theme-sanrio .card,body.portal-theme-sanrio .panel,body.portal-theme-sanrio .dashboard-summary-card,body.portal-theme-sanrio .teacher-dashboard-card{border-radius:20px}
+body.portal-theme-sanrio .section-title:before{content:'💗 ';}
+
+/* Doraemon — rounded gadget-inspired UI */
+body.portal-theme-doraemon{background-image:radial-gradient(circle at 22px 22px,rgba(66,165,255,.10) 0 10px,transparent 11px);background-size:55px 55px}
+body.portal-theme-doraemon .card,body.portal-theme-doraemon .panel,body.portal-theme-doraemon .dashboard-summary-card,body.portal-theme-doraemon .teacher-dashboard-card{border-radius:24px}
+body.portal-theme-doraemon .settings-gear-btn{border-radius:50%}
+
+/* Nature — organic leaf shapes */
+body.portal-theme-nature{background-image:radial-gradient(ellipse at 15px 20px,rgba(34,139,34,.09) 0 7px,transparent 8px),radial-gradient(ellipse at 45px 42px,rgba(46,139,87,.07) 0 8px,transparent 9px);background-size:70px 60px}
+body.portal-theme-nature .card,body.portal-theme-nature .panel,body.portal-theme-nature .dashboard-summary-card,body.portal-theme-nature .teacher-dashboard-card{border-radius:17px}
+body.portal-theme-nature .section-title:before{content:'🌿 ';}
+
+/* Larva — bubbly, playful rounded cards */
+body.portal-theme-larva{background-image:radial-gradient(circle at 15px 18px,rgba(255,193,7,.12) 0 8px,transparent 9px),radial-gradient(circle at 50px 35px,rgba(255,99,71,.10) 0 7px,transparent 8px);background-size:65px 55px}
+body.portal-theme-larva .card,body.portal-theme-larva .panel,body.portal-theme-larva .dashboard-summary-card,body.portal-theme-larva .teacher-dashboard-card{border-radius:25px}
+body.portal-theme-larva .dashboard-menu-btn,body.portal-theme-larva .nav button{border-radius:16px}
+
+/* Keep the formal student contract document clean regardless of design theme. */
+body[class*="portal-theme-"] .contract-document,
+body[class*="portal-theme-"] .contract-document *{background-image:none!important}
+body[class*="portal-theme-"] .contract-document{background:#fff!important;color:#111!important;border-color:#d9d9d9!important}
+
+/* =========================================================
+   DARK MODE — READABILITY / CONTRAST LAYER
+   Dark surfaces use light text; white/light surfaces use dark text.
+   The selected palette is still used for accents and interactive controls.
+========================================================= */
+body.portal-dark{
+  background:#0d1216!important;
+  color:#f3f7f9!important;
+}
+body.portal-dark,
+body.portal-dark *{
+  scrollbar-color:#46545c #11181c;
+}
+
+/* Main dark surfaces */
+body.portal-dark .app,
+body.portal-dark .main,
+body.portal-dark .content,
+body.portal-dark .page,
+body.portal-dark .card,
+body.portal-dark .panel,
+body.portal-dark .userbar,
+body.portal-dark .nav,
+body.portal-dark .portal-settings-panel,
+body.portal-dark .portal-settings-header,
+body.portal-dark .settings-section,
+body.portal-dark .settings-row,
+body.portal-dark .notification-row,
+body.portal-dark .mode-btn,
+body.portal-dark .custom-color-row,
+body.portal-dark .dashboard-summary-card,
+body.portal-dark .teacher-dashboard-card,
+body.portal-dark .dashboard-menu-sub,
+body.portal-dark .font-preview,
+body.portal-dark .table-wrap{
+  background:#182126!important;
+  color:#f3f7f9!important;
+  border-color:#394950!important;
+}
+
+/* Dark text automatically becomes light on dark surfaces */
+body.portal-dark .page h1,
+body.portal-dark .page h2,
+body.portal-dark .page h3,
+body.portal-dark .page h4,
+body.portal-dark .page h5,
+body.portal-dark .page h6,
+body.portal-dark .card h1,
+body.portal-dark .card h2,
+body.portal-dark .card h3,
+body.portal-dark .card h4,
+body.portal-dark .card h5,
+body.portal-dark .card h6,
+body.portal-dark .panel h1,
+body.portal-dark .panel h2,
+body.portal-dark .panel h3,
+body.portal-dark .panel h4,
+body.portal-dark .panel h5,
+body.portal-dark .panel h6,
+body.portal-dark .page p,
+body.portal-dark .card p,
+body.portal-dark .panel p,
+body.portal-dark .page span,
+body.portal-dark .card span,
+body.portal-dark .panel span,
+body.portal-dark .page div,
+body.portal-dark .card div,
+body.portal-dark .panel div,
+body.portal-dark label,
+body.portal-dark .small,
+body.portal-dark .muted,
+body.portal-dark .helper-text,
+body.portal-dark .description,
+body.portal-dark .subtitle{
+  color:#edf4f6;
+}
+
+/* Secondary text stays readable without becoming glaring */
+body.portal-dark .small,
+body.portal-dark .muted,
+body.portal-dark .helper-text,
+body.portal-dark .description,
+body.portal-dark .subtitle,
+body.portal-dark .hint{
+  color:#b9c7cd!important;
+}
+
+/* Form controls */
+body.portal-dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+body.portal-dark select,
+body.portal-dark textarea,
+body.portal-dark .settings-select,
+body.portal-dark .form-control{
+  background:#f8fafb!important;
+  color:#11181c!important;
+  border-color:#697981!important;
+}
+body.portal-dark input::placeholder,
+body.portal-dark textarea::placeholder{
+  color:#68767d!important;
+  opacity:1;
+}
+
+/* White document/form areas intentionally remain white with dark text.
+   This includes the Student Contract and signing/fill-out area. */
+body.portal-dark .global-theme-preserve-white,
+body.portal-dark .contract-document,
+body.portal-dark .contract-paper,
+body.portal-dark .contract-form,
+body.portal-dark .contract-preview,
+body.portal-dark .contract-signature-area{
+  background:#fff!important;
+  color:#111!important;
+}
+body.portal-dark .global-theme-preserve-white * ,
+body.portal-dark .contract-document * ,
+body.portal-dark .contract-paper * ,
+body.portal-dark .contract-form * ,
+body.portal-dark .contract-preview * ,
+body.portal-dark .contract-signature-area *{
+  color:#111!important;
+}
+
+/* Tables */
+body.portal-dark table,
+body.portal-dark thead,
+body.portal-dark tbody,
+body.portal-dark tr,
+body.portal-dark th,
+body.portal-dark td{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#394950!important;
+}
+body.portal-dark th{
+  background:#222f35!important;
+  color:#ffffff!important;
+}
+
+/* Navigation / neutral buttons */
+body.portal-dark .nav button,
+body.portal-dark .filter-btn,
+body.portal-dark .secondary-btn,
+body.portal-dark .btn-secondary,
+body.portal-dark .mode-btn:not(.active),
+body.portal-dark .palette-btn:not(.active),
+body.portal-dark .settings-action-btn.secondary{
+  background:#26343b!important;
+  color:#edf4f6!important;
+  border-color:#46565e!important;
+}
+body.portal-dark .nav button:hover,
+body.portal-dark .filter-btn:hover,
+body.portal-dark .secondary-btn:hover,
+body.portal-dark .btn-secondary:hover,
+body.portal-dark .palette-btn:hover{
+  background:#314149!important;
+  color:#fff!important;
+}
+
+/* Theme-colored controls: use the palette and automatically choose readable text */
+body.portal-dark button.primary,
+body.portal-dark .btn-primary,
+body.portal-dark .primary-btn,
+body.portal-dark .save-btn,
+body.portal-dark .submit-btn,
+body.portal-dark .add-btn,
+body.portal-dark .action-btn,
+body.portal-dark .settings-action-btn:not(.secondary),
+body.portal-dark .sound-test-btn,
+body.portal-dark .network-retest-btn,
+body.portal-dark .mode-btn.active,
+body.portal-dark .palette-btn.active,
+body.portal-dark .appointment-action-btn,
+body.portal-dark .appointment-add-btn,
+body.portal-dark .schedule-add-btn,
+body.portal-dark .student-add-btn,
+body.portal-dark .payment-add-btn,
+body.portal-dark .evaluation-action-btn,
+body.portal-dark #downloadEvaluationBtn:not(:disabled),
+body.portal-dark #saveEvaluationBtn,
+body.portal-dark #generateEvaluationBtn,
+body.portal-dark #clearEvaluationBtn,
+body.portal-dark #addAssessmentBtn,
+body.portal-dark #addClassBtn,
+body.portal-dark #addStudentBtn{
+  color:var(--global-text-on-accent)!important;
+}
+
+/* Accent links / headings remain visible in dark mode */
+body.portal-dark a,
+body.portal-dark .link,
+body.portal-dark .accent-text,
+body.portal-dark .text-accent,
+body.portal-dark .portal-settings-header h3,
+body.portal-dark .settings-section-title{
+  color:var(--global-accent)!important;
+}
+
+/* Calendar in dark mode */
+body.portal-dark .appointment-month-day{
+  background:#1b272d!important;
+  color:#edf4f6!important;
+  border-color:#3d4d55!important;
+}
+body.portal-dark .appointment-month-day.other-month{
+  background:#141c20!important;
+  color:#84939a!important;
+}
+body.portal-dark .appointment-month-day.today{
+  background:var(--global-accent-soft)!important;
+  color:#111!important;
+  border-color:var(--global-accent)!important;
+}
+body.portal-dark .appointment-month-day.selected{
+  background:var(--global-accent)!important;
+  color:var(--global-text-on-accent)!important;
+}
+body.portal-dark .appointment-month-day.has-bookings{
+  background:color-mix(in srgb,var(--global-accent) 28%,#182126)!important;
+  color:#f5f9fa!important;
+  border-color:var(--global-accent)!important;
+}
+
+/* Evaluation / Class Record */
+body.portal-dark .evaluation-student-card,
+body.portal-dark .class-record-item{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#394950!important;
+}
+body.portal-dark .class-record-item-header,
+body.portal-dark .class-record-field{
+  background:#202d33!important;
+  color:#edf4f6!important;
+}
+body.portal-dark .class-record-field label,
+body.portal-dark .evaluation-student-info .student-id,
+body.portal-dark .evaluation-student-info .latest-evaluation{
+  color:var(--global-accent)!important;
+}
+body.portal-dark .class-record-dots,
+body.portal-dark .class-record-menu,
+body.portal-dark .class-record-menu button{
+  background:#202c32!important;
+  color:#edf4f6!important;
+}
+
+/* Disabled controls */
+body.portal-dark button:disabled,
+body.portal-dark input:disabled,
+body.portal-dark select:disabled,
+body.portal-dark textarea:disabled{
+  background:#263239!important;
+  color:#7f9098!important;
+  border-color:#3a484f!important;
+  opacity:1!important;
+}
+
+/* Modal/overlay readability */
+body.portal-dark .modal,
+body.portal-dark .modal-content,
+body.portal-dark .dialog,
+body.portal-dark .popup,
+body.portal-dark .dropdown-menu{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#394950!important;
+}
+body.portal-dark .modal-header,
+body.portal-dark .panel-header{
+  color:#fff!important;
+  border-color:#394950!important;
+}
+body.portal-dark{background:#11181c;color:#edf4f6}.portal-dark .card,.portal-dark .page,.portal-dark .userbar,.portal-dark .nav,.portal-dark .portal-settings-panel,.portal-dark .portal-settings-header{background:#182126!important;color:#edf4f6!important}.portal-dark .nav{border-color:#2c3940}.portal-dark .profile-trigger,.portal-dark .settings-gear-btn,.portal-dark .dashboard-summary-card,.portal-dark .teacher-dashboard-card,.portal-dark .card,.portal-dark input,.portal-dark select,.portal-dark textarea,.portal-dark .settings-select,.portal-dark .settings-section,.portal-dark .mode-btn,.portal-dark .custom-color-row,.portal-dark .notification-row{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark input::placeholder,.portal-dark textarea::placeholder{color:#9aaab2}.portal-dark .settings-gear-btn{color:#fff}.portal-dark .nav button{background:#26343b;color:#edf4f6}.portal-dark .dashboard-menu-btn{color:var(--global-text-on-accent)!important}.portal-dark .portal-settings-header,.portal-dark .portal-settings-panel{background:#182126!important}.portal-dark .font-preview{color:#fff;background:#26343b}.portal-dark .small,.portal-dark .muted,.portal-dark label{color:#b4c2c8}.portal-dark .appointment-month-day{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}.portal-dark .appointment-month-day.has-bookings{background:#14383b!important}.portal-dark .appointment-month-day.other-month{background:#182126!important}.portal-dark .table-wrap,.portal-dark table,.portal-dark th,.portal-dark td{background:#202c32!important;color:#edf4f6!important;border-color:#3a4a52!important}
 
 /* FULL RAINBOW THEME: every visual UI surface gets its own rainbow shade. */
 body.portal-rainbow .topbar{background:linear-gradient(90deg,var(--rainbow-red),var(--rainbow-orange),var(--rainbow-yellow),var(--rainbow-green),var(--rainbow-blue),var(--rainbow-purple),var(--rainbow-pink))!important}
@@ -11543,6 +12115,236 @@ body.portal-rainbow .td-theme-sweep-text{color:var(--rainbow-purple)!important}
   border-color:var(--global-border)!important;
 }
 
+
+<!-- Contrast-aware Dark Mode typography and surfaces -->
+/* Dark mode: dark surfaces get light text, muted text is softened, and colored
+   controls use the existing readable-on-accent calculation. */
+body.portal-dark,
+body.portal-dark #app,
+body.portal-dark main,
+body.portal-dark .main-content,
+body.portal-dark .content,
+body.portal-dark .page-content{
+  background:#0f1518!important;
+  color:#f3f7f8!important;
+}
+
+body.portal-dark h1,body.portal-dark h2,body.portal-dark h3,
+body.portal-dark h4,body.portal-dark h5,body.portal-dark h6,
+body.portal-dark p,body.portal-dark span,body.portal-dark div,
+body.portal-dark li,body.portal-dark strong,body.portal-dark b,
+body.portal-dark .title,body.portal-dark .heading,
+body.portal-dark .card-title,body.portal-dark .section-title{
+  /* Do not force text on intentionally colored controls; their later rules win. */
+  color:#edf4f6;
+}
+
+/* Dark cards / panels */
+body.portal-dark .card,
+body.portal-dark .panel,
+body.portal-dark .dashboard-card,
+body.portal-dark .dashboard-summary-card,
+body.portal-dark .teacher-dashboard-card,
+body.portal-dark .student-card,
+body.portal-dark .record-card,
+body.portal-dark .info-card,
+body.portal-dark .settings-card,
+body.portal-dark .appointment-card,
+body.portal-dark .class-record-item,
+body.portal-dark .evaluation-student-card,
+body.portal-dark .progress-card,
+body.portal-dark .payment-card,
+body.portal-dark .report-card{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#35464e!important;
+}
+
+/* Text placed inside dark surfaces */
+body.portal-dark .card p,
+body.portal-dark .card span,
+body.portal-dark .card div,
+body.portal-dark .panel p,
+body.portal-dark .panel span,
+body.portal-dark .panel div,
+body.portal-dark .dashboard-card p,
+body.portal-dark .dashboard-card span,
+body.portal-dark .dashboard-card div,
+body.portal-dark .student-card p,
+body.portal-dark .student-card span,
+body.portal-dark .record-card p,
+body.portal-dark .record-card span{
+  color:#edf4f6;
+}
+
+/* Labels and helper text: readable but intentionally lower contrast */
+body.portal-dark label,
+body.portal-dark .label,
+body.portal-dark .small,
+body.portal-dark .muted,
+body.portal-dark .helper-text,
+body.portal-dark .hint,
+body.portal-dark .description,
+body.portal-dark .subtitle{
+  color:#b9c7cc!important;
+}
+
+/* Inputs stay dark with light text. */
+body.portal-dark input,
+body.portal-dark select,
+body.portal-dark textarea,
+body.portal-dark .settings-select,
+body.portal-dark option{
+  background:#202c32!important;
+  color:#f1f6f7!important;
+  border-color:#405159!important;
+}
+body.portal-dark input::placeholder,
+body.portal-dark textarea::placeholder{
+  color:#91a3aa!important;
+}
+
+/* Table readability */
+body.portal-dark table,
+body.portal-dark .table-wrap,
+body.portal-dark thead,
+body.portal-dark tbody,
+body.portal-dark tr,
+body.portal-dark th,
+body.portal-dark td{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#394950!important;
+}
+body.portal-dark th{
+  background:#26343b!important;
+  color:#ffffff!important;
+}
+
+/* Neutral controls: light text on dark neutral background. */
+body.portal-dark .nav button,
+body.portal-dark .filter-btn,
+body.portal-dark .secondary-btn,
+body.portal-dark .btn-secondary,
+body.portal-dark .mode-btn:not(.active),
+body.portal-dark .palette-btn:not(.active),
+body.portal-dark .settings-action-btn.secondary,
+body.portal-dark .class-record-menu button{
+  background:#26343b!important;
+  color:#edf4f6!important;
+  border-color:#46565e!important;
+}
+
+/* Accent controls keep their own accent color and readable text. */
+body.portal-dark button.primary,
+body.portal-dark .btn-primary,
+body.portal-dark .primary-btn,
+body.portal-dark .save-btn,
+body.portal-dark .submit-btn,
+body.portal-dark .add-btn,
+body.portal-dark .action-btn,
+body.portal-dark .settings-action-btn:not(.secondary),
+body.portal-dark .sound-test-btn,
+body.portal-dark .network-retest-btn,
+body.portal-dark .mode-btn.active,
+body.portal-dark .palette-btn.active,
+body.portal-dark .appointment-action-btn,
+body.portal-dark .appointment-add-btn,
+body.portal-dark .schedule-add-btn,
+body.portal-dark .student-add-btn,
+body.portal-dark .payment-add-btn,
+body.portal-dark .evaluation-action-btn,
+body.portal-dark #downloadEvaluationBtn:not(:disabled),
+body.portal-dark #saveEvaluationBtn,
+body.portal-dark #generateEvaluationBtn,
+body.portal-dark #clearEvaluationBtn,
+body.portal-dark #addAssessmentBtn,
+body.portal-dark #addClassBtn,
+body.portal-dark #addStudentBtn{
+  color:var(--global-text-on-accent)!important;
+}
+
+/* Links use the selected theme accent, which remains visible on dark surfaces. */
+body.portal-dark a,
+body.portal-dark .link,
+body.portal-dark .accent-text,
+body.portal-dark .text-accent{
+  color:var(--global-accent)!important;
+}
+
+/* Calendar: dark background + light text, with selected/theme states preserved. */
+body.portal-dark .appointment-month-day{
+  background:#1b272d!important;
+  color:#edf4f6!important;
+  border-color:#3d4d55!important;
+}
+body.portal-dark .appointment-month-day.other-month{
+  background:#141c20!important;
+  color:#84939a!important;
+}
+body.portal-dark .appointment-month-day.today{
+  background:var(--global-accent-soft)!important;
+  color:var(--global-text-on-soft)!important;
+  border-color:var(--global-accent)!important;
+}
+body.portal-dark .appointment-month-day.selected{
+  background:var(--global-accent)!important;
+  color:var(--global-text-on-accent)!important;
+}
+body.portal-dark .appointment-month-day.has-bookings{
+  background:color-mix(in srgb,var(--global-accent) 30%,#182126)!important;
+  color:#f5f9fa!important;
+  border-color:var(--global-accent)!important;
+}
+
+/* Modals and popups */
+body.portal-dark .modal,
+body.portal-dark .modal-content,
+body.portal-dark .dialog,
+body.portal-dark .popup,
+body.portal-dark .dropdown-menu,
+body.portal-dark .menu,
+body.portal-dark .popover{
+  background:#182126!important;
+  color:#edf4f6!important;
+  border-color:#394950!important;
+}
+body.portal-dark .modal h1,body.portal-dark .modal h2,body.portal-dark .modal h3,
+body.portal-dark .modal h4,body.portal-dark .modal p,
+body.portal-dark .modal span,body.portal-dark .modal label,
+body.portal-dark .modal-content h1,body.portal-dark .modal-content h2,
+body.portal-dark .modal-content h3,body.portal-dark .modal-content p,
+body.portal-dark .dialog p,body.portal-dark .popup p{
+  color:#edf4f6;
+}
+
+/* Keep the formal student contract clean and readable even in Dark Mode. */
+body.portal-dark .student-contract-document,
+body.portal-dark .contract-document,
+body.portal-dark .contract-paper,
+body.portal-dark .contract-preview,
+body.portal-dark .contract-signing-area{
+  background:#fff!important;
+  color:#111!important;
+}
+body.portal-dark .student-contract-document *,
+body.portal-dark .contract-document *,
+body.portal-dark .contract-paper *,
+body.portal-dark .contract-preview *,
+body.portal-dark .contract-signing-area *{
+  color:#111!important;
+}
+
+/* Disabled controls remain readable instead of becoming black-on-dark. */
+body.portal-dark button:disabled,
+body.portal-dark input:disabled,
+body.portal-dark select:disabled,
+body.portal-dark textarea:disabled{
+  background:#29353b!important;
+  color:#8fa0a7!important;
+  border-color:#3b4a51!important;
+  opacity:1!important;
+}
 </style>
 </body>
 </html>
