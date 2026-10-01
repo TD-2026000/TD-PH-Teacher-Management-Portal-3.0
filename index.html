@@ -3576,6 +3576,10 @@ placeholder="Student ID"
 <label style="margin-top:10px">Package</label>
 <input id="editStudentPackage" placeholder="e.g. 20 Classes">
 
+<label style="margin-top:10px">Start Date</label>
+<input id="editStudentStartDate" type="date">
+<div class="small" style="margin-top:4px">The saved start date of the student's current package.</div>
+
 <label style="margin-top:10px">Status</label>
 <select id="editStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select>
 
@@ -6113,6 +6117,14 @@ document.getElementById('editStudentDuration').value=
 :'30 Minutes';
 
 document.getElementById('editStudentPackage').value=student.packageName||'';
+
+const currentPackage=getCurrentStudentPackage(student);
+const savedStartDate=
+(currentPackage&&currentPackage.startDate) ||
+student.startDate ||
+(student.createdAt?String(student.createdAt).slice(0,10):getLocalDateString(new Date()));
+document.getElementById('editStudentStartDate').value=savedStartDate;
+
 document.getElementById('editStudentStatus').value=student.status||'Active';
 
 setSchedulePicker(
@@ -6159,7 +6171,10 @@ return fail('That Student ID already exists.');
 const index=students.findIndex(s=>s.id===originalId);
 if(index<0)return fail('Student record could not be found.');
 
-students[index]={
+const editedStartDate=document.getElementById('editStudentStartDate').value;
+if(!editedStartDate)return fail('Please select the package start date.');
+
+const editedStudent={
 ...students[index],
 name,email,id,
 age:document.getElementById('editStudentAge').value.trim(),
@@ -6174,9 +6189,20 @@ classTime:scheduleDataToText(
 getSchedulePickerData('edit').details,
 getSchedulePickerData('edit').selected,
 document.getElementById('editStudentDuration').value
-)
+),
+startDate:editedStartDate
 };
 
+const currentPackageForEdit=getCurrentStudentPackage(editedStudent);
+if(currentPackageForEdit){
+  editedStudent.packageHistory=(editedStudent.packageHistory||[]).map(pkg=>
+    pkg.id===currentPackageForEdit.id
+    ?{...pkg,startDate:editedStartDate}
+    :pkg
+  );
+}
+
+students[index]=editedStudent;
 saveStudents(students);
 closeEditStudent();
 renderDashboard();
