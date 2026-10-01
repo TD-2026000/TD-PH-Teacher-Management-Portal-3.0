@@ -1487,29 +1487,7 @@ button.secondary,
   box-shadow:0 0 0 2px rgba(99,199,138,.12);
 }
 
-#changeGmailModal input:disabled{
-  background:#f1f3f5;
-  color:#888;
-  cursor:not-allowed;
-}
 
-.email-success-modal{
-  border-top:5px solid #7bd88f;
-}
-
-.email-success-icon{
-  width:48px;
-  height:48px;
-  margin:0 auto 10px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#dff6df;
-  color:#258b45;
-  font-size:28px;
-  font-weight:800;
-}
 
 .email-login-note{
   margin-top:12px;
@@ -3639,36 +3617,9 @@ readonly
 class="profile-editable-readonly"
 >
 
-<div class="profile-gmail-menu-wrap">
-
-<button
-type="button"
-class="profile-gmail-dots"
-onclick="toggleGmailMenu(event)"
-aria-label="Gmail account options"
->
-⋮
-</button>
-
-<div
-id="profileGmailMenu"
-class="profile-gmail-menu"
->
-
-<button
-type="button"
-onclick="openChangeGmailModal(event); return false;"
->
-Change Email
-</button>
-
 </div>
 
-</div>
-
-</div>
-
-<div class="small">Your Gmail account is used for login. Click the 3 dots to change it.</div>
+<div class="small"></div>
 
 </div>
 
@@ -4040,125 +3991,6 @@ class="modal-cancel"
 onclick="closeEvaluationView()"
 >
 Close
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- =========================================================
-     CHANGE GMAIL ACCOUNT MODAL
-========================================================= -->
-
-<div
-id="changeGmailModal"
-class="modal-backdrop"
-onclick="if(event.target===this) closeChangeGmailModal()"
->
-
-<div class="modal">
-
-<h3>Change Gmail</h3>
-
-<p>
-Enter your <strong>old Gmail</strong> first. After it is verified, you can enter your <strong>new Gmail</strong> and confirm it.
-</p>
-
-<label>Old Gmail</label>
-<input
-id="oldGmailInput"
-type="email"
-placeholder="Enter your old Gmail"
-autocomplete="email"
-oninput="checkOldGmailForChange()"
->
-
-<label style="margin-top:10px">New Gmail</label>
-<input
-id="newGmailInput"
-type="email"
-placeholder="Enter your new Gmail"
-autocomplete="email"
-disabled
->
-
-<label style="margin-top:10px">Confirm New Gmail</label>
-<input
-id="confirmNewGmailInput"
-type="email"
-placeholder="Re-enter your new Gmail"
-autocomplete="email"
-disabled
->
-
-<div
-id="changeGmailError"
-class="modal-error"
-></div>
-
-<div class="small" style="margin-top:10px">
-After the new Gmail is confirmed, use that new Gmail when logging in to your Teacher Danyeal account.
-</div>
-
-<div class="modal-actions">
-
-<button
-type="button"
-class="modal-cancel"
-onclick="closeChangeGmailModal()"
->
-Cancel
-</button>
-
-<button
-type="button"
-class="modal-save"
-onclick="changeTeacherGmail()"
->
-Change Email
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- =========================================================
-     EMAIL CHANGE SUCCESS POPUP
-========================================================= -->
-
-<div
-id="emailChangeSuccessModal"
-class="modal-backdrop"
-onclick="if(event.target===this) closeEmailChangeSuccess()"
->
-
-<div class="modal email-success-modal">
-
-<div class="email-success-icon">✓</div>
-
-<h3>Email Changed Successfully</h3>
-
-<p id="emailChangeSuccessMessage">
-Your Gmail has been changed successfully.
-</p>
-
-<div class="email-login-note">
-<strong>Note:</strong> The new Gmail you entered is the Gmail you should use to log in.
-If email confirmation is required, confirm the new Gmail first.
-</div>
-
-<div class="modal-actions">
-
-<button
-type="button"
-class="modal-save"
-onclick="closeEmailChangeSuccess()"
->
-OK
 </button>
 
 </div>
@@ -5051,7 +4883,6 @@ if(panel)
 panel.classList.remove('show');
 
 closeProfileMoreMenu();
-closeGmailMenu();
 
 }
 
@@ -5077,66 +4908,6 @@ document.getElementById('profileMoreMenu');
 
 if(menu)
 menu.classList.remove('show');
-
-}
-
-function toggleGmailMenu(event){
-
-if(event)
-event.stopPropagation();
-
-const menu=
-document.getElementById('profileGmailMenu');
-
-if(!menu)
-return;
-
-menu.classList.toggle('show');
-
-}
-
-function closeGmailMenu(){
-
-const menu=
-document.getElementById('profileGmailMenu');
-
-if(menu)
-menu.classList.remove('show');
-
-}
-
-document.addEventListener('click',event=>{
-  if(!event.target.closest('.profile-gmail-menu-wrap')){
-    closeGmailMenu();
-  }
-});
-
-function checkOldGmailForChange(){
-
-const oldInput=document.getElementById('oldGmailInput');
-const newInput=document.getElementById('newGmailInput');
-const confirmInput=document.getElementById('confirmNewGmailInput');
-const error=document.getElementById('changeGmailError');
-
-if(!oldInput || !newInput || !confirmInput) return;
-
-const typed=(oldInput.value || '').trim().toLowerCase();
-const current=(currentUser?.email || '').trim().toLowerCase();
-const matched=!!typed && typed===current;
-
-newInput.disabled=!matched;
-confirmInput.disabled=!matched;
-
-if(matched){
-  oldInput.classList.add('gmail-verified');
-  if(error && error.textContent===
-    'The old Gmail does not match your current logged-in Gmail.') {
-    error.textContent='';
-    error.classList.remove('show');
-  }
-}else{
-  oldInput.classList.remove('gmail-verified');
-}
 
 }
 
@@ -5370,165 +5141,6 @@ showProfileStatus(
 'Profile saved successfully.',
 true
 );
-
-}
-
-function openChangeGmailModal(event){
-
-if(event)
-event.stopPropagation();
-
-// The Change Gmail form is ONLY opened from the 3-dot Gmail menu.
-closeGmailMenu();
-
-if(!currentUser)
-return;
-
-document.getElementById('oldGmailInput').value='';
-document.getElementById('newGmailInput').value='';
-document.getElementById('confirmNewGmailInput').value='';
-document.getElementById('newGmailInput').disabled=true;
-document.getElementById('confirmNewGmailInput').disabled=true;
-document.getElementById('oldGmailInput').classList.remove('gmail-verified');
-
-const error=
-document.getElementById('changeGmailError');
-
-if(error){
-error.textContent='';
-error.classList.remove('show');
-}
-
-document.getElementById('changeGmailModal')
-.classList.add('show');
-
-setTimeout(()=>{
-document.getElementById('oldGmailInput')?.focus();
-},50);
-
-}
-
-function closeChangeGmailModal(){
-
-const modal=
-document.getElementById('changeGmailModal');
-
-if(modal)
-modal.classList.remove('show');
-
-}
-
-async function changeTeacherGmail(){
-
-if(!currentUser)
-return;
-
-const oldGmail=
-document.getElementById('oldGmailInput').value.trim();
-
-const newGmail=
-document.getElementById('newGmailInput').value.trim();
-
-const confirmGmail=
-document.getElementById('confirmNewGmailInput').value.trim();
-
-const error=
-document.getElementById('changeGmailError');
-
-const showError=msg=>{
-error.textContent=msg;
-error.classList.add('show');
-};
-
-if(!oldGmail)
-return showError('Please enter your current / old Gmail.');
-
-if(oldGmail.toLowerCase()!==(currentUser.email || '').toLowerCase()){
-return showError(
-'The old Gmail does not match your current logged-in Gmail.'
-);
-}
-
-if(!newGmail)
-return showError('Please enter your new Gmail.');
-
-if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newGmail)){
-return showError('Please enter a valid Gmail address.');
-}
-
-if(newGmail.toLowerCase()==oldGmail.toLowerCase()){
-return showError(
-'The new Gmail must be different from the current Gmail.'
-);
-}
-
-if(newGmail.toLowerCase()!==confirmGmail.toLowerCase()){
-return showError(
-'The new Gmail and confirmation do not match.'
-);
-}
-
-const button=
-document.querySelector('#changeGmailModal .modal-save');
-
-button.disabled=true;
-button.textContent='Updating...';
-
-const {data,error:updateError}=
-await supabaseClient.auth.updateUser({
-email:newGmail
-});
-
-if(updateError){
-
-showError(updateError.message);
-
-button.disabled=false;
-button.textContent='Save Change';
-
-return;
-
-}
-
-/*
-  Supabase may require email confirmation before the new address
-  becomes the active login email. The current account remains usable
-  until that confirmation is completed.
-*/
-
-if(data?.user){
-currentUser=data.user;
-}
-
-document.getElementById('profileEmail').value=
-currentUser.email || newGmail;
-
-document.getElementById('profileHeaderEmail').textContent=
-currentUser.email || newGmail;
-
-closeChangeGmailModal();
-
-showEmailChangeSuccess(newGmail);
-
-}
-
-function showEmailChangeSuccess(newGmail){
-
-const message=document.getElementById('emailChangeSuccessMessage');
-if(message){
-  message.innerHTML=
-    `Your Gmail has been changed successfully to <strong>${newGmail}</strong>.`;
-}
-
-const modal=document.getElementById('emailChangeSuccessModal');
-if(modal) modal.classList.add('show');
-
-}
-
-function closeEmailChangeSuccess(){
-
-const modal=document.getElementById('emailChangeSuccessModal');
-if(modal) modal.classList.remove('show');
 
 }
 
@@ -9380,36 +8992,195 @@ const studentName=(document.getElementById('studentName')?.value || 'Student')
 .replace(/[^a-z0-9]+/gi,'-')
 .replace(/^-+|-+$/g,'') || 'Student';
 
-showStatus('Preparing evaluation image...',true);
+showStatus('Preparing formal evaluation report...',true);
+
+let reportHost=null;
 
 try{
 
-const canvas=await html2canvas(evaluationPage,{
-scale:2,
-useCORS:true,
-backgroundColor:'#ffffff',
-logging:false,
-ignoreElements:(element)=>{
-return element.classList.contains('buttons') ||
-element.classList.contains('page-back-wrap') ||
-element.id==='status';
+/* Create a separate parent-facing copy. Teacher dashboard controls are never captured. */
+reportHost=document.createElement('div');
+reportHost.style.position='fixed';
+reportHost.style.left='-100000px';
+reportHost.style.top='0';
+reportHost.style.width='900px';
+reportHost.style.background='#ffffff';
+reportHost.style.zIndex='-1';
+reportHost.style.padding='0';
+
+const report=evaluationPage.cloneNode(true);
+report.id='parentEvaluationReport';
+report.style.display='block';
+report.style.visibility='visible';
+report.style.position='relative';
+report.style.width='100%';
+report.style.maxWidth='900px';
+report.style.margin='0';
+report.style.padding='40px';
+report.style.background='#ffffff';
+report.style.boxSizing='border-box';
+report.style.color='#111827';
+
+/* Remove website-only controls. */
+report.querySelectorAll('.page-back-wrap, .buttons, #status').forEach(el=>el.remove());
+
+/* Remove the COMPLETE student selector section. */
+const studentSelect=report.querySelector('#studentSelect');
+if(studentSelect){
+  const pickerSection=studentSelect.closest('.section');
+  if(pickerSection) pickerSection.remove();
 }
+
+/* Extra safety in case the selector markup changes later. */
+[...report.querySelectorAll('.section-title')].forEach(el=>{
+  const text=el.textContent.replace(/\s+/g,' ').trim().toUpperCase();
+  if(text.includes('SELECT STUDENT TO EVALUATE')){
+    const section=el.closest('.section');
+    if(section) section.remove(); else el.remove();
+  }
 });
 
-const link=document.createElement('a');
-link.download=`Teacher-Danyeal-Evaluation-${studentName}.png`;
-link.href=canvas.toDataURL('image/png');
-link.click();
+/* Remove teacher instructions/helper text. */
+[...report.querySelectorAll('.small')].forEach(el=>el.remove());
 
-showStatus('Evaluation image downloaded successfully.',true);
+/* Convert form controls to formal, non-editable report values. */
+report.querySelectorAll('input, select, textarea').forEach(control=>{
+  let value='';
+  if(control.tagName==='SELECT'){
+    value=control.options[control.selectedIndex]?.textContent?.trim() || '';
+  }else{
+    value=control.value || control.getAttribute('value') || '';
+  }
+  if(!value || /^--\s*select/i.test(value) || /^select a student/i.test(value)) value='—';
+
+  const valueBox=document.createElement('div');
+  valueBox.className='parent-report-value';
+  valueBox.textContent=value;
+  control.replaceWith(valueBox);
+});
+
+/* Formal parent-facing appearance. */
+const reportStyle=document.createElement('style');
+reportStyle.textContent=`
+#parentEvaluationReport{
+  font-family:Arial,Helvetica,sans-serif !important;
+  line-height:1.5 !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:12px !important;
+}
+#parentEvaluationReport h2{
+  text-align:center !important;
+  font-size:30px !important;
+  margin:0 0 8px !important;
+  color:#111827 !important;
+}
+#parentEvaluationReport h2::after{
+  content:'Teacher Danyeal’s Private English Class' !important;
+  display:block !important;
+  font-size:14px !important;
+  font-weight:normal !important;
+  margin-top:8px !important;
+  color:#6b7280 !important;
+}
+#parentEvaluationReport .section{
+  break-inside:avoid !important;
+  page-break-inside:avoid !important;
+}
+#parentEvaluationReport .section-title{
+  letter-spacing:.3px !important;
+}
+#parentEvaluationReport .parent-report-value{
+  min-height:42px !important;
+  padding:10px 12px !important;
+  border:1px solid #d1d5db !important;
+  border-radius:8px !important;
+  background:#f9fafb !important;
+  color:#111827 !important;
+  display:flex !important;
+  align-items:center !important;
+  white-space:pre-wrap !important;
+  overflow-wrap:anywhere !important;
+}
+#parentEvaluationReport .section-body .parent-report-value{
+  min-height:54px !important;
+  align-items:flex-start !important;
+}
+#parentEvaluationReport .comment-box{
+  background:#f9fafb !important;
+  border:1px solid #d1d5db !important;
+  color:#111827 !important;
+}
+#parentEvaluationReport .score-box{
+  border:1px solid #d1d5db !important;
+  background:#f9fafb !important;
+}
+#parentEvaluationReport .performance{
+  break-inside:avoid !important;
+  page-break-inside:avoid !important;
+}
+#parentEvaluationReport .stars{
+  pointer-events:none !important;
+}
+`;
+report.prepend(reportStyle);
+
+reportHost.appendChild(report);
+document.body.appendChild(reportHost);
+
+await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+
+const canvas=await html2canvas(report,{
+  scale:2,
+  useCORS:true,
+  backgroundColor:'#ffffff',
+  logging:false,
+  windowWidth:900,
+  scrollX:0,
+  scrollY:0
+});
+
+const filename=`Teacher-Danyeal-Evaluation-${studentName}.png`;
+const dataUrl=canvas.toDataURL('image/png');
+
+/* Open the native Save As dialog when the browser supports it. */
+if(typeof window.showSaveFilePicker==='function'){
+  try{
+    const handle=await window.showSaveFilePicker({
+      suggestedName:filename,
+      types:[{
+        description:'PNG Image',
+        accept:{'image/png':['.png']}
+      }]
+    });
+    const writable=await handle.createWritable();
+    const response=await fetch(dataUrl);
+    const blob=await response.blob();
+    await writable.write(blob);
+    await writable.close();
+  }catch(saveError){
+    if(saveError?.name!=='AbortError') throw saveError;
+    return showStatus('Download cancelled.',false);
+  }
+}else{
+  const link=document.createElement('a');
+  link.download=filename;
+  link.href=dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+showStatus('Formal evaluation report downloaded successfully.',true);
 
 }catch(error){
 console.error('Evaluation image download failed:',error);
-showStatus('Unable to download the evaluation image. Please try again.',false);
+showStatus('Unable to download the formal evaluation report. Please try again.',false);
+
+}finally{
+if(reportHost) reportHost.remove();
 }
 
 }
-
 
 /* =========================================================
    RESET EVALUATION FORM
@@ -10595,7 +10366,11 @@ showContractSuccess(
 }
 function showContractError(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='';e.style.background='';e.style.borderColor='';}}
 function showContractSuccess(msg){const e=document.getElementById('contractError');if(e){e.textContent=msg;e.style.color='#067647';e.style.background='#ecfdf3';e.style.borderColor='#abefc6';e.style.padding='10px';e.style.borderRadius='8px';}}
+
 </script>
 
+
+<style>
+</style>
 </body>
 </html>
