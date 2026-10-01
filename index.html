@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Teacher Management Portal</title>
+<title>TD-PH Teacher Management Portal</title>
 
 <style>
 *{box-sizing:border-box}
@@ -777,8 +777,32 @@ button.secondary,
   font-weight:700;
 }
 
-.class-record-menu .delete-record-option{
+ .class-record-menu .delete-record-option{
   color:#b42318;
+}
+
+.evaluation-record-tools{
+  position:relative;
+  display:flex;
+  justify-content:flex-end;
+  margin:-4px 0 10px;
+}
+
+.evaluation-record-tools .class-record-dots{
+  width:38px;
+  height:38px;
+}
+
+.evaluation-select-box{
+  width:18px;
+  height:18px;
+  accent-color:#00d9d9;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.evaluation-select-mode .class-record-item{
+  border-color:#00c8c8 !important;
 }
 
 #downloadEvaluationBtn:disabled{
@@ -7929,9 +7953,12 @@ content.innerHTML=`
   </div>
 
   <div class="student-profile-section">
-   <h4>RECORD OF EVALUATION (${evaluations.length})</h4>
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+   <h4 style="margin:0">RECORD OF EVALUATION (${evaluations.length})</h4>
+   ${evaluations.length?`<div class="class-record-actions"><button type="button" class="class-record-dots" aria-label="Evaluation record options" onclick="event.stopPropagation();toggleStudentProfileEvaluationTools('${escapeAttr(student.id)}')">⋮</button><div id="studentProfileEvaluationTools-${encodeURIComponent(String(student.id))}" class="class-record-menu"><button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}');setTimeout(()=>toggleEvaluationSelectMode('${escapeAttr(student.id)}'),50)">Select to Delete</button></div></div>`:''}
+   </div>
    <div class="small">${evaluations.length?`This student has ${evaluations.length} saved evaluation record${evaluations.length===1?'':'s'}.`:'No evaluation records yet.'}</div>
-   ${evaluations.length?`<div style="display:grid;gap:8px;margin-top:10px">${evaluations.slice(0,10).map((ev,i)=>`<div style="border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><b>Evaluation ${evaluations.length-i}</b><div class="small" style="margin-top:3px">${escapeHtml(ev.lesson_topic||'N/A')} · ${escapeHtml(formatDateTime(ev.evaluationSavedAt||ev.createdAt||ev.dateTime))}</div></div><div class="class-record-actions"><button type="button" class="view-record-btn" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View</button><button type="button" class="class-record-dots" aria-label="Evaluation options" onclick="event.stopPropagation();toggleStudentProfileEvaluationMenu('${escapeAttr(student.id)}','${escapeAttr(String(i))}')">⋮</button><div id="studentProfileEvaluationMenu-${encodeURIComponent(String(student.id))}-${i}" class="class-record-menu"><button type="button" class="delete-record-option" onclick="deleteStudentProfileEvaluation('${escapeAttr(student.id)}','${escapeAttr(String(i))}')">Delete</button></div></div></div>`).join('')}</div>`:''}
+   ${evaluations.length?`<div style="display:grid;gap:8px;margin-top:10px">${evaluations.slice(0,10).map((ev,i)=>`<div style="border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><b>Evaluation ${evaluations.length-i}</b><div class="small" style="margin-top:3px">${escapeHtml(ev.lesson_topic||'N/A')} · ${escapeHtml(formatDateTime(ev.evaluationSavedAt||ev.createdAt||ev.dateTime))}</div></div><div class="class-record-actions"><button type="button" class="view-record-btn" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View</button></div></div>`).join('')}</div>`:''}
    <div class="student-card-actions" style="justify-content:flex-start;margin-top:10px">
     <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">View Class Records</button>
    </div>
@@ -9796,8 +9823,9 @@ document.getElementById(
 
 let html=`
 
-<div class="record-student-header">
+<div class="record-student-header" style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
 
+<div style="display:flex;align-items:flex-start;gap:12px;min-width:0;">
 ${getStudentAvatarHtml(
 student,
 'record-student-avatar'
@@ -9814,12 +9842,22 @@ Student ID: ${escapeHtml(student.id)}
 </span>
 
 <span>
-${escapeHtml(student.email)}
+Student Gmail: ${escapeHtml(student.email || '—')}
 </span>
 
 </div>
+</div>
+
+<div class="class-record-actions" style="margin-left:auto;flex-shrink:0;">
+<button type="button" class="class-record-dots" aria-label="Student evaluation record options" onclick="event.stopPropagation();toggleEvaluationRecordsTools('${escapeAttr(student.id)}')">⋮</button>
+<div id="evaluationRecordsTools-${encodeURIComponent(String(student.id))}" class="class-record-menu">
+<button type="button" onclick="toggleEvaluationSelectMode('${escapeAttr(student.id)}')">Select to Delete</button>
+</div>
+</div>
 
 </div>
+
+<div style="border-bottom:1px solid #d1d5db;margin-top:14px;"></div>
 
 `;
 
@@ -9837,8 +9875,13 @@ No evaluation records found for this student yet.
 
 html+=`
 
-<div style="font-weight:800;margin-bottom:10px;">
-Class Evaluation History
+<div style="font-weight:800;margin:16px 0 10px;">
+Record of Evaluation
+</div>
+
+<div id="evaluationSelectionBar-${encodeURIComponent(String(student.id))}" style="display:none;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding:9px 10px;border:1px solid #d1d5db;border-radius:8px;background:#f8fafc;">
+  <span class="small" id="evaluationSelectionCount-${encodeURIComponent(String(student.id))}">0 selected</span>
+  <button type="button" class="delete-record-option" style="border:0;border-radius:7px;padding:8px 11px;background:#fee4e2;color:#b42318;font-weight:800;cursor:pointer;" onclick="deleteSelectedEvaluationRecords('${escapeAttr(student.id)}')">Delete</button>
 </div>
 
 `;
@@ -9862,9 +9905,12 @@ return `
 
 <div class="class-record-item-header">
 
+<div style="display:flex;align-items:center;gap:9px;">
+<input type="checkbox" class="evaluation-select-box" data-evaluation-select="${escapeAttr(student.id)}" data-evaluation-index="${index}" style="display:none" onchange="updateEvaluationSelection('${escapeAttr(student.id)}')">
 <b>
 Evaluation ${records.length-index}
 </b>
+</div>
 
 <span
 class="small"
@@ -9905,17 +9951,6 @@ onclick="viewEvaluationRecord('${escapeAttr(student.id)}','${escapeAttr(String(i
 >
 View
 </button>
-<button
-type="button"
-class="class-record-dots"
-aria-label="Evaluation options"
-onclick="event.stopPropagation();toggleEvaluationRecordMenu('${escapeAttr(student.id)}','${escapeAttr(String(index))}')"
->
-⋮
-</button>
-<div id="evaluationRecordMenu-${encodeURIComponent(String(student.id))}-${index}" class="class-record-menu">
-<button type="button" class="delete-record-option" onclick="deleteEvaluationRecord('${escapeAttr(student.id)}','${escapeAttr(String(index))}')">Delete</button>
-</div>
 </div>
 
 </div>
@@ -9945,8 +9980,69 @@ document.getElementById(
    EVALUATION RECORD ACTIONS
 ========================================================= */
 
+function toggleEvaluationRecordsTools(studentId){
+  const menu=document.getElementById(`evaluationRecordsTools-${encodeURIComponent(String(studentId))}`);
+  if(!menu) return;
+  document.querySelectorAll('.class-record-menu.show').forEach(m=>{ if(m!==menu) m.classList.remove('show'); });
+  menu.classList.toggle('show');
+}
+
+function toggleEvaluationSelectMode(studentId){
+  const container=document.getElementById('studentClassRecordContent');
+  if(!container) return;
+  const boxes=container.querySelectorAll(`[data-evaluation-select="${CSS.escape(String(studentId))}"]`);
+  const selectionBar=document.getElementById(`evaluationSelectionBar-${encodeURIComponent(String(studentId))}`);
+  const tools=document.getElementById(`evaluationRecordsTools-${encodeURIComponent(String(studentId))}`);
+  const active=container.classList.toggle('evaluation-select-mode');
+  boxes.forEach(box=>{
+    box.style.display=active?'inline-block':'none';
+    if(!active) box.checked=false;
+  });
+  if(selectionBar) selectionBar.style.display=active?'flex':'none';
+  if(tools) tools.classList.remove('show');
+  updateEvaluationSelection(studentId);
+}
+
+function updateEvaluationSelection(studentId){
+  const boxes=document.querySelectorAll(`[data-evaluation-select="${CSS.escape(String(studentId))}"]`);
+  const count=[...boxes].filter(box=>box.checked).length;
+  const label=document.getElementById(`evaluationSelectionCount-${encodeURIComponent(String(studentId))}`);
+  if(label) label.textContent=`${count} selected`;
+}
+
+function deleteSelectedEvaluationRecords(studentId){
+  const boxes=[...document.querySelectorAll(`[data-evaluation-select="${CSS.escape(String(studentId))}"]`)].filter(box=>box.checked);
+  if(!boxes.length){
+    alert('Please tick at least one evaluation to delete.');
+    return;
+  }
+
+  const records=getStudentEvaluations(studentId);
+  const selected=boxes.map(box=>records[Number(box.dataset.evaluationIndex)]).filter(Boolean);
+  if(!selected.length) return;
+
+  const ok=window.confirm(`Are you sure you want to delete the selected evaluation${selected.length===1?'':'s'}? This action cannot be undone.`);
+  if(!ok) return;
+
+  const selectedJson=new Set(selected.map(item=>JSON.stringify(item)));
+  const all=getEvaluations();
+  const remaining=all.filter(item=>!selectedJson.has(JSON.stringify(item)));
+  saveEvaluations(remaining);
+
+  renderRecords();
+  renderDashboard();
+  openStudentClassRecord(studentId);
+}
+
 function toggleEvaluationRecordMenu(studentId,index){
   const menu=document.getElementById(`evaluationRecordMenu-${encodeURIComponent(String(studentId))}-${index}`);
+  if(!menu) return;
+  document.querySelectorAll('.class-record-menu.show').forEach(m=>{ if(m!==menu) m.classList.remove('show'); });
+  menu.classList.toggle('show');
+}
+
+function toggleStudentProfileEvaluationTools(studentId){
+  const menu=document.getElementById(`studentProfileEvaluationTools-${encodeURIComponent(String(studentId))}`);
   if(!menu) return;
   document.querySelectorAll('.class-record-menu.show').forEach(m=>{ if(m!==menu) m.classList.remove('show'); });
   menu.classList.toggle('show');
