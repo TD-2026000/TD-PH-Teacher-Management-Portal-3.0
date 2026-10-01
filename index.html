@@ -1842,6 +1842,109 @@ button.secondary,
   }
 
 }
+/* =========================================================
+   ENHANCED STUDENT MANAGEMENT
+========================================================= */
+.student-add-trigger-wrap{
+  display:flex;
+  justify-content:flex-end;
+  margin:0 0 16px;
+}
+.student-add-trigger{
+  border:0;
+  border-radius:8px;
+  padding:11px 18px;
+  background:#00d9d9;
+  color:#000;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 2px 5px rgba(0,0,0,.08);
+}
+.student-add-trigger:hover{
+  filter:brightness(.96);
+}
+.student-add-modal{
+  max-width:820px;
+}
+.student-add-modal-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.student-modal-close{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:8px;
+  background:#eee;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.student-modal-close:hover{
+  background:#ddd;
+}
+.student-toolbar{
+  display:flex;
+  gap:10px;
+  align-items:end;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.student-search-wrap{flex:1;min-width:240px}
+.student-filter-wrap{width:190px;max-width:100%}
+.student-card-list{display:grid;gap:12px}
+.student-card{
+  border:1px solid #ccc;border-radius:12px;background:#fff;padding:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,.05)
+}
+.student-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.student-card-name{font-size:18px;font-weight:900}
+.student-card-id{font-size:12px;color:#666;margin-top:3px}
+.student-status-badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#dff6df;font-size:11px;font-weight:800}
+.student-status-badge.inactive{background:#eee}
+.student-status-badge.completed{background:#dcecff}
+.student-card-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:13px}
+.student-meta-box{border:1px solid #e0e0e0;border-radius:8px;padding:9px;background:#fafafa}
+.student-meta-box label{font-size:10px;color:#666;margin-bottom:3px}
+.student-meta-box div{font-size:13px;font-weight:700;word-break:break-word}
+.student-progress{margin-top:12px}
+.student-progress-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;margin-bottom:5px}
+.student-progress-track{height:9px;background:#e8e8e8;border-radius:999px;overflow:hidden}
+.student-progress-fill{height:100%;background:#00d9d9;border-radius:999px}
+.student-card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.student-card-actions button{border:0;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:800;cursor:pointer;background:#eee}
+.student-card-actions .primary-action{background:#00d9d9}
+.student-card-actions .danger-action{background:#ffe1e1;color:#a00000}
+.student-add-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.student-add-grid .full{grid-column:1/-1}
+.schedule-checks{display:flex;gap:8px;flex-wrap:wrap}
+.schedule-check{display:flex;align-items:center;gap:5px;border:1px solid #ccc;border-radius:7px;padding:7px 9px;background:#fafafa;font-size:12px;font-weight:700}
+.schedule-check input{width:auto}
+.schedule-picker{display:grid;gap:8px;margin-top:7px}
+.schedule-row{display:grid;grid-template-columns:120px minmax(150px,1fr) minmax(130px,1fr);gap:8px;align-items:center;border:1px solid #ddd;border-radius:8px;padding:8px;background:#fafafa}
+.schedule-day-toggle{display:flex;align-items:center;gap:7px;font-weight:700;font-size:12px}
+.schedule-day-toggle input{width:auto}
+.schedule-time-select{width:100%}
+.schedule-end-time{font-size:12px;color:#666}
+.schedule-end-time strong{color:#111}
+@media(max-width:650px){.schedule-row{grid-template-columns:1fr}.schedule-end-time{padding-left:24px}}
+.student-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.student-detail-box{border:1px solid #ddd;border-radius:8px;padding:10px;background:#fafafa}
+.student-detail-box.full{grid-column:1/-1}
+.student-detail-box label{font-size:11px;color:#666;margin-bottom:4px}
+.student-detail-box div{font-size:14px;line-height:1.45;word-break:break-word}
+.student-detail-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.student-detail-stat{border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;background:#fff}
+.student-detail-stat b{display:block;font-size:24px}
+.student-detail-stat span{font-size:11px;color:#666}
+@media(max-width:850px){.student-card-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.student-add-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.student-card-meta,.student-add-grid,.student-detail-grid,.student-detail-summary{grid-template-columns:1fr}.student-detail-box.full{grid-column:auto}}
+
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2294,12 +2397,12 @@ Dashboard
 
 <div class="dashboard-summary-grid">
 <div class="dashboard-summary-card">
-<div class="dashboard-summary-label">STUDENTS</div>
+<div class="dashboard-summary-label">NUMBER OF STUDENTS</div>
 <div id="dashboardStudentCount" class="dashboard-summary-number">0</div>
 </div>
 
 <div class="dashboard-summary-card">
-<div class="dashboard-summary-label">APPOINTMENTS</div>
+<div class="dashboard-summary-label">NUMBER OF APPOINTMENTS</div>
 <div id="dashboardAppointmentCount" class="dashboard-summary-number">0</div>
 </div>
 
@@ -2321,27 +2424,27 @@ Dashboard
 
 <div class="dashboard-menu">
 <button type="button" class="dashboard-menu-btn" onclick="showPage('student')">
-<span class="dashboard-menu-label">STUDENT</span>
+<span class="dashboard-menu-label">👨‍🎓 STUDENT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('evaluation')">
-<span class="dashboard-menu-label">EVALUATION</span>
+<span class="dashboard-menu-label">📝 EVALUATION</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('records')">
-<span class="dashboard-menu-label">RECORD OF EVALUATION</span>
+<span class="dashboard-menu-label">📋 RECORD OF EVALUATION</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('contract')">
-<span class="dashboard-menu-label">STUDENT CONTRACT</span>
+<span class="dashboard-menu-label">📄 STUDENT CONTRACT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('appointment')">
-<span class="dashboard-menu-label">APPOINTMENT</span>
+<span class="dashboard-menu-label">📅 APPOINTMENT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('payment')">
-<span class="dashboard-menu-label">PAYMENT</span>
+<span class="dashboard-menu-label">💳 PAYMENT</span>
 </button>
 </div>
 
@@ -2367,89 +2470,103 @@ Last Evaluation
 
 
 
+</div>
+
 <!-- STUDENT -->
 
 <div id="studentPage" class="page">
 
-<h2 style="margin-top:0">Student</h2>
+<h2 style="margin-top:0">Student Management</h2>
 
 <div class="page-back-wrap">
 <button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
 </div>
 
-<div id="studentRecordsSection" class="panel">
-
-<div class="panel-title">
-STUDENT RECORDS
-</div>
-
+<div class="panel">
+<div class="panel-title">STUDENT RECORDS</div>
 <div class="panel-body">
 
-<p style="margin-top:0">
-Add each student once. During evaluation, you will only select the student.
-</p>
-
-<div class="add-student-grid">
-
-<div>
-
-<label>Student Name</label>
-
-<input
-id="newStudentName"
-placeholder="Student name"
->
-
+<div class="student-toolbar">
+  <div class="student-search-wrap">
+    <label for="studentSearch">Search Student</label>
+    <input id="studentSearch" type="search" placeholder="Search student name or Student ID..." oninput="renderStudents()">
+  </div>
+  <div class="student-filter-wrap">
+    <label for="studentStatusFilter">Status</label>
+    <select id="studentStatusFilter" onchange="renderStudents()">
+      <option value="all">All Students</option>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
 </div>
 
-<div>
-
-<label>Parent's Email</label>
-
-<input
-id="newStudentEmail"
-type="email"
-placeholder="parent@email.com"
->
-
+<!-- ADD STUDENT BUTTON -->
+<div class="student-add-trigger-wrap">
+  <button type="button" class="student-add-trigger" onclick="openAddStudent()">+ ADD STUDENT</button>
 </div>
 
-<div>
-
-<label>Student ID</label>
-
-<input
-id="newStudentId"
-placeholder="Student ID"
+<!-- ADD STUDENT MODAL -->
+<div
+id="addStudentModal"
+class="modal-backdrop"
+onclick="if(event.target===this) closeAddStudent()"
 >
+<div class="modal student-add-modal">
 
+<div class="student-add-modal-header">
+  <div>
+    <h3 style="margin:0">Add New Student</h3>
+    <div class="small" style="margin-top:4px">Enter the student's information below.</div>
+  </div>
+  <button type="button" class="student-modal-close" onclick="closeAddStudent()" aria-label="Close">×</button>
 </div>
 
-<button
-id="addStudentBtn"
-type="button"
-class="primary btn"
->
-Add Student
-</button>
+<div class="student-add-grid">
+
+<div><label>Student Name</label><input id="newStudentName" placeholder="Student name"></div>
+<div><label>Student ID</label><input id="newStudentId" placeholder="Student ID"></div>
+<div><label>Age</label><input id="newStudentAge" type="number" min="1" max="100" placeholder="Age"></div>
+
+<div><label>Parent/Guardian Name</label><input id="newStudentParentName" placeholder="Parent/Guardian name"></div>
+<div><label>Parent's Email</label><input id="newStudentEmail" type="email" placeholder="parent@email.com"></div>
+<div><label>English Level</label><select id="newStudentLevel"><option value="">Select level</option><option>Beginner</option><option>Elementary</option><option>Pre-Intermediate</option><option>Intermediate</option><option>Upper-Intermediate</option><option>Advanced</option></select></div>
+
+<div><label>Class Duration</label><select id="newStudentDuration">
+<option value="30 Minutes">30 Minutes</option>
+<option value="40 Minutes">40 Minutes</option>
+<option value="50 Minutes">50 Minutes</option>
+</select></div>
+<div><label>Package</label><input id="newStudentPackage" placeholder="e.g. 20 Classes"></div>
+
+<div><label>Status</label><select id="newStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select></div>
+
+<div class="full">
+<label>Preferred Class Schedule</label>
+<div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div>
+<div id="newSchedulePicker" class="schedule-picker"></div>
+</div>
 
 </div>
 
 <div id="studentStatus" class="status"></div>
 
-<div
-id="studentList"
-class="student-list"
-style="margin-top:15px"
-></div>
+<div class="modal-actions">
+  <button type="button" class="modal-cancel" onclick="closeAddStudent()">Cancel</button>
+  <button id="addStudentBtn" type="button" class="modal-save" onclick="addStudent()">+ Add Student</button>
+</div>
+
+</div>
+</div>
+
+<div style="margin-top:16px;font-weight:800">ALL STUDENTS</div>
+<div id="studentList" class="student-card-list" style="margin-top:10px"></div>
 
 </div>
 </div>
 
 </div>
-
-</div>
-
 
 <!-- STUDENT CONTRACT -->
 
@@ -3113,6 +3230,19 @@ Log Out
 
 
 <!-- =========================================================
+     STUDENT PROFILE MODAL
+========================================================= -->
+<div id="studentProfileModal" class="modal-backdrop" onclick="if(event.target===this) closeStudentProfile()">
+<div class="modal record-view-modal">
+<h3 id="studentProfileTitle">Student Profile</h3>
+<div id="studentProfileContent"></div>
+<div class="modal-actions">
+<button type="button" class="modal-cancel" onclick="closeStudentProfile()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- =========================================================
      EDIT STUDENT MODAL
 ========================================================= -->
 
@@ -3160,6 +3290,35 @@ Student ID
 id="editStudentId"
 placeholder="Student ID"
 >
+
+<label style="margin-top:10px">Age</label>
+<input id="editStudentAge" type="number" min="1" max="100" placeholder="Age">
+
+<label style="margin-top:10px">Parent/Guardian Name</label>
+<input id="editStudentParentName" placeholder="Parent/Guardian name">
+
+<label style="margin-top:10px">English Level</label>
+<select id="editStudentLevel">
+<option value="">Select level</option>
+<option>Beginner</option><option>Elementary</option><option>Pre-Intermediate</option><option>Intermediate</option><option>Upper-Intermediate</option><option>Advanced</option>
+</select>
+
+<label style="margin-top:10px">Class Duration</label>
+<select id="editStudentDuration">
+<option value="30 Minutes">30 Minutes</option>
+<option value="40 Minutes">40 Minutes</option>
+<option value="50 Minutes">50 Minutes</option>
+</select>
+
+<label style="margin-top:10px">Package</label>
+<input id="editStudentPackage" placeholder="e.g. 20 Classes">
+
+<label style="margin-top:10px">Status</label>
+<select id="editStudentStatus"><option>Active</option><option>Inactive</option><option>Completed</option></select>
+
+<label style="margin-top:10px">Preferred Class Schedule</label>
+<div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div>
+<div id="editSchedulePicker" class="schedule-picker"></div>
 
 <div
 id="editStudentError"
@@ -4377,13 +4536,38 @@ pendingProfilePicture || ''
 saveTeacherProfileData(data);
 
 /* Update the visible profile immediately — no page refresh needed */
-document.getElementById(
-'currentTeacher'
-).textContent=fullName;
+/* Immediately sync the small upper-left account area */
+const currentTeacherEl =
+document.getElementById('currentTeacher');
 
-document.getElementById(
-'profileHeaderName'
-).textContent=fullName;
+if(currentTeacherEl){
+currentTeacherEl.textContent =
+data.fullName || data.username || 'Teacher';
+}
+
+/* Sync the small upper-left profile picture immediately when Save Profile is clicked. */
+const topProfileIconEl =
+document.getElementById('profileIcon');
+
+if(topProfileIconEl){
+const topPicture =
+data.picture || data.profile_picture || '';
+
+if(topPicture){
+topProfileIconEl.innerHTML =
+`<img src="${String(topPicture)}" alt="Profile Picture">`;
+}else{
+topProfileIconEl.textContent='👤';
+}
+}
+
+const profileHeaderNameEl =
+document.getElementById('profileHeaderName');
+
+if(profileHeaderNameEl){
+profileHeaderNameEl.textContent =
+data.fullName || data.username || 'Teacher';
+}
 
 const dashboardUsernameEl=
 document.getElementById(
@@ -4391,7 +4575,8 @@ document.getElementById(
 );
 
 if(dashboardUsernameEl){
-dashboardUsernameEl.textContent=username;
+dashboardUsernameEl.textContent =
+data.username || 'Teacher';
 }
 
 /* Keep the dashboard profile picture synchronized immediately */
@@ -4401,11 +4586,11 @@ document.getElementById(
 );
 
 if(dashboardPhotoEl){
-const savedPicture=
+const savedPicture =
 data.picture || data.profile_picture || '';
 
 if(savedPicture){
-dashboardPhotoEl.innerHTML=
+dashboardPhotoEl.innerHTML =
 `<img src="${String(savedPicture)}" alt="Teacher Profile Picture">`;
 }else{
 dashboardPhotoEl.textContent='👤';
@@ -5220,98 +5405,298 @@ s.className=
    ADD STUDENT
 ========================================================= */
 
+function openAddStudent(){
+  const modal=document.getElementById('addStudentModal');
+  if(!modal)return;
+
+  const status=document.getElementById('studentStatus');
+  if(status){
+    status.textContent='';
+    status.className='status';
+  }
+
+  modal.classList.add('show');
+  setTimeout(()=>{
+    const name=document.getElementById('newStudentName');
+    if(name)name.focus();
+  },50);
+}
+
+function closeAddStudent(){
+  const modal=document.getElementById('addStudentModal');
+  if(modal)modal.classList.remove('show');
+}
+
+
+/* =========================================================
+   STUDENT SCHEDULE PICKER
+   Each selected day has its own start-time dropdown.
+   The end time is calculated automatically from the class duration.
+========================================================= */
+
+const SCHEDULE_DAYS=[
+'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+];
+
+function buildTimeOptions(){
+let html='<option value="">Select start time</option>';
+
+for(let minutes=6*60;minutes<=23*60+30;minutes+=30){
+const h=Math.floor(minutes/60);
+const m=minutes%60;
+const hour12=(h%12)||12;
+const ampm=h<12?'AM':'PM';
+const label=`${hour12}:${String(m).padStart(2,'0')} ${ampm}`;
+html+=`<option value="${String(minutes).padStart(4,'0')}">${label}</option>`;
+}
+
+return html;
+}
+
+function minutesToTimeLabel(totalMinutes){
+let mins=totalMinutes%(24*60);
+const h=Math.floor(mins/60);
+const m=mins%60;
+const hour12=(h%12)||12;
+const ampm=h<12?'AM':'PM';
+return `${hour12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+function durationToMinutes(value){
+const match=String(value||'30 Minutes').match(/(\d+)/);
+return match?parseInt(match[1],10)||30:30;
+}
+
+function getSchedulePickerData(prefix){
+const details={};
+const selected=[];
+
+SCHEDULE_DAYS.forEach(day=>{
+const checkbox=document.getElementById(`${prefix}Schedule_${day}`);
+const select=document.getElementById(`${prefix}Time_${day}`);
+
+if(checkbox && checkbox.checked){
+selected.push(day);
+if(select && select.value){
+details[day]=parseInt(select.value,10);
+}
+}
+});
+
+return {selected,details};
+}
+
+function updateScheduleEndTime(prefix,day){
+const select=document.getElementById(`${prefix}Time_${day}`);
+const end=document.getElementById(`${prefix}End_${day}`);
+const checkbox=document.getElementById(`${prefix}Schedule_${day}`);
+
+if(!select||!end||!checkbox)return;
+
+const hasTime=checkbox.checked && select.value;
+if(!hasTime){
+end.innerHTML='Select a start time';
+return;
+}
+
+const start=parseInt(select.value,10);
+const duration=durationToMinutes(
+document.getElementById(`${prefix}StudentDuration`)?.value
+);
+
+end.innerHTML=`Ends at <strong>${minutesToTimeLabel(start+duration)}</strong>`;
+}
+
+function updateAllScheduleEndTimes(prefix){
+SCHEDULE_DAYS.forEach(day=>updateScheduleEndTime(prefix,day));
+}
+
+function buildSchedulePicker(prefix,containerId){
+const container=document.getElementById(containerId);
+if(!container)return;
+
+const options=buildTimeOptions();
+
+container.innerHTML=SCHEDULE_DAYS.map(day=>`
+<div class="schedule-row">
+  <label class="schedule-day-toggle">
+    <input
+      type="checkbox"
+      id="${prefix}Schedule_${day}"
+      onchange="toggleScheduleDay('${prefix}','${day}')"
+    >
+    ${day}
+  </label>
+
+  <select
+    id="${prefix}Time_${day}"
+    class="schedule-time-select"
+    disabled
+    onchange="updateScheduleEndTime('${prefix}','${day}')"
+  >
+    ${options}
+  </select>
+
+  <div id="${prefix}End_${day}" class="schedule-end-time">
+    Select a start time
+  </div>
+</div>
+`).join('');
+}
+
+function toggleScheduleDay(prefix,day){
+const checkbox=document.getElementById(`${prefix}Schedule_${day}`);
+const select=document.getElementById(`${prefix}Time_${day}`);
+
+if(!checkbox||!select)return;
+
+select.disabled=!checkbox.checked;
+
+if(!checkbox.checked){
+select.value='';
+}
+
+updateScheduleEndTime(prefix,day);
+}
+
+function setSchedulePicker(prefix,scheduleDetails,preferredSchedule){
+const details=scheduleDetails||{};
+const preferred=Array.isArray(preferredSchedule)?preferredSchedule:[];
+
+SCHEDULE_DAYS.forEach(day=>{
+const checkbox=document.getElementById(`${prefix}Schedule_${day}`);
+const select=document.getElementById(`${prefix}Time_${day}`);
+
+if(!checkbox||!select)return;
+
+const rawTime=details[day];
+const selectedTime=
+rawTime!==undefined && rawTime!==null
+?String(rawTime)
+:'';
+
+checkbox.checked=
+Object.prototype.hasOwnProperty.call(details,day) ||
+preferred.includes(day);
+
+select.disabled=!checkbox.checked;
+select.value=selectedTime;
+
+updateScheduleEndTime(prefix,day);
+});
+}
+
+function scheduleDataToText(scheduleDetails,preferredSchedule,duration){
+const details=scheduleDetails||{};
+const preferred=Array.isArray(preferredSchedule)?preferredSchedule:[];
+
+const days=SCHEDULE_DAYS.filter(day=>
+Object.prototype.hasOwnProperty.call(details,day) ||
+preferred.includes(day)
+);
+
+if(!days.length)return 'Schedule not set';
+
+return days.map(day=>{
+const start=details[day];
+if(start===undefined || start===null || start===''){
+return day;
+}
+const startMinutes=parseInt(start,10);
+const endMinutes=startMinutes+durationToMinutes(duration);
+return `${day} — ${minutesToTimeLabel(startMinutes)}–${minutesToTimeLabel(endMinutes)}`;
+}).join(' • ');
+}
+
 function addStudent(){
 
-const name=
-document.getElementById(
-'newStudentName'
-).value.trim();
+const name=document.getElementById('newStudentName').value.trim();
+const email=document.getElementById('newStudentEmail').value.trim();
+const id=document.getElementById('newStudentId').value.trim();
+const age=document.getElementById('newStudentAge').value.trim();
+const parentName=document.getElementById('newStudentParentName').value.trim();
+const level=document.getElementById('newStudentLevel').value;
+const duration=document.getElementById('newStudentDuration').value;
+const packageName=document.getElementById('newStudentPackage').value.trim();
+const status=document.getElementById('newStudentStatus').value;
+const scheduleData=getSchedulePickerData('new');
+const schedule=scheduleData.selected;
+const scheduleDetails=scheduleData.details;
 
-const email=
-document.getElementById(
-'newStudentEmail'
-).value.trim();
+if(!name)return showStudentStatus('Please enter the student name.',false);
+if(!email)return showStudentStatus("Please enter the parent's email.",false);
+if(!id)return showStudentStatus('Please enter the student ID.',false);
 
-const id=
-document.getElementById(
-'newStudentId'
-).value.trim();
+if(!schedule.length)
+return showStudentStatus('Please select at least one class day.',false);
 
-if(!name)
-return showStudentStatus(
-'Please enter the student name.',
-false
+const missingTime=schedule.some(day=>
+scheduleDetails[day]===undefined
 );
 
-if(!email)
-return showStudentStatus(
-"Please enter the parent's email.",
-false
-);
-
-if(!id)
-return showStudentStatus(
-'Please enter the student ID.',
-false
-);
+if(missingTime)
+return showStudentStatus('Please choose a start time for every selected day.',false);
 
 const students=getStudents();
 
-if(
-students.some(
-s=>s.id.toLowerCase()===id.toLowerCase()
-)
-){
+if(students.some(s=>s.id.toLowerCase()===id.toLowerCase()))
+return showStudentStatus('That Student ID already exists.',false);
 
-return showStudentStatus(
-'That Student ID already exists.',
-false
+const classTime=scheduleDataToText(
+scheduleDetails,
+schedule,
+duration
 );
 
-}
-
 students.push({
-
-id,
-
-name,
-
-email,
-
-createdAt:new Date().toISOString()
-
+  id,
+  name,
+  email,
+  age,
+  parentName,
+  level,
+  duration,
+  packageName,
+  status,
+  preferredSchedule:schedule,
+  scheduleDetails,
+  classTime,
+  createdAt:new Date().toISOString()
 });
 
 saveStudents(students);
 
-document.getElementById(
-'newStudentName'
-).value='';
+[
+'newStudentName',
+'newStudentEmail',
+'newStudentId',
+'newStudentAge',
+'newStudentParentName',
+'newStudentPackage'
+].forEach(id=>{
+const el=document.getElementById(id);
+if(el)el.value='';
+});
 
-document.getElementById(
-'newStudentEmail'
-).value='';
+document.getElementById('newStudentLevel').value='';
+document.getElementById('newStudentDuration').value='30 Minutes';
+document.getElementById('newStudentStatus').value='Active';
 
-document.getElementById(
-'newStudentId'
-).value='';
+setSchedulePicker('new',{},[]);
 
-showStudentStatus(
-'Student added successfully.',
-true
-);
-
+showStudentStatus('Student added successfully.',true);
+closeAddStudent();
 renderDashboard();
-
 populateStudentSelect();
-
 renderRecords();
-
+renderStudents();
 }
 
 
 /* =========================================================
    STUDENT MENU
+=========================================================
+
 ========================================================= */
 
 function toggleStudentMenu(id){
@@ -5350,156 +5735,93 @@ m=>m.classList.remove('show')
 function openEditStudent(id){
 
 closeStudentMenus();
-
-const student=
-getStudents().find(
-s=>s.id===id
-);
-
+const student=getStudents().find(s=>s.id===id);
 if(!student)return;
 
-document.getElementById(
-'editOriginalId'
-).value=student.id;
+document.getElementById('editOriginalId').value=student.id;
+document.getElementById('editStudentName').value=student.name||'';
+document.getElementById('editStudentEmail').value=student.email||'';
+document.getElementById('editStudentId').value=student.id||'';
+document.getElementById('editStudentAge').value=student.age||'';
+document.getElementById('editStudentParentName').value=student.parentName||'';
+document.getElementById('editStudentLevel').value=student.level||'';
+document.getElementById('editStudentDuration').value=
+['30 Minutes','40 Minutes','50 Minutes'].includes(student.duration)
+?student.duration
+:'30 Minutes';
 
-document.getElementById(
-'editStudentName'
-).value=student.name;
+document.getElementById('editStudentPackage').value=student.packageName||'';
+document.getElementById('editStudentStatus').value=student.status||'Active';
 
-document.getElementById(
-'editStudentEmail'
-).value=student.email;
+setSchedulePicker(
+'edit',
+student.scheduleDetails||{},
+student.preferredSchedule||[]
+);
 
-document.getElementById(
-'editStudentId'
-).value=student.id;
-
-document.getElementById(
-'editStudentError'
-).textContent='';
-
-document.getElementById(
-'editStudentError'
-).classList.remove('show');
-
-document.getElementById(
-'editStudentModal'
-).classList.add('show');
-
+document.getElementById('editStudentError').textContent='';
+document.getElementById('editStudentError').classList.remove('show');
+document.getElementById('editStudentModal').classList.add('show');
 }
 
 function closeEditStudent(){
-
-document.getElementById(
-'editStudentModal'
-).classList.remove('show');
-
+document.getElementById('editStudentModal').classList.remove('show');
 }
 
 function saveEditedStudent(){
+const originalId=document.getElementById('editOriginalId').value;
+const name=document.getElementById('editStudentName').value.trim();
+const email=document.getElementById('editStudentEmail').value.trim();
+const id=document.getElementById('editStudentId').value.trim();
+const err=document.getElementById('editStudentError');
+const fail=msg=>{err.textContent=msg;err.classList.add('show');};
 
-const originalId=
-document.getElementById(
-'editOriginalId'
-).value;
+if(!name)return fail('Please enter the student name.');
+if(!email)return fail("Please enter the parent's email.");
+if(!id)return fail('Please enter the student ID.');
 
-const name=
-document.getElementById(
-'editStudentName'
-).value.trim();
+const scheduleData=getSchedulePickerData('edit');
 
-const email=
-document.getElementById(
-'editStudentEmail'
-).value.trim();
+if(!scheduleData.selected.length)
+return fail('Please select at least one class day.');
 
-const id=
-document.getElementById(
-'editStudentId'
-).value.trim();
-
-const err=
-document.getElementById(
-'editStudentError'
-);
-
-const fail=msg=>{
-
-err.textContent=msg;
-
-err.classList.add('show');
-
-};
-
-if(!name)
-return fail(
-'Please enter the student name.'
-);
-
-if(!email)
-return fail(
-"Please enter the parent's email."
-);
-
-if(!id)
-return fail(
-'Please enter the student ID.'
-);
+if(scheduleData.selected.some(day=>
+scheduleData.details[day]===undefined
+))
+return fail('Please choose a start time for every selected day.');
 
 const students=getStudents();
+if(students.some(s=>s.id.toLowerCase()===id.toLowerCase()&&s.id!==originalId))
+return fail('That Student ID already exists.');
 
-if(
-students.some(
-s=>
-s.id.toLowerCase()===id.toLowerCase()
-&&
-s.id!==originalId
-)
-){
-
-return fail(
-'That Student ID already exists.'
-);
-
-}
-
-const index=
-students.findIndex(
-s=>s.id===originalId
-);
-
-if(index<0)
-return fail(
-'Student record could not be found.'
-);
+const index=students.findIndex(s=>s.id===originalId);
+if(index<0)return fail('Student record could not be found.');
 
 students[index]={
-
 ...students[index],
-
-name,
-
-email,
-
-id
-
+name,email,id,
+age:document.getElementById('editStudentAge').value.trim(),
+parentName:document.getElementById('editStudentParentName').value.trim(),
+level:document.getElementById('editStudentLevel').value,
+duration:document.getElementById('editStudentDuration').value,
+packageName:document.getElementById('editStudentPackage').value.trim(),
+status:document.getElementById('editStudentStatus').value,
+preferredSchedule:getSchedulePickerData('edit').selected,
+scheduleDetails:getSchedulePickerData('edit').details,
+classTime:scheduleDataToText(
+getSchedulePickerData('edit').details,
+getSchedulePickerData('edit').selected,
+document.getElementById('editStudentDuration').value
+)
 };
 
 saveStudents(students);
-
 closeEditStudent();
-
 renderDashboard();
-
 populateStudentSelect(id);
-
 renderRecords();
-
-showStudentStatus(
-'Student record updated successfully.',
-true
-);
-
+renderStudents();
+showStudentStatus('Student record updated successfully.',true);
 }
 
 
@@ -5753,35 +6075,137 @@ list.innerHTML=students.map(s=>`
 }
 
 
+
 /* =========================================================
    STUDENT PAGE
 ========================================================= */
 
+function getPackageClassCount(packageName){
+const match=String(packageName||'').match(/(\d+)/);
+return match?Math.max(0,parseInt(match[1],10)||0):0;
+}
+
+function getStudentProgress(student){
+const evaluations=getStudentEvaluations(student.id);
+
+/* New student records use the Package field as the source
+   for the number of classes. Old records that still have
+   classesPurchased remain supported. */
+const purchased=Math.max(
+0,
+parseInt(
+student.classesPurchased ??
+getPackageClassCount(student.packageName),
+10
+)||0
+);
+
+const completed=evaluations.length;
+const remaining=Math.max(0,purchased-completed);
+const percent=purchased?Math.min(100,Math.round((completed/purchased)*100)):0;
+return {purchased,completed,remaining,percent};
+}
+
+function openStudentProfile(id){
+const student=getStudents().find(s=>s.id===id);
+if(!student)return;
+const p=getStudentProgress(student);
+const schedule=scheduleDataToText(
+student.scheduleDetails,
+student.preferredSchedule,
+student.duration
+);
+const content=document.getElementById('studentProfileContent');
+const title=document.getElementById('studentProfileTitle');
+if(title) title.textContent=student.name||'Student Profile';
+if(!content)return;
+
+content.innerHTML=`
+<div class="student-detail-summary">
+ <div class="student-detail-stat"><b>${p.purchased}</b><span>Classes Purchased</span></div>
+ <div class="student-detail-stat"><b>${p.completed}</b><span>Classes Completed</span></div>
+ <div class="student-detail-stat"><b>${p.remaining}</b><span>Classes Remaining</span></div>
+</div>
+<div class="student-progress" style="margin-bottom:14px">
+ <div class="student-progress-head"><span>Course Progress</span><span>${p.percent}%</span></div>
+ <div class="student-progress-track"><div class="student-progress-fill" style="width:${p.percent}%"></div></div>
+</div>
+<div class="student-detail-grid">
+ <div class="student-detail-box"><label>Student ID</label><div>${escapeHtml(student.id)}</div></div>
+ <div class="student-detail-box"><label>Status</label><div>${escapeHtml(student.status||'Active')}</div></div>
+ <div class="student-detail-box"><label>Age</label><div>${escapeHtml(student.age||'Not set')}</div></div>
+ <div class="student-detail-box"><label>English Level</label><div>${escapeHtml(student.level||'Not set')}</div></div>
+ <div class="student-detail-box"><label>Parent/Guardian</label><div>${escapeHtml(student.parentName||'Not set')}</div></div>
+ <div class="student-detail-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'Not set')}</div></div>
+ <div class="student-detail-box"><label>Class Duration</label><div>${escapeHtml(student.duration||'25 Minutes')}</div></div>
+ <div class="student-detail-box"><label>Package</label><div>${escapeHtml(student.packageName||'Not set')}</div></div>
+ <div class="student-detail-box full"><label>Preferred Class Schedule</label><div>${escapeHtml(schedule)}</div></div>
+ <div class="student-detail-box full"><label>Class Time</label><div>${escapeHtml(student.classTime||'Not set')}</div></div>
+</div>
+<div class="student-card-actions">
+ <button type="button" class="primary-action" onclick="closeStudentProfile();openEditStudent('${escapeAttr(student.id)}')">Edit Student</button>
+ <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">Evaluation History</button>
+ <button type="button" onclick="closeStudentProfile();openStudentClassRecord('${escapeAttr(student.id)}')">Class Records</button>
+</div>`;
+
+document.getElementById('studentProfileModal').classList.add('show');
+}
+
+function closeStudentProfile(){
+const el=document.getElementById('studentProfileModal');
+if(el)el.classList.remove('show');
+}
+
 function renderStudents(){
-  const students=getStudents();
-  const list=document.getElementById('studentList');
-  if(!list) return;
+const students=getStudents();
+const list=document.getElementById('studentList');
+if(!list)return;
 
-  if(!students.length){
-    list.innerHTML='<div class="empty">No students yet. Add your first student above.</div>';
-    return;
-  }
+const search=(document.getElementById('studentSearch')?.value||'').trim().toLowerCase();
+const filter=document.getElementById('studentStatusFilter')?.value||'all';
+const filtered=students.filter(s=>{
+ const matchesSearch=!search||String(s.name||'').toLowerCase().includes(search)||String(s.id||'').toLowerCase().includes(search);
+ const matchesStatus=filter==='all'||(s.status||'Active')===filter;
+ return matchesSearch&&matchesStatus;
+});
 
-  list.innerHTML=students.map(s=>`
-<div class="student-row">
-<div class="student-info">
-<b>${escapeHtml(s.name)}</b>
-<span>ID: ${escapeHtml(s.id)} · ${escapeHtml(s.email)}</span>
-</div>
-<div class="student-actions">
-<button type="button" class="dots-btn" aria-label="Student options" onclick="event.stopPropagation();toggleStudentMenu('${escapeAttr(s.id)}')">⋮</button>
-<div id="studentMenu-${encodeURIComponent(s.id)}" class="student-menu">
-<button type="button" onclick="openEditStudent('${escapeAttr(s.id)}')">Edit</button>
-<button type="button" class="delete-option" onclick="openDeleteStudent('${escapeAttr(s.id)}')">Delete</button>
-</div>
-</div>
-</div>
-`).join('');
+if(!filtered.length){
+list.innerHTML=`<div class="empty">${students.length?'No students match your search or filter.':'No students yet. Add your first student above.'}</div>`;
+return;
+}
+
+list.innerHTML=filtered.map(s=>{
+ const p=getStudentProgress(s);
+ const schedule=scheduleDataToText(
+s.scheduleDetails,
+s.preferredSchedule,
+s.duration
+);
+ const status=s.status||'Active';
+ const statusClass=status.toLowerCase();
+ return `<div class="student-card">
+  <div class="student-card-top">
+   <div><div class="student-card-name">${escapeHtml(s.name)}</div><div class="student-card-id">Student ID: ${escapeHtml(s.id)}</div></div>
+   <span class="student-status-badge ${escapeAttr(statusClass)}">${escapeHtml(status)}</span>
+  </div>
+  <div class="student-card-meta">
+   <div class="student-meta-box"><label>English Level</label><div>${escapeHtml(s.level||'Not set')}</div></div>
+   <div class="student-meta-box"><label>Class Duration</label><div>${escapeHtml(s.duration||'25 Minutes')}</div></div>
+   <div class="student-meta-box"><label>Schedule</label><div>${escapeHtml(schedule)}</div></div>
+   <div class="student-meta-box"><label>Parent Gmail</label><div>${escapeHtml(s.email||'Not set')}</div></div>
+  </div>
+  <div class="student-progress">
+   <div class="student-progress-head"><span>Classes: ${p.completed} / ${p.purchased}</span><span>${p.remaining} remaining</span></div>
+   <div class="student-progress-track"><div class="student-progress-fill" style="width:${p.percent}%"></div></div>
+  </div>
+  <div class="student-card-actions">
+   <button type="button" class="primary-action" onclick="openStudentProfile('${escapeAttr(s.id)}')">View Profile</button>
+   <button type="button" onclick="openStudentClassRecord('${escapeAttr(s.id)}')">Class Records</button>
+   <button type="button" onclick="openEditStudent('${escapeAttr(s.id)}')">Edit</button>
+   <button type="button" class="danger-action" onclick="openDeleteStudent('${escapeAttr(s.id)}')">Delete</button>
+  </div>
+ </div>`;
+}).join('');
 }
 
 
@@ -7686,6 +8110,19 @@ false
 /* =========================================================
    START APPLICATION
 ========================================================= */
+
+buildSchedulePicker('new','newSchedulePicker');
+buildSchedulePicker('edit','editSchedulePicker');
+
+document.getElementById('newStudentDuration')?.addEventListener(
+'change',
+()=>updateAllScheduleEndTimes('new')
+);
+
+document.getElementById('editStudentDuration')?.addEventListener(
+'change',
+()=>updateAllScheduleEndTimes('edit')
+);
 
 initAuth();
 
