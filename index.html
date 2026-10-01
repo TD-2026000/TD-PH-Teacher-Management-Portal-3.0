@@ -1409,6 +1409,79 @@ button.secondary,
   color:#8a0000;
 }
 
+
+.profile-gmail-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  width:100%;
+}
+
+.profile-gmail-row > input{
+  flex:1;
+  min-width:0;
+}
+
+.profile-gmail-menu-wrap{
+  position:relative;
+  flex-shrink:0;
+}
+
+.profile-gmail-dots{
+  width:34px;
+  height:34px;
+  border:1px solid #ccc;
+  border-radius:7px;
+  background:#fff;
+  cursor:pointer;
+  font-size:22px;
+  line-height:1;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 0 5px;
+}
+
+.profile-gmail-dots:hover{
+  background:#f1f1f1;
+}
+
+.profile-gmail-menu{
+  position:absolute;
+  right:0;
+  top:39px;
+  min-width:145px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.16);
+  padding:5px;
+  display:none !important;
+  z-index:10002;
+}
+
+.profile-gmail-menu.show{
+  display:block !important;
+}
+
+.profile-gmail-menu button{
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:10px 11px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.profile-gmail-menu button:hover{
+  background:#f1f1f1;
+}
+
 .profile-gmail-row input.gmail-verified{
   border-color:#63c78a;
   box-shadow:0 0 0 2px rgba(99,199,138,.12);
@@ -3584,7 +3657,7 @@ class="profile-gmail-menu"
 
 <button
 type="button"
-onclick="openChangeGmailModal(event)"
+onclick="openChangeGmailModal(event); return false;"
 >
 Change Email
 </button>
@@ -3595,7 +3668,7 @@ Change Email
 
 </div>
 
-<div class="small">Your latest confirmed Gmail account is used for login.</div>
+<div class="small">Your Gmail account is used for login. Click the 3 dots to change it.</div>
 
 </div>
 
@@ -3987,17 +4060,17 @@ onclick="if(event.target===this) closeChangeGmailModal()"
 
 <div class="modal">
 
-<h3>Change Email</h3>
+<h3>Change Gmail</h3>
 
 <p>
-Enter your current Gmail first before changing to a new Gmail account.
+Enter your <strong>old Gmail</strong> first. After it is verified, you can enter your <strong>new Gmail</strong> and confirm it.
 </p>
 
-<label>Current / Old Gmail</label>
+<label>Old Gmail</label>
 <input
 id="oldGmailInput"
 type="email"
-placeholder="Enter your current Gmail"
+placeholder="Enter your old Gmail"
 autocomplete="email"
 oninput="checkOldGmailForChange()"
 >
@@ -4026,7 +4099,7 @@ class="modal-error"
 ></div>
 
 <div class="small" style="margin-top:10px">
-After the new Gmail is confirmed, it becomes the Gmail account used for login.
+After the new Gmail is confirmed, use that new Gmail when logging in to your Teacher Danyeal account.
 </div>
 
 <div class="modal-actions">
@@ -4070,12 +4143,12 @@ onclick="if(event.target===this) closeEmailChangeSuccess()"
 <h3>Email Changed Successfully</h3>
 
 <p id="emailChangeSuccessMessage">
-Your new Gmail has been updated successfully.
+Your Gmail has been changed successfully.
 </p>
 
 <div class="email-login-note">
-<strong>Note:</strong> The new Gmail you entered is now the Gmail to use when you log in.
-If email confirmation is required, please confirm the new Gmail first.
+<strong>Note:</strong> The new Gmail you entered is the Gmail you should use to log in.
+If email confirmation is required, confirm the new Gmail first.
 </div>
 
 <div class="modal-actions">
@@ -5032,6 +5105,12 @@ menu.classList.remove('show');
 
 }
 
+document.addEventListener('click',event=>{
+  if(!event.target.closest('.profile-gmail-menu-wrap')){
+    closeGmailMenu();
+  }
+});
+
 function checkOldGmailForChange(){
 
 const oldInput=document.getElementById('oldGmailInput');
@@ -5299,6 +5378,7 @@ function openChangeGmailModal(event){
 if(event)
 event.stopPropagation();
 
+// The Change Gmail form is ONLY opened from the 3-dot Gmail menu.
 closeGmailMenu();
 
 if(!currentUser)
@@ -5404,7 +5484,7 @@ if(updateError){
 showError(updateError.message);
 
 button.disabled=false;
-button.textContent='Change Email';
+button.textContent='Save Change';
 
 return;
 
@@ -5437,7 +5517,7 @@ function showEmailChangeSuccess(newGmail){
 const message=document.getElementById('emailChangeSuccessMessage');
 if(message){
   message.innerHTML=
-    `Your new Gmail <strong>${newGmail}</strong> has been submitted successfully.`;
+    `Your Gmail has been changed successfully to <strong>${newGmail}</strong>.`;
 }
 
 const modal=document.getElementById('emailChangeSuccessModal');
