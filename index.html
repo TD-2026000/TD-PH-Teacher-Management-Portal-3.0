@@ -2890,6 +2890,42 @@ body.portal-dark .student-add-modal-header .small{
 }
 </style>
 
+<style id="payment-student-picker-search-click-fix">
+#paymentStudentPickerModal .payment-student-search-wrap{
+  position:sticky;
+  top:0;
+  z-index:2;
+  padding:0 0 12px;
+  background:inherit;
+}
+#paymentStudentPickerModal #paymentStudentSearch{
+  width:100%;
+  min-height:44px;
+  border:1px solid var(--global-border,#b8f7f7);
+  border-radius:12px;
+  padding:10px 13px;
+  background:#fff;
+  color:#111;
+  outline:none;
+}
+#paymentStudentPickerModal #paymentStudentSearch:focus{
+  border-color:var(--global-accent,#00bcbc);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--global-accent,#00bcbc) 16%,transparent);
+}
+#paymentStudentPickerModal .payment-student-picker-item{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  pointer-events:auto!important;
+  user-select:none;
+  position:relative;
+  z-index:3;
+}
+#paymentStudentPickerModal .payment-student-picker-item:focus{
+  outline:2px solid var(--global-accent,#00bcbc);
+  outline-offset:1px;
+}
+</style>
+
 <style id="payment-student-picker-center-fix">
 #paymentStudentPickerModal.modal-overlay{
   position:fixed!important;
@@ -3956,8 +3992,8 @@ onclick="if(event.target===this) closeAddStudent()"
 
       <div class="panel-body">
         <div id="paymentReceiptStudentSummary" class="payment-student-summary">
-          <strong>No student selected</strong>
-          <span>Click “Add Student” to choose a student.</span>
+          <strong>Student Name: No student selected</strong>
+          <span>Student ID: — · Click “Add Student” to choose a student.</span>
         </div>
 
         <input type="hidden" id="paymentReceiptStudentId">
@@ -4025,7 +4061,13 @@ onclick="if(event.target===this) closeAddStudent()"
   <div id="paymentStudentPickerModal" class="modal-overlay" style="display:none">
     <div class="modal payment-student-picker-modal">
       <div class="modal-header"><h3>Select Student</h3><button type="button" onclick="closePaymentStudentPicker()">×</button></div>
-      <div class="modal-body"><p class="small">Select a student to create a payment receipt.</p><div id="paymentStudentPickerList" class="payment-student-picker-list"></div></div>
+      <div class="modal-body">
+        <p class="small">Search by Student ID or Student Name, then select the student.</p>
+        <div class="payment-student-search-wrap">
+          <input id="paymentStudentSearch" type="search" placeholder="Search Student ID or Student Name..." oninput="filterPaymentStudentPicker()" autocomplete="off">
+        </div>
+        <div id="paymentStudentPickerList" class="payment-student-picker-list"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -11947,12 +11989,37 @@ function setPaymentReceiptDefaults(){
 }
 function openPaymentStudentPicker(){
   const modal=document.getElementById('paymentStudentPickerModal'); if(!modal)return;
-  const list=document.getElementById('paymentStudentPickerList'); const students=getStudents();
-  if(!students.length){list.innerHTML='<div class="payment-picker-empty">No students found. Please add a student first.</div>';}
-  else{
-    list.innerHTML=students.map(s=>`<button type="button" class="payment-student-picker-item" onclick="selectPaymentReceiptStudent(${JSON.stringify(String(s.id))})"><span class="payment-picker-avatar">${escapeHtml((s.name||'?').charAt(0).toUpperCase())}</span><span><b>${escapeHtml(s.name||'Unnamed Student')}</b><small>${escapeHtml(s.id||'')} · ${escapeHtml(s.email||'')}</small></span></button>`).join('');
-  }
+  const search=document.getElementById('paymentStudentSearch');
+  if(search) search.value='';
+  renderPaymentStudentPickerList('');
   modal.style.display='flex';
+  requestAnimationFrame(()=>{ if(search) search.focus(); });
+}
+function renderPaymentStudentPickerList(query=''){
+  const list=document.getElementById('paymentStudentPickerList'); if(!list)return;
+  const students=getStudents();
+  const q=String(query||'').trim().toLowerCase();
+  const filtered=students.filter(st=>{
+    const name=String(st.name||'').toLowerCase();
+    const id=String(st.id||'').toLowerCase();
+    return !q || name.includes(q) || id.includes(q);
+  });
+  if(!students.length){
+    list.innerHTML='<div class="payment-picker-empty">No students found. Please add a student first.</div>';
+    return;
+  }
+  if(!filtered.length){
+    list.innerHTML='<div class="payment-picker-empty">No student matches your search.</div>';
+    return;
+  }
+  list.innerHTML=filtered.map(st=>`<button type="button" class="payment-student-picker-item" onclick="selectPaymentReceiptStudent(${JSON.stringify(String(st.id))})">
+    <span class="payment-picker-avatar">${escapeHtml((st.name||'?').charAt(0).toUpperCase())}</span>
+    <span><b>${escapeHtml(st.name||'Unnamed Student')}</b><small>Student ID: ${escapeHtml(st.id||'—')} · ${escapeHtml(st.email||'—')}</small></span>
+  </button>`).join('');
+}
+function filterPaymentStudentPicker(){
+  const search=document.getElementById('paymentStudentSearch');
+  renderPaymentStudentPickerList(search?search.value:'');
 }
 function closePaymentStudentPicker(){const m=document.getElementById('paymentStudentPickerModal');if(m)m.style.display='none';}
 function updatePaymentReceiptClasses(){
@@ -11972,7 +12039,7 @@ function selectPaymentReceiptStudent(id){
   const student=getStudents().find(s=>String(s.id)===String(id)); if(!student)return;
   document.getElementById('paymentReceiptStudentId').value=student.id;
   const sum=document.getElementById('paymentReceiptStudentSummary');
-  sum.innerHTML=`<strong>${escapeHtml(student.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(student.id||'—')} · Parent: ${escapeHtml(student.email||'—')}</span>`;
+  sum.innerHTML=`<strong>Student Name: ${escapeHtml(student.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(student.id||'—')} · Parent: ${escapeHtml(student.email||'—')}</span>`;
   const pkg=document.getElementById('paymentReceiptPackage'); if(pkg&&!pkg.value){ const existing=student.packageName||''; pkg.value=['Package 1','Package 2','Package 3','Package 4'].includes(existing)?existing:''; } updatePaymentReceiptClasses();
   closePaymentStudentPicker(); markPaymentReceiptDirty(); updatePaymentReceiptPreview();
 }
