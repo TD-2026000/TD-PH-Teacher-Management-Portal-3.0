@@ -2843,7 +2843,7 @@ body.portal-dark .student-add-modal-header .small{
   color:#000!important;
 }
 </style>
-</head>
+\n<style id="payment-receipt-theme-styles">\n.payment-receipt-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:18px;align-items:start}\n.payment-receipt-form-panel,.payment-receipt-preview-panel{overflow:hidden;border-radius:18px!important}\n.payment-receipt-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:var(--global-accent-soft,#e7ffff);border:1px solid var(--global-border,#b8f7f7);border-radius:16px;margin:12px 12px 0}\n.payment-receipt-header h3{margin:0;color:var(--global-accent-dark,#00bcbc);font-size:18px}\n.payment-receipt-header p{margin:5px 0 0;color:#334155;font-size:13px}\n.payment-add-btn{border:0;border-radius:10px;padding:10px 14px;background:var(--global-accent,#00e5e5);color:var(--global-text-on-accent,#071014);font-weight:800;cursor:pointer;white-space:nowrap}\n.payment-student-summary{border:1px solid var(--global-border,#b8f7f7);background:var(--global-accent-pale,#f8ffff);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:3px}\n.payment-student-summary strong{color:var(--global-accent-dark,#00bcbc)}\n.payment-receipt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}\n.payment-receipt-grid>div{min-width:0}\n.payment-receipt-grid .payment-receipt-full{grid-column:1/-1}\n.payment-receipt-grid textarea{min-height:90px;resize:vertical}\n.payment-receipt-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}\n.payment-receipt-actions button{border-radius:10px!important}\n.payment-receipt-preview-wrap{background:#f3f4f6;border:1px solid #d1d5db;border-radius:14px;padding:12px;display:flex;justify-content:center;overflow:auto}\n#paymentReceiptCanvas{display:block;width:min(100%,520px);height:auto;background:#fff;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.12)}\n.payment-student-picker-modal{max-width:560px!important;border-radius:18px!important;overflow:hidden}\n.payment-student-picker-list{display:grid;gap:8px;margin-top:14px;max-height:55vh;overflow:auto}\n.payment-student-picker-item{width:100%;text-align:left;border:1px solid var(--global-border,#b8f7f7);background:var(--global-accent-pale,#f8ffff);border-radius:12px;padding:12px 14px;cursor:pointer}\n.payment-student-picker-item:hover{background:var(--global-accent-soft,#e7ffff)}\n.payment-student-picker-item b{display:block;color:var(--global-accent-dark,#00bcbc)}\n.payment-student-picker-item span{display:block;font-size:12px;margin-top:3px;color:#475467}\nbody.portal-dark .payment-receipt-header p,body.portal-dark .payment-student-picker-item span{color:#e5e7eb}\nbody.portal-dark .payment-receipt-preview-wrap{background:#111827;border-color:#374151}\nbody.portal-dark .payment-student-summary{background:color-mix(in srgb,var(--global-accent) 15%,#182126)}\n@media(max-width:850px){.payment-receipt-layout{grid-template-columns:1fr}.payment-receipt-grid{grid-template-columns:1fr}}\n</style>\n</head>
 
 <body>
 
@@ -3848,22 +3848,138 @@ onclick="if(event.target===this) closeAddStudent()"
 
 </div>
 
-<!-- PAYMENT -->
+<!-- PAYMENT RECEIPT -->
 
 <div id="paymentPage" class="page">
 
-<h2 style="margin-top:0">Payment</h2>
+<h2 style="margin-top:0">Payment Receipt</h2>
 
 <div class="page-back-wrap">
 <button type="button" class="page-back-btn" onclick="backToDashboard()">← Back to Dashboard</button>
 </div>
 
-<div class="panel">
-<div class="panel-title">PAYMENT RECORDS</div>
-<div class="panel-body">
-<p style="margin-top:0">Payment management will be placed here.</p>
-<p class="small">This section can later contain package, amount paid, payment date, balance, and payment status.</p>
+<div class="payment-receipt-layout">
+
+<div class="panel payment-receipt-form-panel">
+  <div class="payment-receipt-header">
+    <div>
+      <h3>PAYMENT RECEIPT</h3>
+      <p>Create a receipt for a student's payment and send it to the parent.</p>
+    </div>
+    <button type="button" class="payment-add-btn" onclick="openPaymentStudentPicker()">＋ Add Student</button>
+  </div>
+
+  <div class="panel-body">
+    <div id="paymentReceiptStudentSummary" class="payment-student-summary">
+      <strong>No student selected</strong>
+      <span>Click “Add Student” to choose a student.</span>
+    </div>
+
+    <input type="hidden" id="paymentReceiptStudentId">
+
+    <div class="payment-receipt-grid">
+      <div>
+        <label>Receipt No.</label>
+        <input id="paymentReceiptNo" placeholder="Auto-generated receipt number">
+      </div>
+      <div>
+        <label>Payment Date</label>
+        <input id="paymentReceiptDate" type="date">
+      </div>
+      <div>
+        <label>Package</label>
+        <input id="paymentReceiptPackage" placeholder="e.g. 20 Classes">
+      </div>
+      <div>
+        <label>Amount Paid by Student</label>
+        <input id="paymentReceiptAmount" type="number" min="0" step="0.01" placeholder="0.00" oninput="updatePaymentReceiptPreview();updatePaymentCurrencyConversion()">
+      </div>
+      <div>
+        <label>Student Currency</label>
+        <select id="paymentReceiptStudentCurrency" onchange="updatePaymentCurrencyConversion()">
+          <option value="PHP">PHP — Philippine Peso</option>
+          <option value="VND">VND — Vietnamese Dong</option>
+          <option value="RMB">RMB — Chinese Yuan</option>
+          <option value="THB">THB — Thai Baht</option>
+          <option value="USD">USD — US Dollar</option>
+          <option value="EUR">EUR — Euro</option>
+          <option value="SGD">SGD — Singapore Dollar</option>
+          <option value="MYR">MYR — Malaysian Ringgit</option>
+          <option value="JPY">JPY — Japanese Yen</option>
+          <option value="KRW">KRW — South Korean Won</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Payment Method</label>
+        <select id="paymentReceiptMethod" onchange="togglePaymentOtherMethod();updatePaymentReceiptPreview()">
+          <option>Bank Transfer</option>
+          <option>GCash</option>
+          <option>InstaPay</option>
+          <option>PayPal</option>
+          <option>Cash</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div id="paymentReceiptOtherMethodWrap" style="display:none">
+        <label>Specify Payment Method</label>
+        <input id="paymentReceiptOtherMethod" placeholder="e.g. Wise, Western Union, Alipay" oninput="updatePaymentReceiptPreview()">
+      </div>
+      <div>
+        <label>Payment Status</label>
+        <select id="paymentReceiptStatus" onchange="updatePaymentReceiptPreview()">
+          <option>Paid</option>
+          <option>Partial Payment</option>
+          <option>Pending</option>
+        </select>
+      </div>
+      <div>
+        <label>Reference No. / Transaction ID</label>
+        <input id="paymentReceiptReference" placeholder="Optional" oninput="updatePaymentReceiptPreview()">
+      </div>
+      <div class="payment-receipt-full">
+        <label>Notes</label>
+        <textarea id="paymentReceiptNotes" placeholder="Optional note for the parent..." oninput="updatePaymentReceiptPreview()"></textarea>
+      </div>
+    </div>
+
+    <div id="paymentReceiptStatusMessage" class="status" style="margin-top:12px"></div>
+
+    <div class="payment-receipt-actions">
+      <button type="button" class="modal-save" onclick="savePaymentReceipt()">Save Receipt</button>
+      <button type="button" class="primary-action" id="paymentReceiptDownloadBtn" onclick="downloadPaymentReceipt()" disabled>Download / PDF</button>
+      <button type="button" class="modal-cancel" onclick="clearPaymentReceipt()">Clear</button>
+    </div>
+  </div>
 </div>
+
+<div class="panel payment-receipt-preview-panel">
+  <div class="panel-title">PARENT RECEIPT PREVIEW</div>
+  <div class="panel-body">
+    <div id="paymentReceiptPreviewWrap" class="payment-receipt-preview-wrap">
+      <canvas id="paymentReceiptCanvas" width="900" height="1200"></canvas>
+    </div>
+    <div class="small" style="margin-top:10px">Save the receipt first. After saving, “Download / PDF” becomes available. The downloaded image is suitable for sending to parents.</div>
+  </div>
+</div>
+
+</div>
+
+<!-- PAYMENT STUDENT PICKER -->
+<div id="paymentStudentPickerModal" class="modal-backdrop" onclick="if(event.target===this)closePaymentStudentPicker()">
+  <div class="modal payment-student-picker-modal">
+    <div class="student-add-modal-header">
+      <div>
+        <h3 style="margin:0">Add Student</h3>
+        <div class="small" style="margin-top:4px">Choose the student who made the payment.</div>
+      </div>
+      <button type="button" class="student-modal-close" onclick="closePaymentStudentPicker()" aria-label="Close">×</button>
+    </div>
+    <div id="paymentStudentPickerList" class="payment-student-picker-list"></div>
+    <div class="modal-actions">
+      <button type="button" class="modal-cancel" onclick="closePaymentStudentPicker()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 </div>
@@ -6755,6 +6871,11 @@ function backToDashboard(){
 ========================================================= */
 
 function showPage(page){
+if(page==='payment'){
+  if(!paymentReceiptEl('paymentReceiptNo')?.value) resetPaymentReceiptForm();
+  setTimeout(updatePaymentReceiptPreview,30);
+}
+
 
 closeProfilePanel();
 
@@ -11698,6 +11819,243 @@ async function runNetworkTest(){
  document.addEventListener('click',e=>{const p=document.getElementById('portalSettingsPanel');const b=document.getElementById('settingsGearBtn');if(p&&p.classList.contains('show')&&!p.contains(e.target)&&!b?.contains(e.target))closePortalSettings();});
 })();
 
+
+
+/* =========================================================
+   PAYMENT RECEIPT
+========================================================= */
+const PAYMENT_RECEIPTS_BASE_KEY='teacherDanyealPaymentReceipts_v2';
+let paymentReceiptSaved=false;
+let paymentReceiptCurrentId='';
+
+function getPaymentReceipts(){
+  try{return JSON.parse(localStorage.getItem(userStorageKey(PAYMENT_RECEIPTS_BASE_KEY))||'[]');}
+  catch(e){return [];}
+}
+function savePaymentReceipts(data){
+  localStorage.setItem(userStorageKey(PAYMENT_RECEIPTS_BASE_KEY),JSON.stringify(data));
+}
+function paymentReceiptEl(id){return document.getElementById(id);}
+function paymentReceiptToday(){return getLocalDateString(new Date());}
+function makePaymentReceiptNo(){
+  const d=new Date();
+  const stamp=d.getFullYear().toString()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  return `TD-${stamp}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
+}
+function openPaymentStudentPicker(){
+  const modal=paymentReceiptEl('paymentStudentPickerModal');
+  const list=paymentReceiptEl('paymentStudentPickerList');
+  if(!modal||!list)return;
+  const students=getStudents();
+  if(!students.length){list.innerHTML='<div class="empty">No students yet. Please add a student first.</div>';}
+  else{
+    list.innerHTML=students.map(s=>`<button type="button" class="payment-student-picker-item" onclick="selectPaymentReceiptStudent('${escapeAttr(s.id)}')"><b>${escapeHtml(s.name||'Unnamed Student')}</b><span>ID: ${escapeHtml(s.id||'—')} · ${escapeHtml(s.email||'No parent Gmail')}</span></button>`).join('');
+  }
+  modal.classList.add('show');
+}
+function closePaymentStudentPicker(){
+  const modal=paymentReceiptEl('paymentStudentPickerModal');
+  if(modal)modal.classList.remove('show');
+}
+function selectPaymentReceiptStudent(id){
+  const student=getStudents().find(s=>s.id===id);
+  if(!student)return;
+  paymentReceiptEl('paymentReceiptStudentId').value=student.id;
+  const summary=paymentReceiptEl('paymentReceiptStudentSummary');
+  if(summary)summary.innerHTML=`<strong>${escapeHtml(student.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(student.id||'—')} · Parent Gmail: ${escapeHtml(student.email||'—')}</span>`;
+  const pkg=paymentReceiptEl('paymentReceiptPackage');
+  if(pkg&&!pkg.value)pkg.value=student.packageName||'';
+  closePaymentStudentPicker();
+  updatePaymentReceiptPreview();
+}
+function resetPaymentReceiptForm(){
+  paymentReceiptEl('paymentReceiptStudentId').value='';
+  paymentReceiptEl('paymentReceiptNo').value=makePaymentReceiptNo();
+  paymentReceiptEl('paymentReceiptDate').value=paymentReceiptToday();
+  paymentReceiptEl('paymentReceiptPackage').value='';
+  paymentReceiptEl('paymentReceiptAmount').value='';
+  paymentReceiptEl('paymentReceiptStudentCurrency').value='PHP';
+  paymentReceiptEl('paymentReceiptOtherMethod').value='';
+  paymentReceiptEl('paymentReceiptMethod').value='Bank Transfer';
+  togglePaymentOtherMethod();
+  paymentReceiptEl('paymentReceiptStatus').value='Paid';
+  paymentReceiptEl('paymentReceiptReference').value='';
+  paymentReceiptEl('paymentReceiptNotes').value='';
+  const summary=paymentReceiptEl('paymentReceiptStudentSummary');
+  if(summary)summary.innerHTML='<strong>No student selected</strong><span>Click “Add Student” to choose a student.</span>';
+  paymentReceiptSaved=false;
+  paymentReceiptCurrentId='';
+  const btn=paymentReceiptEl('paymentReceiptDownloadBtn');
+  if(btn)btn.disabled=true;
+  updatePaymentReceiptPreview();
+}
+function clearPaymentReceipt(){
+  resetPaymentReceiptForm();
+  const status=paymentReceiptEl('paymentReceiptStatusMessage');
+  if(status){status.textContent='Receipt form cleared.';status.className='status';}
+}
+function togglePaymentOtherMethod(){
+  const method=paymentReceiptEl('paymentReceiptMethod');
+  const wrap=paymentReceiptEl('paymentReceiptOtherMethodWrap');
+  if(wrap)wrap.style.display=method&&method.value==='Other'?'block':'none';
+}
+function updatePaymentCurrencyConversion(){
+  updatePaymentReceiptPreview();
+}
+function loadPaymentReceiptConversion(data){
+  const el=paymentReceiptEl('paymentReceiptStudentCurrency');
+  if(el)el.value=data.studentCurrency||data.currency||'PHP';
+  togglePaymentOtherMethod();
+  updatePaymentReceiptPreview();
+}
+
+function getPaymentReceiptData(){
+  const studentId=paymentReceiptEl('paymentReceiptStudentId')?.value||'';
+  const student=getStudents().find(s=>s.id===studentId);
+  return {
+    id:paymentReceiptCurrentId||`pay_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
+    receiptNo:paymentReceiptEl('paymentReceiptNo')?.value.trim()||makePaymentReceiptNo(),
+    studentId,
+    studentName:student?.name||'',
+    studentEmail:student?.email||'',
+    packageName:paymentReceiptEl('paymentReceiptPackage')?.value.trim()||'',
+    amount:paymentReceiptEl('paymentReceiptAmount')?.value||'',
+    currency:paymentReceiptEl('paymentReceiptStudentCurrency')?.value||'PHP',
+    studentCurrency:paymentReceiptEl('paymentReceiptStudentCurrency')?.value||'PHP',
+    method:paymentReceiptEl('paymentReceiptMethod')?.value==='Other'?(paymentReceiptEl('paymentReceiptOtherMethod')?.value.trim()||'Other'):(paymentReceiptEl('paymentReceiptMethod')?.value||''),
+    otherMethod:paymentReceiptEl('paymentReceiptOtherMethod')?.value.trim()||'',
+    status:paymentReceiptEl('paymentReceiptStatus')?.value||'Paid',
+    reference:paymentReceiptEl('paymentReceiptReference')?.value.trim()||'',
+    notes:paymentReceiptEl('paymentReceiptNotes')?.value.trim()||'',
+    paymentDate:paymentReceiptEl('paymentReceiptDate')?.value||paymentReceiptToday(),
+    createdAt:new Date().toISOString()
+  };
+}
+function setPaymentReceiptStatus(message,ok=false){
+  const el=paymentReceiptEl('paymentReceiptStatusMessage');
+  if(!el)return;
+  el.textContent=message;
+  el.className='status'+(ok?' success':'');
+}
+function savePaymentReceipt(){
+  const studentId=paymentReceiptEl('paymentReceiptStudentId')?.value||'';
+  if(!studentId)return setPaymentReceiptStatus('Please click “Add Student” and select a student.',false);
+  const data=getPaymentReceiptData();
+  if(!data.amount || Number(data.amount)<=0)return setPaymentReceiptStatus('Please enter the amount paid.',false);
+  if(!data.packageName)return setPaymentReceiptStatus('Please enter the package.',false);
+  const receipts=getPaymentReceipts();
+  const existingIndex=receipts.findIndex(r=>r.id===data.id);
+  if(existingIndex>=0)receipts[existingIndex]=data; else receipts.unshift(data);
+  savePaymentReceipts(receipts);
+
+  const students=getStudents();
+  const idx=students.findIndex(s=>s.id===studentId);
+  if(idx>=0){
+    const existing=Array.isArray(students[idx].paymentReceipts)?students[idx].paymentReceipts:[];
+    const paymentIndex=existing.findIndex(r=>r.id===data.id);
+    if(paymentIndex>=0)existing[paymentIndex]=data; else existing.unshift(data);
+    students[idx].paymentReceipts=existing;
+    students[idx].lastPaymentDate=data.paymentDate;
+    students[idx].lastPaymentAmount=data.amount;
+    students[idx].lastPaymentReceiptNo=data.receiptNo;
+    saveStudents(students);
+  }
+  paymentReceiptCurrentId=data.id;
+  paymentReceiptSaved=true;
+  paymentReceiptEl('paymentReceiptNo').value=data.receiptNo;
+  const btn=paymentReceiptEl('paymentReceiptDownloadBtn');
+  if(btn)btn.disabled=false;
+  setPaymentReceiptStatus(`Receipt ${data.receiptNo} saved to ${data.studentName}'s Student Record.`,true);
+  updatePaymentReceiptPreview();
+  renderDashboard();
+  renderStudents();
+}
+function updatePaymentReceiptPreview(){
+  const canvas=paymentReceiptEl('paymentReceiptCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const W=900,H=1200;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--global-accent').trim()||'#00e5e5';
+  const soft=getComputedStyle(document.documentElement).getPropertyValue('--global-accent-soft').trim()||'#e7ffff';
+  const dark=getComputedStyle(document.documentElement).getPropertyValue('--global-accent-dark').trim()||'#00bcbc';
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=soft;roundRectCanvas(ctx,40,40,W-80,150,24);ctx.fill();
+  const data=getPaymentReceiptData();
+  const titleX=75;
+  ctx.fillStyle=dark;ctx.font='800 34px Arial';ctx.fillText('PAYMENT RECEIPT',titleX,92);
+  ctx.fillStyle='#475467';ctx.font='500 18px Arial';ctx.fillText('Teacher Danyeal’s English Class',titleX,128);
+  ctx.fillStyle='#667085';ctx.font='600 16px Arial';ctx.fillText('Receipt No.',610,82);
+  ctx.fillStyle='#111827';ctx.font='700 17px Arial';ctx.fillText(data.receiptNo||'—',610,110);
+  ctx.fillStyle='#667085';ctx.font='600 16px Arial';ctx.fillText('Payment Date',610,140);
+  ctx.fillStyle='#111827';ctx.font='700 17px Arial';ctx.fillText(data.paymentDate||'—',610,168);
+  let y=250;
+  receiptCanvasRow(ctx,'Student',data.studentName||'Select a student',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Student ID',data.studentId||'—',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Package',data.packageName||'—',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Amount Paid',data.amount?`${data.studentCurrency||data.currency||'PHP'} ${Number(data.amount).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`:'—',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Payment Method',data.method||'—',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Status',data.status||'—',y,accent);y+=75;
+  receiptCanvasRow(ctx,'Reference No.',data.reference||'—',y,accent);y+=105;
+  ctx.strokeStyle='#e5e7eb';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(75,y);ctx.lineTo(825,y);ctx.stroke();y+=55;
+  ctx.fillStyle=dark;ctx.font='800 20px Arial';ctx.fillText('Notes',75,y);y+=35;
+  ctx.fillStyle='#344054';ctx.font='500 18px Arial';
+  wrapCanvasText(ctx,data.notes||'Thank you for your payment.',75,y,750,28);
+  ctx.fillStyle='#98a2b3';ctx.font='500 15px Arial';ctx.fillText('Please keep this receipt for your records.',75,1115);
+  ctx.fillStyle=accent;roundRectCanvas(ctx,75,1140,750,4,2);ctx.fill();
+}
+function roundRectCanvas(ctx,x,y,w,h,r){
+  const rr=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();
+}
+function receiptCanvasRow(ctx,label,value,y,accent){
+  ctx.fillStyle='#667085';ctx.font='600 16px Arial';ctx.fillText(label,75,y);
+  ctx.fillStyle='#111827';ctx.font='700 20px Arial';ctx.fillText(String(value).slice(0,55),330,y);
+  ctx.strokeStyle='#eef0f3';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(75,y+20);ctx.lineTo(825,y+20);ctx.stroke();
+}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=String(text||'').split(/\\s+/);let line='';
+  for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,x,y);y+=lineHeight;line=word;}else line=test;}
+  if(line)ctx.fillText(line,x,y);
+}
+function downloadPaymentReceipt(){
+  if(!paymentReceiptSaved)return setPaymentReceiptStatus('Please save the receipt first.',false);
+  updatePaymentReceiptPreview();
+  const canvas=paymentReceiptEl('paymentReceiptCanvas');
+  if(!canvas)return;
+  const data=getPaymentReceiptData();
+  const link=document.createElement('a');
+  link.download=`Payment-Receipt-${(data.studentName||'Student').replace(/[^a-z0-9]+/gi,'-')}-${data.receiptNo}.png`;
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  setPaymentReceiptStatus('Receipt image downloaded. You can send the PNG directly to the parent. For PDF, use your browser print option and choose “Save as PDF”.',true);
+}
+
+function openSavedPaymentReceipt(id){
+  const receipts=getPaymentReceipts();
+  const data=receipts.find(r=>r.id===id);
+  if(!data)return;
+  paymentReceiptCurrentId=data.id;paymentReceiptSaved=true;
+  paymentReceiptEl('paymentReceiptStudentId').value=data.studentId||'';
+  paymentReceiptEl('paymentReceiptNo').value=data.receiptNo||makePaymentReceiptNo();
+  paymentReceiptEl('paymentReceiptDate').value=data.paymentDate||paymentReceiptToday();
+  paymentReceiptEl('paymentReceiptPackage').value=data.packageName||'';
+  paymentReceiptEl('paymentReceiptAmount').value=data.amount||'';
+  paymentReceiptEl('paymentReceiptStudentCurrency').value=data.studentCurrency||data.currency||'PHP';
+  paymentReceiptEl('paymentReceiptMethod').value=['Bank Transfer','GCash','InstaPay','PayPal','Cash','Other'].includes(data.method)?data.method:'Other';
+  paymentReceiptEl('paymentReceiptStatus').value=data.status||'Paid';
+  loadPaymentReceiptConversion(data);
+  paymentReceiptEl('paymentReceiptReference').value=data.reference||'';
+  paymentReceiptEl('paymentReceiptNotes').value=data.notes||'';
+  const student=getStudents().find(s=>s.id===data.studentId);
+  paymentReceiptEl('paymentReceiptStudentSummary').innerHTML=student?`<strong>${escapeHtml(student.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(student.id||'—')} · Parent Gmail: ${escapeHtml(student.email||'—')}</span>`:'<strong>Student not found</strong>';
+  paymentReceiptEl('paymentReceiptDownloadBtn').disabled=false;
+  showPage('payment');updatePaymentReceiptPreview();
+}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{togglePaymentOtherMethod();updatePaymentCurrencyConversion();},{once:true});else {togglePaymentOtherMethod();updatePaymentCurrencyConversion();}
+
 </script>
 
 
@@ -12366,6 +12724,7 @@ body.portal-dark textarea:disabled{
   border-color:#3b4a51!important;
   opacity:1!important;
 }
+
 </style>
 </body>
 </html>
