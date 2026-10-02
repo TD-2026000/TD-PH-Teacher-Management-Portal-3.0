@@ -2704,6 +2704,145 @@ html.portal-font-active .font-choice{
 
 </style>
 
+
+<style id="teacher-profile-theme-polish">
+/* Teacher Account popup: readable text/controls in both dark and light themes */
+.profile-panel{
+  border-radius:18px!important;
+  overflow:hidden!important;
+}
+.profile-panel-header{
+  margin:12px 12px 0!important;
+  padding:14px 16px!important;
+  border-radius:14px!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.06)!important;
+}
+.profile-fields{
+  padding:0 20px 20px!important;
+}
+
+/* Dark dashboard: keep popup dark, but make text light for visibility */
+body.portal-dark .profile-panel{
+  background:#252525!important;
+  color:#f5f5f5!important;
+  border-color:var(--global-accent-dark,#00bcbc)!important;
+}
+body.portal-dark .profile-panel-header{
+  background:#303030!important;
+  border-color:var(--global-accent-dark,#00bcbc)!important;
+}
+body.portal-dark .profile-panel-header .profile-header-name b,
+body.portal-dark .profile-panel-header .profile-header-name span,
+body.portal-dark .profile-fields .profile-field label,
+body.portal-dark .profile-panel label{
+  color:#f5f5f5!important;
+}
+body.portal-dark .profile-fields .profile-field input,
+body.portal-dark .profile-fields .profile-field select,
+body.portal-dark .profile-fields .profile-field textarea{
+  background:#fff!important;
+  color:#111!important;
+  border-color:var(--global-accent-dark,#00bcbc)!important;
+}
+
+/* Light dashboard: dark text for readable contrast */
+body:not(.portal-dark) .profile-panel{
+  color:#111!important;
+}
+body:not(.portal-dark) .profile-panel-header .profile-header-name b,
+body:not(.portal-dark) .profile-panel-header .profile-header-name span,
+body:not(.portal-dark) .profile-fields .profile-field label,
+body:not(.portal-dark) .profile-panel label{
+  color:#111!important;
+}
+body:not(.portal-dark) .profile-fields .profile-field input,
+body:not(.portal-dark) .profile-fields .profile-field select,
+body:not(.portal-dark) .profile-fields .profile-field textarea{
+  background:#fff!important;
+  color:#111!important;
+}
+</style>
+
+<style id="add-student-theme-header-fix">
+/* Add Student modal: theme-aware curved header */
+.student-add-modal{
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  border:1px solid var(--global-border,#b8f7f7)!important;
+}
+.student-add-modal-header{
+  margin:0!important;
+  padding:16px 18px!important;
+  background:var(--global-accent-soft,#e7ffff)!important;
+  border:1px solid var(--global-border,#b8f7f7)!important;
+  border-radius:16px!important;
+  color:var(--global-accent-dark,#00bcbc)!important;
+}
+.student-add-modal-header h3{
+  color:var(--global-accent-dark,#00bcbc)!important;
+}
+.student-add-modal-header .small{
+  color:var(--global-accent-dark,#00bcbc)!important;
+  opacity:.85;
+}
+.student-modal-close{
+  background:var(--global-accent-pale,#f5ffff)!important;
+  color:var(--global-accent-dark,#00bcbc)!important;
+  border:1px solid var(--global-border,#b8f7f7)!important;
+  border-radius:10px!important;
+}
+.student-modal-close:hover{
+  background:var(--global-accent-soft,#e7ffff)!important;
+}
+.student-add-grid{
+  padding:18px 18px 0!important;
+}
+.student-add-modal > .status{
+  margin-left:18px!important;
+  margin-right:18px!important;
+}
+.student-add-modal > .modal-actions{
+  padding:0 18px 18px!important;
+}
+body.portal-dark .student-add-modal{
+  background:#182126!important;
+}
+body.portal-dark .student-add-modal-header{
+  background:color-mix(in srgb,var(--global-accent) 18%,#182126)!important;
+  border-color:var(--global-accent-dark)!important;
+  color:#fff!important;
+}
+body.portal-dark .student-add-modal-header h3,
+body.portal-dark .student-add-modal-header .small{
+  color:#fff!important;
+}
+</style>
+
+
+<style id="add-student-header-contrast-fix">
+/* Add Student: light theme header needs dark, readable text */
+.student-add-modal-header{
+  color:#111!important;
+}
+.student-add-modal-header h3,
+.student-add-modal-header .small,
+.student-add-modal-header label,
+.student-add-modal-header span{
+  color:#111!important;
+  text-shadow:none!important;
+}
+.student-add-modal-header .student-modal-close{
+  color:#111!important;
+  background:rgba(255,255,255,.78)!important;
+  border:1px solid rgba(0,0,0,.12)!important;
+}
+.student-add-modal-header .student-modal-close:hover{
+  background:#fff!important;
+  color:#000!important;
+}
+</style>
 </head>
 
 <body>
@@ -11667,9 +11806,9 @@ body.portal-dark .teacher-dashboard-card,
 body.portal-dark .dashboard-menu-sub,
 body.portal-dark .font-preview,
 body.portal-dark .table-wrap{
-  background:var(--global-accent-soft)!important;
-  color:var(--global-text-on-soft)!important;
-  border-color:var(--global-accent)!important;
+  background:#182126!important;
+  color:#f3f7f9!important;
+  border-color:#394950!important;
 }
 
 /* Dark text automatically becomes light on dark surfaces */
