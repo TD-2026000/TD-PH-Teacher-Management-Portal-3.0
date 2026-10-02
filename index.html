@@ -3089,6 +3089,27 @@ body.portal-dark .student-add-modal-header .small{
 }
 </style>
 
+
+<style id="inspirational-quotes-style">
+.inspirational-quotes-card{
+  margin:22px 0 6px; padding:24px 28px; text-align:center;
+  background:var(--global-accent-pale,#f8ffff);
+  border:1px solid var(--global-border,#b8f7f7);
+  border-radius:20px; box-shadow:0 8px 24px rgba(0,0,0,.07);
+  overflow:hidden;
+}
+.inspirational-quotes-label{font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--global-accent-dark,#008f8f);margin-bottom:2px}
+.quote-text{font-size:20px;line-height:1.2;font-weight:700;color:#172027;min-height:0;display:flex;align-items:center;justify-content:center}
+.quote-author{margin-top:2px;font-size:13px;font-weight:800;color:#667085}
+.quote-enter{animation:quoteEnter .65s ease both}
+@keyframes quoteEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+body.portal-dark .inspirational-quotes-card{background:color-mix(in srgb,var(--global-accent) 16%,#182126)!important;border-color:var(--global-accent-dark)!important}
+body.portal-dark .inspirational-quotes-label{color:#f4fbfc!important}
+body.portal-dark .quote-text{color:#f5f9fa!important}
+body.portal-dark .quote-author{color:#c5d2d6!important}
+@media(max-width:650px){.inspirational-quotes-card{padding:20px 16px}.quote-text{font-size:17px;min-height:80px}}
+</style>
+
 </head>
 
 <body>
@@ -3654,20 +3675,20 @@ Dashboard
 <span class="dashboard-menu-label">EVALUATION</span>
 </button>
 
-<button type="button" class="dashboard-menu-btn" onclick="showPage('records')">
-<span class="dashboard-menu-label">RECORD OF EVALUATION</span>
-</button>
-
 <button type="button" class="dashboard-menu-btn" onclick="showPage('contract')">
 <span class="dashboard-menu-label">STUDENT CONTRACT</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('appointment')">
-<span class="dashboard-menu-label">APPOINTMENT</span>
+<span class="dashboard-menu-label">APPOINTMENTS</span>
 </button>
 
 <button type="button" class="dashboard-menu-btn" onclick="showPage('payment')">
 <span class="dashboard-menu-label">PAYMENT</span>
+</button>
+
+<button type="button" class="dashboard-menu-btn" onclick="showPage('records')">
+<span class="dashboard-menu-label">RECORD OF EVALUATION</span>
 </button>
 </div>
 
@@ -3692,6 +3713,15 @@ Last Evaluation
 
 
 
+
+
+
+<!-- INSPIRATIONAL QUOTES -->
+<div id="inspirationalQuotes" class="inspirational-quotes-card" aria-live="polite">
+  <div class="inspirational-quotes-label">INSPIRATIONAL QUOTE</div>
+  <div id="quoteText" class="quote-text">“The only way to do great work is to love what you do.”</div>
+  <div id="quoteAuthor" class="quote-author">— Teacher Danyeal</div>
+</div>
 
 </div>
 
@@ -13054,5 +13084,33 @@ body.portal-dark .payment-picker-empty{color:#b9c7cc!important}
 @media(max-width:900px){.payment-receipt-layout{grid-template-columns:1fr}}
 @media(max-width:650px){.payment-receipt-grid{grid-template-columns:1fr}.payment-receipt-full{grid-column:auto}.payment-receipt-header{align-items:flex-start;flex-direction:column}.payment-add-btn{width:100%}}
 </style>
+
+<script id="inspirational-quotes-script">
+(function(){
+  const quotes = ["A good teacher can inspire hope, ignite the imagination, and instill a love of learning.", "The art of teaching is the art of assisting discovery.", "Teaching is the profession that creates all other professions.", "The influence of a good teacher can never be erased.", "Education is not the filling of a pail, but the lighting of a fire.", "The best teachers are those who show you where to look but don’t tell you what to see.", "A teacher affects eternity; he can never tell where his influence stops.", "The beautiful thing about learning is that nobody can take it away from you.", "The mediocre teacher tells. The good teacher explains. The superior teacher demonstrates. The great teacher inspires.", "Teaching is a work of heart.", "Language is the road map of a culture. It tells you where its people come from and where they are going.", "Learning another language is not only learning different words for the same things, but learning another way to think about things.", "One language sets you in a corridor for life. Two languages open every door along the way.", "To have another language is to possess a second soul.", "A different language is a different vision of life.", "Language shapes the way we think and determines what we can think about.", "The limits of my language mean the limits of my world.", "Every word you teach is a bridge to a new world.", "An ESL teacher does not just teach words; they open doors to opportunities.", "Every conversation in English is a step toward confidence.", "A screen may separate us, but learning connects us.", "Behind every online lesson is a teacher creating possibilities.", "Distance is never a barrier when passion connects teacher and learner.", "Technology connects classrooms, but teachers connect hearts.", "An online teacher is a guide, a motivator, and a bridge across cultures.", "Virtual classrooms may be digital, but the impact is real.", "Great online teachers make students feel seen, heard, and valued.", "A webcam can show a face, but a great teacher shows compassion.", "Teaching online is not about being in the same room; it is about creating the same connection.", "The best online teachers bring warmth into a digital world.", "The future of the world is in my classroom today.", "Teachers plant seeds of knowledge that grow forever.", "Your student may forget what you taught, but they will never forget how you made them feel.", "The greatest sign of success for a teacher is to be able to say, “The children are now working as if I did not exist.”", "Children are not things to be molded, but people to be unfolded.", "The influence of teachers extends beyond the classroom.", "A teacher’s job is not only to teach, but to awaken curiosity.", "Every learner deserves a teacher who believes in them.", "The best teachers teach from the heart, not from the book.", "Teaching is the greatest act of optimism.", "Helping learners find their voice, one word at a time.", "Teaching English, building confidence, connecting cultures.", "Every lesson is a chance to inspire growth.", "Making English learning simple, meaningful, and enjoyable.", "Empowering students to communicate with confidence.", "More than teaching English—I help students discover their potential.", "Creating confident English speakers across the globe.", "Bringing language, culture, and connection together.", "A teacher today, a lifelong influence tomorrow.", "Helping students turn English into opportunities.", "Teach. Inspire. Empower.", "Small lessons create big futures.", "Every learner has a story. Help them tell it.", "Confidence begins with communication.", "Words create worlds.", "Teach with patience. Inspire with purpose.", "Every mistake is a step toward fluency.", "Progress matters more than perfection.", "A confident speaker starts with a supportive teacher.", "Every student can shine with the right guidance.", "Coffee, camera, classroom—ready to inspire.", "Behind this screen is a teacher who believes in every learner.", "Teaching English today, shaping global citizens tomorrow.", "My classroom has no walls, only endless possibilities.", "From my screen to your dreams.", "Different countries, one language, one connection.", "Teaching English, creating friendships worldwide.", "Every lesson is a journey, every student is a story.", "Online teaching: connecting minds beyond borders.", "The world is my classroom, and learning is my mission.", "A teacher’s kindness can become a student’s confidence.", "Behind every fluent speaker is someone who believed they could learn.", "The greatest reward of teaching is seeing students believe in themselves.", "Teachers don’t just teach languages; they build courage.", "A patient teacher creates a fearless learner.", "Every student deserves someone who never gives up on them.", "Teaching is touching lives one lesson at a time.", "A great teacher leaves footprints on the hearts of learners.", "The best lessons are remembered because they are felt.", "Your encouragement today can become someone’s confidence tomorrow.", "Teaching English is not only about grammar; it is about communication and connection.", "An effective teacher creates learners who no longer need constant guidance.", "The goal of teaching is not perfection, but progress.", "Every learner has potential waiting for the right opportunity.", "Good teachers teach skills; great teachers inspire growth.", "A teacher’s voice can become a student’s inner confidence.", "Learning happens when students feel safe, supported, and inspired.", "Teaching is the bridge between knowledge and possibility.", "The best investment a teacher makes is believing in learners.", "Great teaching begins with understanding the learner.", "Do not teach students what to think; teach them how to think.", "The task of the educator is to teach students to see the vitality in themselves.", "The mind is not a vessel to be filled, but a fire to be kindled.", "Education is the passport to the future.", "A teacher opens the door, but the learner must walk through it.", "Every expert was once a beginner.", "Learning never exhausts the mind.", "The best teachers are lifelong learners.", "Teach with passion, lead with kindness.", "Your lesson may last an hour, but your impact can last a lifetime."];
+  let quoteIndex = 0;
+  function showQuote(index, animate=true){
+    const text=document.getElementById('quoteText');
+    if(!text||!quotes.length)return;
+    if(animate){
+      text.classList.remove('quote-enter');
+      void text.offsetWidth;
+      text.classList.add('quote-enter');
+    }
+    text.textContent='“'+quotes[index]+'”';
+  }
+  window.initInspirationalQuotes=function(){
+    showQuote(quoteIndex,false);
+    if(window.__tdQuoteTimer) clearInterval(window.__tdQuoteTimer);
+    window.__tdQuoteTimer=setInterval(function(){
+      quoteIndex=(quoteIndex+1)%quotes.length;
+      showQuote(quoteIndex,true);
+    },10000);
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initInspirationalQuotes);
+  else initInspirationalQuotes();
+})();
+</script>
+
 </body>
 </html>
