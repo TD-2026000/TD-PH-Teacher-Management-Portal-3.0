@@ -2889,6 +2889,45 @@ body.portal-dark .student-add-modal-header .small{
   padding-left:58px!important;
 }
 </style>
+
+<style id="payment-student-picker-center-fix">
+#paymentStudentPickerModal.modal-overlay{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:20px!important;
+  z-index:99999!important;
+  background:rgba(0,0,0,.48)!important;
+}
+#paymentStudentPickerModal.modal-overlay[style*="display: block"],
+#paymentStudentPickerModal.modal-overlay[style*="display:block"]{
+  display:flex!important;
+}
+#paymentStudentPickerModal .payment-student-picker-modal{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:min(560px,calc(100vw - 40px))!important;
+  max-width:560px!important;
+  max-height:min(720px,calc(100vh - 40px))!important;
+  margin:0!important;
+  overflow:hidden!important;
+  border-radius:18px!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.30)!important;
+}
+#paymentStudentPickerModal .modal-header{
+  border-radius:16px 16px 0 0!important;
+}
+#paymentStudentPickerModal .modal-body{
+  max-height:calc(100vh - 150px)!important;
+  overflow-y:auto!important;
+}
+</style>
 </head>
 
 <body>
