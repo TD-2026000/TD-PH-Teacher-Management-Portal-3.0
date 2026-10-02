@@ -2964,6 +2964,131 @@ body.portal-dark .student-add-modal-header .small{
   overflow-y:auto!important;
 }
 </style>
+<style id="payment-student-picker-click-fix">
+#paymentStudentPickerModal{pointer-events:auto!important;}
+#paymentStudentPickerModal .payment-student-picker-modal,
+#paymentStudentPickerModal .modal-body,
+#paymentStudentPickerModal .payment-student-picker-list{pointer-events:auto!important;}
+#paymentStudentPickerModal .payment-student-picker-item{
+  display:flex!important;
+  width:100%!important;
+  min-height:58px!important;
+  align-items:center!important;
+  gap:12px!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  position:relative!important;
+  z-index:100002!important;
+  touch-action:manipulation!important;
+}
+</style>
+
+<style id="payment-student-picker-scroll-final">
+/* Payment Receipt - Select Student: robust scrolling for large student lists */
+#paymentStudentPickerModal.modal-overlay{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:20px!important;
+  overflow:hidden!important;
+  overscroll-behavior:contain!important;
+}
+#paymentStudentPickerModal .payment-student-picker-modal{
+  display:flex!important;
+  flex-direction:column!important;
+  width:min(560px,calc(100vw - 40px))!important;
+  max-width:560px!important;
+  height:min(760px,calc(100vh - 40px))!important;
+  max-height:calc(100vh - 40px)!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+#paymentStudentPickerModal .modal-header{
+  flex:0 0 auto!important;
+}
+#paymentStudentPickerModal .modal-body{
+  display:flex!important;
+  flex-direction:column!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  padding-bottom:14px!important;
+}
+#paymentStudentPickerModal .payment-student-search-wrap{
+  flex:0 0 auto!important;
+  position:sticky!important;
+  top:0!important;
+  z-index:20!important;
+}
+#paymentStudentPickerModal .payment-student-picker-list{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior:contain!important;
+  padding:2px 4px 12px 2px!important;
+  scrollbar-width:auto!important;
+}
+#paymentStudentPickerModal .payment-student-picker-list::-webkit-scrollbar{
+  width:10px!important;
+}
+#paymentStudentPickerModal .payment-student-picker-item{
+  flex:0 0 auto!important;
+}
+@media(max-width:600px){
+  #paymentStudentPickerModal.modal-overlay{
+    padding:10px!important;
+  }
+  #paymentStudentPickerModal .payment-student-picker-modal{
+    width:calc(100vw - 20px)!important;
+    height:calc(100vh - 20px)!important;
+    max-height:calc(100vh - 20px)!important;
+  }
+}
+</style>
+<style id="add-student-modal-scroll-fix-v15">
+/* Add Student: keep modal centered and make the complete form scrollable on smaller screens */
+#addStudentModal{
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  padding:14px!important;
+}
+#addStudentModal .student-add-modal{
+  width:min(820px,calc(100vw - 28px))!important;
+  max-width:820px!important;
+  max-height:calc(100vh - 28px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-gutter:stable!important;
+  padding:20px!important;
+}
+#addStudentModal .student-add-modal::-webkit-scrollbar{width:10px}
+#addStudentModal .student-add-modal::-webkit-scrollbar-track{background:transparent}
+#addStudentModal .student-add-modal::-webkit-scrollbar-thumb{background:var(--global-border,#b8f7f7);border-radius:999px}
+#addStudentModal .student-add-modal::-webkit-scrollbar-thumb:hover{background:var(--global-accent,#00caca)}
+#addStudentModal .student-add-modal-header{position:sticky;top:-20px;z-index:5;padding:14px 0 14px;margin:0 0 16px;background:var(--global-accent-soft,#e7ffff);border:1px solid var(--global-border,#b8f7f7);border-radius:14px;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+#addStudentModal .student-add-modal-header>div:first-child{padding-left:14px}
+#addStudentModal .student-add-modal-header .student-modal-close{margin-right:10px}
+#addStudentModal .modal-actions{position:sticky;bottom:-20px;z-index:5;margin:16px -20px -20px;padding:14px 20px 20px;background:var(--global-accent-pale,#f8ffff);border-top:1px solid var(--global-border,#b8f7f7)}
+@media (max-width:700px){
+  #addStudentModal{padding:8px!important}
+  #addStudentModal .student-add-modal{width:calc(100vw - 16px)!important;max-height:calc(100vh - 16px)!important;padding:14px!important}
+  #addStudentModal .student-add-modal-header{top:-14px}
+  #addStudentModal .modal-actions{bottom:-14px;margin-left:-14px;margin-right:-14px;margin-bottom:-14px;padding-left:14px;padding-right:14px}
+}
+</style>
+
 </head>
 
 <body>
@@ -11991,6 +12116,7 @@ function openPaymentStudentPicker(){
   const modal=document.getElementById('paymentStudentPickerModal'); if(!modal)return;
   const search=document.getElementById('paymentStudentSearch');
   if(search) search.value='';
+  initPaymentStudentPickerClicks();
   renderPaymentStudentPickerList('');
   modal.style.display='flex';
   requestAnimationFrame(()=>{ if(search) search.focus(); });
@@ -12012,10 +12138,23 @@ function renderPaymentStudentPickerList(query=''){
     list.innerHTML='<div class="payment-picker-empty">No student matches your search.</div>';
     return;
   }
-  list.innerHTML=filtered.map(st=>`<button type="button" class="payment-student-picker-item" onclick="selectPaymentReceiptStudent(${JSON.stringify(String(st.id))})">
+  list.innerHTML=filtered.map(st=>`<button type="button" class="payment-student-picker-item" data-payment-student-id="${escapeHtml(String(st.id||''))}">
     <span class="payment-picker-avatar">${escapeHtml((st.name||'?').charAt(0).toUpperCase())}</span>
     <span><b>${escapeHtml(st.name||'Unnamed Student')}</b><small>Student ID: ${escapeHtml(st.id||'—')} · ${escapeHtml(st.email||'—')}</small></span>
   </button>`).join('');
+}
+function initPaymentStudentPickerClicks(){
+  const list=document.getElementById('paymentStudentPickerList');
+  if(!list || list.dataset.clickReady==='1') return;
+  list.dataset.clickReady='1';
+  list.addEventListener('click', function(event){
+    const item=event.target.closest('.payment-student-picker-item');
+    if(!item || !list.contains(item)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const id=item.getAttribute('data-payment-student-id') || '';
+    if(id) selectPaymentReceiptStudent(id);
+  });
 }
 function filterPaymentStudentPicker(){
   const search=document.getElementById('paymentStudentSearch');
