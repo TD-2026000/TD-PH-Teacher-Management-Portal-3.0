@@ -2353,6 +2353,44 @@ button.secondary,
 .contract-rich-editor:focus{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--global-accent) 18%,transparent)}
 .contract-rich-editor ul,.contract-rich-editor ol{padding-left:28px}
 
+
+/* v21 compact contract toolbar: only B, I, U and Font Size remain visible */
+.contract-rich-toolbar{position:relative!important;}
+.contract-rich-toolbar .rich-overflow-wrap{position:relative;display:inline-flex;align-items:center;margin-left:2px}
+.contract-rich-toolbar .rich-more-btn{height:34px;min-width:38px;padding:0 9px;border:1px solid #cfd6df;background:#fff;border-radius:7px;color:#111;font-weight:900;font-size:20px;line-height:1;cursor:pointer}
+.contract-rich-toolbar .rich-more-btn:hover{background:#eef6ff;border-color:#9bbce8}
+.contract-rich-toolbar .rich-overflow-menu{display:none;position:absolute;right:0;top:40px;z-index:9999;width:280px;max-height:390px;overflow:auto;padding:8px;background:#fff;border:1px solid #d0d5dd;border-radius:12px;box-shadow:0 14px 35px rgba(0,0,0,.16)}
+.contract-rich-toolbar .rich-overflow-menu.open{display:flex;flex-direction:column;gap:6px}
+.contract-rich-toolbar .rich-overflow-menu .rich-btn,.contract-rich-toolbar .rich-overflow-menu .rich-select,.contract-rich-toolbar .rich-overflow-menu .rich-color-label{width:100%;box-sizing:border-box}
+.contract-rich-toolbar .rich-overflow-menu .rich-btn{text-align:left}
+.contract-rich-toolbar .rich-overflow-menu .rich-color-label{justify-content:space-between}
+
+
+/* v22 WPS-style More menu */
+.contract-rich-toolbar .rich-overflow-wrap{position:relative;display:inline-flex;align-items:center;margin-left:2px}
+.contract-rich-toolbar .rich-more-btn{height:34px;min-width:62px;padding:0 12px;border:1px solid #cfd6df;background:#fff;border-radius:7px;color:#111;font-weight:800;font-size:13px;line-height:1;cursor:pointer}
+.contract-rich-toolbar .rich-more-btn:hover{background:#eef6ff;border-color:#9bbce8}
+.contract-rich-toolbar .rich-overflow-menu{display:none;position:absolute;right:0;top:40px;z-index:9999;width:300px;max-height:420px;overflow:auto;padding:8px;background:#fff;border:1px solid #d0d5dd;border-radius:12px;box-shadow:0 14px 35px rgba(0,0,0,.16)}
+.contract-rich-toolbar .rich-overflow-menu.open{display:flex;flex-direction:column;gap:6px}
+.contract-rich-toolbar .rich-overflow-menu .rich-btn,.contract-rich-toolbar .rich-overflow-menu .rich-select,.contract-rich-toolbar .rich-overflow-menu .rich-color-label{width:100%;box-sizing:border-box}
+.contract-rich-toolbar .rich-overflow-menu .rich-btn{text-align:left}
+.contract-rich-toolbar .rich-overflow-menu .rich-color-label{justify-content:space-between}
+
+<style id="contract-font-dropdown-preview">
+#contractFontFamily option[value="Arial"]{font-family:Arial,sans-serif}
+#contractFontFamily option[value="Times New Roman"]{font-family:"Times New Roman",serif}
+#contractFontFamily option[value="Georgia"]{font-family:Georgia,serif}
+#contractFontFamily option[value="Calibri"]{font-family:Calibri,sans-serif}
+#contractFontFamily option[value="Verdana"]{font-family:Verdana,sans-serif}
+#contractFontFamily option[value="Tahoma"]{font-family:Tahoma,sans-serif}
+#contractFontFamily option[value="Trebuchet MS"]{font-family:"Trebuchet MS",sans-serif}
+#contractFontFamily option[value="Courier New"]{font-family:"Courier New",monospace}
+#contractFontFamily option[value="Cambria"]{font-family:Cambria,serif}
+#contractFontFamily option[value="Garamond"]{font-family:Garamond,serif}
+#contractFontFamily option[value="Segoe UI"]{font-family:"Segoe UI",sans-serif}
+#contractFontFamily option[value="Roboto"]{font-family:Roboto,sans-serif}
+#contractFontFamily option[value="Poppins"]{font-family:Poppins,sans-serif}
+#contractFontFamily option[value="Montserrat"]{font-family:Montserrat,sans-serif}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -4108,15 +4146,15 @@ onclick="if(event.target===this) closeAddStudent()"
             <button type="button" class="rich-btn" data-cmd="bold" title="Bold"><b>B</b></button>
             <button type="button" class="rich-btn" data-cmd="italic" title="Italic"><i>I</i></button>
             <button type="button" class="rich-btn" data-cmd="underline" title="Underline"><u>U</u></button>
-            <label class="rich-size-label">Font Size <input id="contractFontSize" type="number" min="8" max="96" value="12" title="Font size"></label>
-            <button type="button" class="rich-btn" id="contractFontIncrease" title="Increase font size">A+</button>
-            <button type="button" class="rich-btn" id="contractFontDecrease" title="Decrease font size">A−</button>
+            <button type="button" class="rich-btn" id="contractFontIncrease" title="Increase font size by 1">A+</button>
+            <button type="button" class="rich-btn" id="contractFontDecrease" title="Decrease font size by 1">A−</button>
             <label class="rich-color-label" title="Text Color">Text Color <input id="contractTextColor" type="color" value="#111111"></label>
             <label class="rich-color-label" title="Highlight Color">Highlight <input id="contractHighlightColor" type="color" value="#fff59d"></label>
             <select id="contractFontFamily" class="rich-select" title="Font Style">
-              <option value="Arial">Arial</option><option value="Times New Roman">Times New Roman</option><option value="Georgia">Georgia</option><option value="Calibri">Calibri</option><option value="Verdana">Verdana</option><option value="Tahoma">Tahoma</option><option value="Trebuchet MS">Trebuchet MS</option><option value="Courier New">Courier New</option><option value="Cambria">Cambria</option><option value="Garamond">Garamond</option><option value="Segoe UI">Segoe UI</option><option value="Roboto">Roboto</option><option value="Poppins">Poppins</option><option value="Montserrat">Montserrat</option>
+              <option value="" disabled selected>Font Style</option>
+              <option value="Arial" style="font-family:Arial,sans-serif">Arial</option><option value="Times New Roman" style="font-family:'Times New Roman',serif">Times New Roman</option><option value="Georgia" style="font-family:Georgia,serif">Georgia</option><option value="Calibri" style="font-family:Calibri,sans-serif">Calibri</option><option value="Verdana" style="font-family:Verdana,sans-serif">Verdana</option><option value="Tahoma" style="font-family:Tahoma,sans-serif">Tahoma</option><option value="Trebuchet MS" style="font-family:'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="Courier New" style="font-family:'Courier New',monospace">Courier New</option><option value="Cambria" style="font-family:Cambria,serif">Cambria</option><option value="Garamond" style="font-family:Garamond,serif">Garamond</option><option value="Segoe UI" style="font-family:'Segoe UI',sans-serif">Segoe UI</option><option value="Roboto" style="font-family:Roboto,sans-serif">Roboto</option><option value="Poppins" style="font-family:Poppins,sans-serif">Poppins</option><option value="Montserrat" style="font-family:Montserrat,sans-serif">Montserrat</option>
             </select>
-            <select id="contractAlignment" class="rich-select" title="Alignment"><option value="justifyLeft">Left</option><option value="justifyCenter">Center</option><option value="justifyRight">Right</option><option value="justifyFull">Justify</option></select>
+            <select id="contractAlignment" class="rich-select" title="Alignment"><option value="" disabled selected>Alignment</option><option value="justifyLeft">Left</option><option value="justifyCenter">Center</option><option value="justifyRight">Right</option><option value="justifyFull">Justify</option></select>
             <button type="button" class="rich-btn" data-cmd="insertUnorderedList" title="Bullet List">• List</button>
             <button type="button" class="rich-btn" data-cmd="insertOrderedList" title="Numbered List">1. List</button>
             <button type="button" class="rich-btn" data-cmd="undo" title="Undo">↶</button>
@@ -12073,66 +12111,110 @@ async function previewStudentContract(){
   let modal=document.getElementById('studentContractPreviewModal');
   if(!modal){
    modal=document.createElement('div'); modal.id='studentContractPreviewModal'; modal.className='modal-backdrop';
-   modal.innerHTML=`<div class="modal contract-preview-modal"><div class="modal-header contract-preview-modal-header"><h3>STUDENT CONTRACT PREVIEW</h3><button type="button" class="contract-preview-close-btn" onclick="closeStudentContractPreview()" aria-label="Close preview" title="Close preview">×</button></div><div class="modal-body"><div class="small" style="margin-bottom:10px">US Legal portrait preview • automatic pages when the agreement is long • 12pt document text • Real PDF format</div><div id="studentContractPreviewPages" class="contract-pdf-preview-pages"></div></div></div>`;
+   modal.innerHTML=`<div class="modal contract-preview-modal"><div class="modal-header contract-preview-modal-header"><h3>STUDENT CONTRACT PREVIEW</h3><button type="button" class="contract-preview-close-btn" onclick="closeStudentContractPreview()" aria-label="Close preview" title="Close preview">×</button></div><div class="modal-body"><div class="small" style="margin-bottom:10px">US Legal portrait preview • automatic pages when the agreement is long • formatting preserved from the editor • Real PDF format</div><div id="studentContractPreviewPages" class="contract-pdf-preview-pages"></div></div></div>`;
    modal.addEventListener('click',e=>{if(e.target===modal)closeStudentContractPreview();}); document.body.appendChild(modal);
   }
   const pages=document.getElementById('studentContractPreviewPages'); if(!pages)return; pages.innerHTML='';
   const savedContract=contractSelectedStudentId ? (getStudentContracts()?.[contractSelectedStudentId] || null) : null;
-  const agreement=String(document.getElementById('contractAgreementText')?.value || savedContract?.customSections?.agreementText || '').trim();
-  const lines=agreement ? agreement.split(/\r?\n/).map(x=>x.trim()).filter(Boolean) : ['No contract agreement / terms entered yet.'];
-  const pageHeightPx=14*96, paddingTop=43, paddingBottom=43;
-  const headerPx=82, infoLinePx=24, sectionTitlePx=26, linePx=18, signaturePx=120;
-  const maxFirst=pageHeightPx-paddingTop-paddingBottom-headerPx-(info?Math.max(1,document.querySelectorAll('#contractStudentInfo .contract-info-box').length)*infoLinePx:0)-signaturePx;
-  const maxOther=pageHeightPx-paddingTop-paddingBottom-signaturePx;
-  const chunks=[]; let chunk=[], used=0, limit=maxFirst;
-  lines.forEach(line=>{
-    const estimated=Math.max(linePx, Math.ceil(line.length/92)*linePx)+3;
-    if(chunk.length && used+estimated>limit){chunks.push(chunk);chunk=[];used=0;limit=maxOther;}
-    chunk.push(line);used+=estimated;
+  const editor=document.getElementById('contractAgreementEditor');
+  const liveHtml=editor ? editor.innerHTML.trim() : '';
+  const savedHtml=String(savedContract?.customSections?.agreementHtml||'').trim();
+  const plain=String(editor ? (editor.innerText||editor.textContent||'') : (document.getElementById('contractAgreementText')?.value||savedContract?.customSections?.agreementText||'')).trim();
+  const agreementHtml=liveHtml || savedHtml || (plain ? escapeHtml(plain).replace(/\n/g,'<br>') : '');
+
+  /* Build rich blocks so bold/italic/underline/font size/color/highlight/lists
+     survive into the parent-facing preview. */
+  const source=document.createElement('div');
+  source.innerHTML=agreementHtml || '<div>No contract agreement / terms entered yet.</div>';
+  const rawBlocks=[...source.childNodes].filter(n=>!(n.nodeType===3 && !n.textContent.trim()));
+  const blocks=[];
+  rawBlocks.forEach(n=>{
+    if(n.nodeType===1 && /^(UL|OL)$/i.test(n.tagName)){
+      [...n.children].forEach(li=>{const wrap=document.createElement(n.tagName.toLowerCase()); wrap.innerHTML=li.outerHTML; blocks.push(wrap);});
+    }else if(n.nodeType===1){blocks.push(n.cloneNode(true));}
+    else {const d=document.createElement('div');d.textContent=n.textContent;blocks.push(d);}
+  });
+  if(!blocks.length){const d=document.createElement('div');d.textContent='No contract agreement / terms entered yet.';blocks.push(d);}
+
+  /*
+     IMPORTANT: paginate the actual rich agreement, not a fixed one-page estimate.
+     The old code measured each block but makeContractPreviewPage() also injected
+     the entire agreement once more, which made long agreements appear clipped.
+     We now build clean page shells and split the real agreement content by the
+     rendered height of the page.  The last page reserves space for acknowledgement
+     + signatures, so they can never be pushed outside the legal page.
+  */
+  const pageHeightPx=14*96;
+  const pagePaddingPx=43*2;
+  const headerPx=92+14;
+  const infoCount=document.querySelectorAll('#contractStudentInfo .contract-info-box').length;
+  const infoPx=info ? Math.max(1,infoCount)*24+10 : 0;
+  const firstContentLimit=pageHeightPx-pagePaddingPx-headerPx-infoPx;
+  const otherContentLimit=pageHeightPx-pagePaddingPx;
+  const finalReserve=255;
+
+  function makeMeasure(){
+    const m=document.createElement('div');
+    m.style.cssText='position:absolute;left:-100000px;top:0;width:8.5in;visibility:hidden;pointer-events:none;box-sizing:border-box;padding:43px;color:#111;background:#fff;overflow:visible;';
+    document.body.appendChild(m); return m;
+  }
+  const measure=makeMeasure();
+  const chunks=[]; let chunk=[], used=0, limit=firstContentLimit;
+  blocks.forEach((block)=>{
+    const c=block.cloneNode(true);
+    const holder=document.createElement('div');
+    holder.className='preview-contract-agreement-body';
+    holder.appendChild(c);
+    measure.innerHTML=''; measure.appendChild(holder);
+    const h=Math.max(22,holder.getBoundingClientRect().height)+6;
+    const currentLimit=(limit===otherContentLimit && chunk.length===0) ? otherContentLimit : limit;
+    if(chunk.length && used+h>currentLimit){chunks.push(chunk);chunk=[];used=0;limit=otherContentLimit;}
+    chunk.push(block.cloneNode(true)); used+=h;
   });
   if(chunk.length)chunks.push(chunk);
   if(!chunks.length)chunks.push([]);
 
+  /* Make sure the final page has room for the acknowledgement and signatures. */
+  if(chunks.length===1 && used > Math.max(0,firstContentLimit-finalReserve)){
+    const last=chunks[0]; let moved=[]; let u=0;
+    const firstLimit=Math.max(0,firstContentLimit-finalReserve);
+    last.forEach(block=>{
+      const holder=document.createElement('div'); holder.className='preview-contract-agreement-body'; holder.appendChild(block.cloneNode(true));
+      measure.innerHTML=''; measure.appendChild(holder);
+      const h=Math.max(22,holder.getBoundingClientRect().height)+6;
+      if(last.length-moved.length>1 && u+h>firstLimit){moved.push(block);}
+      else if(moved.length){moved.push(block);}
+      else{u+=h;}
+    });
+    if(moved.length){chunks[0]=last.slice(0,last.length-moved.length);chunks.push(moved);}
+  }
+  measure.remove();
+
   chunks.forEach((chunk,index)=>{
-    const page=makeContractPreviewPage('Page '+(index+1), index===0?info:'', sections, index===0);
+    const page=makeContractPreviewPage('Page '+(index+1), index===0?info:'', [], index===0);
     page.classList.add('contract-legal-portrait-page-final');
+    /* Remove the old full agreement injected by the generic page builder. */
+    page.querySelectorAll('.pdf-preview-agreement').forEach(el=>el.remove());
+    /* Only the final page receives the legacy sections/signature area. */
+    page.querySelectorAll('.pdf-section, .pdf-signed-signatures').forEach(el=>el.remove());
     const agreementBox=document.createElement('div'); agreementBox.className='preview-contract-agreement-direct';
-    if(index===0){
-      agreementBox.innerHTML='<h3>CONTRACT AGREEMENT / TERMS</h3>';
-    }
+    if(index===0) agreementBox.innerHTML='<h3>CONTRACT AGREEMENT / TERMS</h3>';
     const body=document.createElement('div'); body.className='preview-contract-agreement-body';
-    chunk.forEach(line=>{const el=document.createElement('div');el.textContent=line.replace(/^✓\s*/,'• ');body.appendChild(el);});
+    chunk.forEach(node=>body.appendChild(node.cloneNode(true)));
     agreementBox.appendChild(body);
-    const header=page.querySelector('.pdf-page-header');
-    const infoBlock=page.querySelector('.pdf-info-bullets');
+    const header=page.querySelector('.pdf-page-header'); const infoBlock=page.querySelector('.pdf-info-bullets');
     if(infoBlock) infoBlock.insertAdjacentElement('afterend',agreementBox); else if(header) header.insertAdjacentElement('afterend',agreementBox); else page.prepend(agreementBox);
-    if(index < chunks.length-1){
-      // Keep only agreement content on continuation pages; signatures are placed on the final page.
-      page.querySelectorAll('.pdf-section:not(.pdf-preview-agreement), .pdf-signed-signatures').forEach(el=>el.remove());
-    }
     if(index===chunks.length-1){
-      // Add the required agreement acknowledgement immediately before the signatures.
-      const ack=document.createElement('div');
-      ack.className='preview-contract-agreement-signatures-note';
-      ack.innerHTML='<h3>AGREEMENT &amp; SIGNATURES</h3><p>By signing this contract, the parent/student confirms that they have read, understood, and agreed to the teacher\'s Private English Class agreement written above.</p>';
-      page.appendChild(ack);
-      // Rebuild the final-page signature area so signatures always remain visible after long agreements.
+      const ack=document.createElement('div'); ack.className='preview-contract-agreement-signatures-note';
+      ack.innerHTML='<h3>AGREEMENT &amp; SIGNATURES</h3><p>By signing this contract, the parent/student confirms that they have read, understood, and agreed to the teacher\'s Private English Class agreement written above.</p>'; page.appendChild(ack);
       page.querySelectorAll('.pdf-signed-signatures').forEach(el=>el.remove());
-      const signedFiles=document.createElement('div'); signedFiles.className='pdf-signed-signatures';
-      signedFiles.innerHTML='<h3>Signatures</h3><div class="pdf-signed-signature-grid"></div>';
-      const signedGrid=signedFiles.querySelector('.pdf-signed-signature-grid');
-      const teacherName=getTeacherContractDisplayName()||'Teacher';
-      const studentForSignature=contractSelectedStudentId?getStudents().find(st=>st.id===contractSelectedStudentId):null;
-      const parentName=String(studentForSignature?.parentName||'Parent / Guardian').trim()||'Parent / Guardian';
+      const signedFiles=document.createElement('div'); signedFiles.className='pdf-signed-signatures'; signedFiles.innerHTML='<h3>Signatures</h3><div class="pdf-signed-signature-grid"></div>';
+      const signedGrid=signedFiles.querySelector('.pdf-signed-signature-grid'); const teacherName=getTeacherContractDisplayName()||'Teacher';
+      const studentForSignature=contractSelectedStudentId?getStudents().find(st=>st.id===contractSelectedStudentId):null; const parentName=String(studentForSignature?.parentName||'Parent / Guardian').trim()||'Parent / Guardian';
       [['teacher',`Teacher: ${teacherName}`],['parent',`Parent / Guardian: ${parentName}`]].forEach(([role,label])=>{
-        const savedFile=role==='teacher'?savedContract?.teacherFileData:savedContract?.parentFileData;
-        const savedType=role==='teacher'?savedContract?.teacherFileType:savedContract?.parentFileType;
-        const file=contractFileData[role]||(savedFile?{data:savedFile,type:savedType||''}:null);
-        const card=document.createElement('div');card.className='pdf-signed-signature-card';
-        const title=document.createElement('div');title.className='pdf-signed-signature-label';title.textContent=label;card.appendChild(title);
-        if(file?.data&&String(file.type||'').startsWith('image/')){const img=document.createElement('img');img.src=file.data;img.alt=label;img.className='pdf-signed-signature-image';card.appendChild(img);}
-        else if(file?.data&&file.type==='application/pdf'){const note=document.createElement('div');note.className='pdf-signed-signature-note';note.textContent='Signed PDF uploaded.';card.appendChild(note);}
-        else{const note=document.createElement('div');note.className='pdf-signed-signature-note';note.textContent='Signature not uploaded.';card.appendChild(note);}
+        const savedFile=role==='teacher'?savedContract?.teacherFileData:savedContract?.parentFileData; const savedType=role==='teacher'?savedContract?.teacherFileType:savedContract?.parentFileType; const file=contractFileData[role]||(savedFile?{data:savedFile,type:savedType||''}:null);
+        const card=document.createElement('div');card.className='pdf-signed-signature-card'; const title=document.createElement('div');title.className='pdf-signed-signature-label';title.textContent=label;card.appendChild(title);
+        if(file?.data&&String(file.type||'').startsWith('image/')){const img=document.createElement('img');img.src=file.data;img.alt=label;img.className='pdf-signed-signature-image';card.appendChild(img);} else if(file?.data&&file.type==='application/pdf'){const note=document.createElement('div');note.className='pdf-signed-signature-note';note.textContent='Signed PDF uploaded.';card.appendChild(note);} else {const note=document.createElement('div');note.className='pdf-signed-signature-note';note.textContent='Signature not uploaded.';card.appendChild(note);}
         signedGrid.appendChild(card);
       });
       page.appendChild(signedFiles);
@@ -12148,73 +12230,35 @@ async function downloadStudentContractPDF(){
  if(!contractSavedForStudentId || contractSavedForStudentId!==contractSelectedStudentId){showContractError('Please save the Student Contract first before downloading.');return;}
  try{
   if(!window.jspdf?.jsPDF)throw new Error('PDF generator is not available right now.');
-  const {sections}=getContractPreviewSections();
+  if(typeof html2canvas!=='function')throw new Error('PDF image renderer is not available right now.');
+
+  /*
+     Build the same automatic multi-page preview used on screen, then render
+     each legal-size page into the PDF. This keeps rich formatting (font size,
+     font family, bold, color, highlight, alignment, lists, etc.) identical to
+     the parent-facing preview and allows any number of pages.
+  */
+  await previewStudentContract();
+  const modal=document.getElementById('studentContractPreviewModal');
+  const pageEls=[...(modal?.querySelectorAll('.contract-legal-portrait-page-final')||[])];
+  if(!pageEls.length)throw new Error('No contract pages were generated.');
+
   const student=getStudents().find(s=>s.id===contractSelectedStudentId);
   const safeName=String(student?.name||'Student Contract').replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'')||'Student-Contract';
-  // US Legal portrait: 8.5 × 14 inches. One page only.
-  const pdf=new window.jspdf.jsPDF({orientation:'portrait',unit:'pt',format:'legal'});
-  const pageW=pdf.internal.pageSize.getWidth(), pageH=pdf.internal.pageSize.getHeight();
-  const margin=34, contentW=pageW-margin*2;
-  const accent=getComputedStyle(document.documentElement).getPropertyValue('--global-accent').trim()||'#00e5e5';
-  const dark=getComputedStyle(document.documentElement).getPropertyValue('--global-accent-dark').trim()||'#00bcbc';
-  const soft=getComputedStyle(document.documentElement).getPropertyValue('--global-accent-soft').trim()||'#e7ffff';
-  const rgb=h=>{h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]};
-  const drawHeader=()=>{const c=rgb(soft),d=rgb(dark);pdf.setFillColor(...c);pdf.setDrawColor(...rgb(accent));pdf.setLineWidth(1);pdf.roundedRect(margin,20,contentW,54,12,12,'FD');pdf.setTextColor(...d);pdf.setFont('helvetica','bold');pdf.setFontSize(15);pdf.text(getTeacherContractTitle(),pageW/2,45,{align:'center'});pdf.setTextColor(17,17,17);pdf.setFontSize(11);pdf.text('STUDENT CONTRACT',pageW/2,63,{align:'center'});};
-  drawHeader();
-  let y=88;
-  const infoBoxes=[...document.querySelectorAll('#contractStudentInfo .contract-info-box')];
-  pdf.setFont('helvetica','normal');pdf.setFontSize(12);pdf.setTextColor(17,17,17);
-  infoBoxes.forEach((b)=>{const label=String(b.querySelector('label')?.textContent||'').trim();const value=b.textContent.replace(label,'').replace(/\s+/g,' ').trim();pdf.setFont('helvetica','bold');pdf.text('• '+label+':',margin,y);const lw=pdf.getTextWidth('• '+label+': ');pdf.setFont('helvetica','normal');pdf.text(value,margin+lw,y,{maxWidth:contentW-lw});y+=16;});
-  y+=4;
-  const currentAgreement=String(document.getElementById('contractAgreementText')?.value||'').trim();
-  const savedContract=contractSelectedStudentId ? getStudentContracts()?.[contractSelectedStudentId] : null;
-  const agreementValue=currentAgreement || String(savedContract?.customSections?.agreementText||'').trim();
-  if(agreementValue){
-    pdf.setFont('helvetica','bold');pdf.setFontSize(12);pdf.setTextColor(17,17,17);
-    pdf.text('CONTRACT AGREEMENT / TERMS',margin,y,{maxWidth:contentW});
-    y+=15;
-    pdf.setDrawColor(215,220,227);pdf.setLineWidth(.7);pdf.line(margin,y-4,margin+contentW,y-4);
-    pdf.setFont('helvetica','normal');pdf.setFontSize(12);
-    const agreementLines=agreementValue.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-    agreementLines.forEach(raw=>{
-      const bullet=raw.replace(/^✓\s*/,'• ');
-      const lines=pdf.splitTextToSize(bullet,contentW);
-      pdf.text(lines,margin,y,{lineHeightFactor:1.08});
-      y+=lines.length*12*1.08+3;
-    });
-    y+=4;
+  const pdf=new window.jspdf.jsPDF({orientation:'portrait',unit:'pt',format:'legal',compress:true});
+  const pageW=pdf.internal.pageSize.getWidth();
+  const pageH=pdf.internal.pageSize.getHeight();
+
+  for(let i=0;i<pageEls.length;i++){
+    const el=pageEls[i];
+    const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
+    const img=canvas.toDataURL('image/png');
+    if(i>0)pdf.addPage('legal','portrait');
+    pdf.addImage(img,'PNG',0,0,pageW,pageH,undefined,'FAST');
   }
-  sections.forEach(sec=>{
-    const h=sec.querySelector('h3');
-    if(!h)return;
-    pdf.setFont('helvetica','bold');pdf.setFontSize(12);pdf.setTextColor(17,17,17);
-    pdf.text(String(h.textContent||''),margin,y,{maxWidth:contentW});
-    y+=15;
-    pdf.setDrawColor(215,220,227);pdf.setLineWidth(.7);pdf.line(margin,y-4,margin+contentW,y-4);
-    [...sec.querySelectorAll('p')].forEach(p=>{
-      const raw=p.textContent.trim(); if(!raw)return;
-      const bullet=raw.replace(/^✓\s*/,'• ');
-      const bold=!!p.querySelector('strong');
-      pdf.setFont('helvetica',bold?'bold':'normal');pdf.setFontSize(12);pdf.setTextColor(17,17,17);
-      const lines=pdf.splitTextToSize(bullet,contentW);
-      pdf.text(lines,margin,y,{lineHeightFactor:1.08});
-      y+=lines.length*12*1.08+3;
-    });
-    const sig=sec.querySelector('.signature-grid');
-    if(sig){y+=5;[...sig.querySelectorAll(':scope > div')].forEach((d,i)=>{pdf.setFont('helvetica','normal');pdf.setFontSize(11);pdf.text(d.textContent.replace(/\s+/g,' ').trim(),margin+(i?contentW/2:0),y,{maxWidth:contentW/2-8});});y+=28;}
-    y+=4;
-  });
-  y+=4;
-  pdf.setFont('helvetica','bold');pdf.setFontSize(12);pdf.setTextColor(17,17,17);
-  pdf.text('AGREEMENT & SIGNATURES',margin,y,{maxWidth:contentW});
-  y+=15;
-  pdf.setFont('helvetica','normal');pdf.setFontSize(12);
-  const ackText="By signing this contract, the parent/student confirms that they have read, understood, and agreed to the teacher's Private English Class agreement written above.";
-  const ackLines=pdf.splitTextToSize(ackText,contentW);
-  pdf.text(ackLines,margin,y,{lineHeightFactor:1.08});
-  y+=ackLines.length*12*1.08+8;
-  if(y>pageH-24){throw new Error('The Student Contract content is too long to fit on one US Legal portrait page at 12pt.');}
+
   pdf.save(`${safeName}-Student-Contract.pdf`);
+  closeStudentContractPreview();
  }catch(err){showContractError(err.message||'Unable to download the Student Contract PDF.');}
 }
 
@@ -12252,27 +12296,171 @@ function showContractSuccess(msg){const e=document.getElementById('contractError
 ========================================================= */
 (function(){
  function editor(){return document.getElementById('contractAgreementEditor');}
+ let savedRange=null;
+ let selectionWasSaved=false;
  function sync(){const e=editor(),h=document.getElementById('contractAgreementText');if(e&&h)h.value=(e.innerText||e.textContent||'').trim();}
- function focusEditor(){const e=editor();if(e){e.focus();return e;}return null;}
- function command(cmd,val){const e=focusEditor();if(!e)return;document.execCommand(cmd,false,val||null);sync();}
- function selectionFontSize(px){const e=focusEditor();if(!e)return;const size=Math.max(8,Math.min(96,parseInt(px,10)||12));document.execCommand('fontSize',false,'7');e.querySelectorAll('font[size="7"]').forEach(f=>{const span=document.createElement('span');span.style.fontSize=size+'px';span.innerHTML=f.innerHTML;f.replaceWith(span);});sync();}
- function adjustSize(delta){const e=editor();if(!e)return;const sel=window.getSelection();let current=12;if(sel&&sel.rangeCount){let n=sel.anchorNode;if(n&&n.nodeType===3)n=n.parentElement;const cs=n?getComputedStyle(n).fontSize:null;current=parseInt(cs,10)||12;}selectionFontSize(current+delta);const input=document.getElementById('contractFontSize');if(input)input.value=Math.max(8,Math.min(96,current+delta));}
- function bind(){
-  const bar=document.getElementById('contractRichToolbar'); if(!bar||bar.dataset.bound==='1')return; bar.dataset.bound='1';
-  bar.addEventListener('mousedown',e=>{if(e.target.closest('button,select,input'))e.preventDefault();});
-  bar.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>command(b.dataset.cmd)));
-  const size=document.getElementById('contractFontSize'); if(size)size.addEventListener('change',()=>selectionFontSize(size.value));
-  const inc=document.getElementById('contractFontIncrease'); if(inc)inc.addEventListener('click',()=>adjustSize(1));
-  const dec=document.getElementById('contractFontDecrease'); if(dec)dec.addEventListener('click',()=>adjustSize(-1));
-  const color=document.getElementById('contractTextColor'); if(color)color.addEventListener('input',()=>command('foreColor',color.value));
-  const hi=document.getElementById('contractHighlightColor'); if(hi)hi.addEventListener('input',()=>command('hiliteColor',hi.value));
-  const font=document.getElementById('contractFontFamily'); if(font)font.addEventListener('change',()=>command('fontName',font.value));
-  const align=document.getElementById('contractAlignment'); if(align)align.addEventListener('change',()=>command(align.value));
-  const e=editor(); if(e)e.addEventListener('input',sync);
+ function rangeInsideEditor(r){
+   const e=editor();
+   return !!(e&&r&&e.contains(r.commonAncestorContainer));
  }
- window.initContractRichEditor=bind;
- document.addEventListener('DOMContentLoaded',bind);
- setTimeout(bind,500);
+ function saveSelection(){
+   const e=editor(),sel=window.getSelection();
+   if(!e||!sel||!sel.rangeCount)return false;
+   const r=sel.getRangeAt(0);
+   if(rangeInsideEditor(r)){
+     savedRange=r.cloneRange();
+     selectionWasSaved=true;
+     return true;
+   }
+   return false;
+ }
+ function restoreSelection(){
+   const e=editor();
+   if(!e||!savedRange||!selectionWasSaved)return false;
+   try{
+     e.focus({preventScroll:true});
+     const sel=window.getSelection();
+     sel.removeAllRanges();
+     sel.addRange(savedRange);
+     return true;
+   }catch(err){return false;}
+ }
+ function setSelectionRange(r){
+   const e=editor();
+   if(!e||!r)return false;
+   try{
+     const sel=window.getSelection();
+     sel.removeAllRanges();
+     sel.addRange(r);
+     savedRange=r.cloneRange();
+     selectionWasSaved=true;
+     return true;
+   }catch(err){return false;}
+ }
+ function runWithSavedSelection(fn){
+   const e=editor(); if(!e)return;
+   if(!restoreSelection())return;
+   fn();
+   saveSelection();
+   sync();
+ }
+ function command(cmd,val){runWithSavedSelection(()=>document.execCommand(cmd,false,val==null?null:val));}
+
+ /* Apply a style ONLY to the currently selected text. The selected text is
+    re-selected after every operation, so repeated A+/A-, color, and font
+    changes continue to target exactly the same wording. */
+ function wrapSelected(styleObj){
+   const e=editor();
+   if(!e||!savedRange||!selectionWasSaved)return false;
+   if(!restoreSelection())return false;
+   const sel=window.getSelection();
+   if(!sel||!sel.rangeCount||sel.isCollapsed)return false;
+   const r=sel.getRangeAt(0).cloneRange();
+   if(!rangeInsideEditor(r)||r.collapsed)return false;
+
+   const frag=r.extractContents();
+   const span=document.createElement('span');
+   Object.keys(styleObj||{}).forEach(k=>{span.style[k]=styleObj[k];});
+   span.appendChild(frag);
+   r.insertNode(span);
+
+   const newRange=document.createRange();
+   newRange.selectNodeContents(span);
+   setSelectionRange(newRange);
+   sync();
+   return true;
+ }
+ function selectionFontSize(px){
+   const size=Math.max(8,Math.min(96,parseInt(px,10)||12));
+   return wrapSelected({fontSize:size+'px'});
+ }
+ function getSelectedFontSize(){
+   const e=editor();
+   if(!e||!savedRange||!selectionWasSaved)return 12;
+   if(!restoreSelection())return 12;
+   const sel=window.getSelection();
+   if(!sel||!sel.rangeCount||sel.isCollapsed)return 12;
+   const r=sel.getRangeAt(0);
+   let node=r.startContainer;
+   if(node.nodeType===3)node=node.parentElement;
+   if(node && node!==e){
+     const px=parseInt(getComputedStyle(node).fontSize,10);
+     if(Number.isFinite(px))return px;
+   }
+   return 12;
+ }
+ function adjustSize(delta){
+   const current=getSelectedFontSize();
+   const next=Math.max(8,Math.min(96,current+delta));
+   selectionFontSize(next);
+ }
+ function buildMoreMenu(bar){
+   if(bar.dataset.moreReady==='1')return;
+   const controls=[...bar.children];
+   const visible=[]; const extra=[];
+   controls.forEach((el,i)=>{if(i<5)visible.push(el);else extra.push(el);});
+   if(!extra.length){bar.dataset.moreReady='1';return;}
+   const wrap=document.createElement('div');wrap.className='rich-overflow-wrap';
+   const more=document.createElement('button');more.type='button';more.className='rich-more-btn';more.textContent='MORE';more.setAttribute('aria-expanded','false');more.setAttribute('aria-label','More formatting options');
+   const menu=document.createElement('div');menu.className='rich-overflow-menu';
+   extra.forEach(el=>menu.appendChild(el));wrap.appendChild(more);wrap.appendChild(menu);bar.appendChild(wrap);
+   more.addEventListener('pointerdown',e=>{saveSelection();});
+   more.addEventListener('mousedown',e=>{saveSelection();});
+   more.addEventListener('click',e=>{e.stopPropagation();saveSelection();menu.classList.toggle('open');more.setAttribute('aria-expanded',menu.classList.contains('open')?'true':'false');});
+   document.addEventListener('click',e=>{if(!wrap.contains(e.target)){menu.classList.remove('open');more.setAttribute('aria-expanded','false');}});
+   menu.addEventListener('pointerdown',e=>{const control=e.target.closest('button,select,input');if(control)saveSelection();},true);
+   menu.addEventListener('mousedown',e=>{const control=e.target.closest('button,select,input');if(control)saveSelection();},true);
+   bar.dataset.moreReady='1';
+ }
+ function bind(){
+  const bar=document.getElementById('contractRichToolbar');if(!bar||bar.dataset.bound==='1')return;bar.dataset.bound='1';
+  buildMoreMenu(bar);
+  bar.querySelectorAll('button[data-cmd]').forEach(b=>{
+    b.addEventListener('pointerdown',()=>saveSelection());
+    b.addEventListener('mousedown',e=>{e.preventDefault();saveSelection();});
+    b.addEventListener('click',()=>command(b.dataset.cmd));
+  });
+  const inc=document.getElementById('contractFontIncrease');
+  if(inc){inc.addEventListener('pointerdown',e=>{e.preventDefault();saveSelection();});inc.addEventListener('mousedown',e=>{e.preventDefault();saveSelection();});inc.addEventListener('click',e=>{e.preventDefault();adjustSize(1);});}
+  const dec=document.getElementById('contractFontDecrease');
+  if(dec){dec.addEventListener('pointerdown',e=>{e.preventDefault();saveSelection();});dec.addEventListener('mousedown',e=>{e.preventDefault();saveSelection();});dec.addEventListener('click',e=>{e.preventDefault();adjustSize(-1);});}
+  const color=document.getElementById('contractTextColor');
+  if(color){
+    color.addEventListener('pointerdown',()=>saveSelection(),true);
+    color.addEventListener('mousedown',()=>saveSelection(),true);
+    color.addEventListener('focus',saveSelection);
+    color.addEventListener('input',()=>wrapSelected({color:color.value}));
+  }
+  const hi=document.getElementById('contractHighlightColor');
+  if(hi){
+    hi.addEventListener('pointerdown',()=>saveSelection(),true);
+    hi.addEventListener('mousedown',()=>saveSelection(),true);
+    hi.addEventListener('focus',saveSelection);
+    hi.addEventListener('input',()=>wrapSelected({backgroundColor:hi.value}));
+  }
+  const font=document.getElementById('contractFontFamily');
+  if(font){
+    font.addEventListener('pointerdown',()=>saveSelection(),true);
+    font.addEventListener('mousedown',()=>saveSelection(),true);
+    font.addEventListener('focus',saveSelection);
+    font.addEventListener('change',()=>{
+      const value=font.value;
+      if(!value)return;
+      wrapSelected({fontFamily:value});
+      font.value='';
+    });
+  }
+  const align=document.getElementById('contractAlignment');
+  if(align){align.addEventListener('pointerdown',()=>saveSelection(),true);align.addEventListener('mousedown',()=>saveSelection(),true);align.addEventListener('focus',saveSelection);align.addEventListener('change',()=>command(align.value));}
+  const e=editor();
+  if(e){
+    e.addEventListener('keyup',saveSelection);
+    e.addEventListener('mouseup',saveSelection);
+    e.addEventListener('input',()=>{saveSelection();sync();});
+    e.addEventListener('focus',saveSelection);
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
 
 /* =========================================================
