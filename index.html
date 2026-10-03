@@ -2143,6 +2143,7 @@ button.secondary,
 .schedule-day-toggle{display:flex;align-items:center;gap:7px;font-weight:700;font-size:12px}
 .schedule-day-toggle input{width:auto}
 .schedule-time-select{width:100%}
+.schedule-time-select option:disabled{background:#555!important;color:#fff!important;font-weight:800}
 .schedule-end-time{font-size:12px;color:#666}
 .schedule-end-time strong{color:#111}
 @media(max-width:650px){.schedule-row{grid-template-columns:1fr}.schedule-end-time{padding-left:24px}}
@@ -2210,6 +2211,47 @@ button.secondary,
 .appointment-day-detail-body{display:grid;gap:8px;padding:10px}
 .appointment-day-detail-footer{display:flex;justify-content:flex-end;padding:10px;border-top:1px solid #ddd;background:#fafafa}
 .appointment-detail-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;border:1px solid #ddd;border-radius:8px;padding:10px;background:#fff}
+/* Selected appointment day: full 12:00 AM–11:30 PM half-hour timeline */
+.appointment-time-grid{display:grid;gap:0;border-top:1px solid #ddd}
+.appointment-time-slot{display:grid;grid-template-columns:105px minmax(0,1fr);min-height:54px;border-bottom:1px solid #e3e3e3;background:#fff}
+.appointment-time-label{padding:15px 10px;font-weight:900;font-size:12px;color:#555;background:#fafafa;border-right:1px solid #ddd;text-align:right}
+.appointment-time-content{padding:7px 10px;display:flex;align-items:center;gap:8px;min-width:0}
+.appointment-time-empty{color:#aaa;font-size:11px}
+.appointment-time-booking{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:8px 10px;border:1px solid var(--global-accent-dark,#00bcbc);border-left:4px solid var(--global-accent-dark,#00bcbc);border-radius:7px;background:var(--global-accent-soft,#e7ffff);cursor:pointer;min-width:0}
+.appointment-time-booking:hover{background:var(--global-accent-pale,#f3ffff)}
+/* Booked class color: active/upcoming follows the selected theme; finished classes become light gray with the theme as outline. */
+.appointment-time-booking.completed{background:#f1f3f5!important;border:1px solid var(--global-accent-dark,#00bcbc)!important;border-left:4px solid var(--global-accent-dark,#00bcbc)!important;color:#333!important}
+.appointment-time-booking.completed:hover{background:#e8ebee!important}
+.appointment-time-booking.completed .appointment-time-booking-main span{color:#6b7280!important}
+.appointment-time-booking-main{min-width:0}
+.appointment-time-booking-main strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appointment-time-booking-main span{display:block;font-size:11px;color:#666;margin-top:2px}
+.appointment-time-booking-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.appointment-time-add{border:0;border-radius:6px;background:#eee;padding:6px 9px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap}
+.appointment-time-add:hover{background:#ddd}
+
+.appointment-time-action{border:0;border-radius:6px;padding:6px 9px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;background:#eee}
+.appointment-time-action.open{background:#e8f0ff;color:#174ea6}
+.appointment-time-action.view{background:#f1e8ff;color:#6a1b9a}
+.appointment-time-action.present{background:#dff6df;color:#176b2c}
+.appointment-time-action.absent{background:#ffe1e1;color:#a40000}
+.appointment-time-action.evaluate{background:#dff6df;color:#176b2c}
+.appointment-time-action.rebook{background:#fff3cd;color:#7a5600}
+.appointment-time-action.cancel{background:#ffe1e1;color:#900}
+.appointment-time-action:hover{filter:brightness(.96)}
+.appointment-view-modal{max-width:620px}
+.appointment-view-grid{display:grid;grid-template-columns:150px 1fr;gap:8px 12px;margin-top:12px}
+.appointment-view-grid>div{padding:9px;border:1px solid var(--global-border,#ddd);border-radius:7px;background:var(--portal-surface,#fff)}
+.appointment-view-grid .label{font-weight:900;background:var(--global-accent-soft,#f4fafa)}
+.appointment-view-status{margin-top:12px;padding:10px;border-radius:8px;font-weight:900}
+.appointment-view-footer{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid #ddd}
+@media(max-width:700px){.appointment-view-grid{grid-template-columns:1fr}.appointment-time-booking-actions{width:100%;justify-content:flex-start}}
+.appointment-show-all-time-wrap{display:flex;justify-content:center;padding:10px;border-bottom:1px solid #ddd;background:#fafafa}
+.appointment-show-all-time{border:1px solid #ccc;border-radius:7px;background:#fff;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer}
+.appointment-show-all-time:hover{background:#f3f3f3}
+.appointment-hidden-early-time{display:none}
+@media(max-width:700px){.appointment-time-slot{grid-template-columns:82px minmax(0,1fr)}.appointment-time-label{font-size:11px;padding:13px 7px}.appointment-time-content{padding:6px}.appointment-time-booking{align-items:flex-start;flex-direction:column}.appointment-time-booking-actions{width:100%;justify-content:flex-start}}
+
 .appointment-detail-time{font-weight:900}
 .appointment-detail-main b{display:block}
 .appointment-detail-main span{display:block;font-size:12px;color:#666;margin-top:2px}
@@ -2260,7 +2302,9 @@ button.secondary,
 
 .contract-toolbar{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap}.contract-toolbar>div:first-child{min-width:280px;flex:1}.contract-status-box{padding:10px 14px;border:1px solid #d8dee8;border-radius:10px;background:#f8fafc;min-width:180px}.contract-status-box span{display:block;font-size:11px;color:#667085;text-transform:uppercase;font-weight:700}.contract-status-box strong{display:block;margin-top:3px}.contract-workspace{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,.65fr);gap:18px;align-items:start}.contract-document{background:#fff;border:1px solid #d9dee7;border-radius:14px;padding:34px;box-shadow:0 8px 24px rgba(16,24,40,.07);min-height:900px}.contract-header{text-align:center;border-bottom:2px solid #111;padding-bottom:18px;margin-bottom:22px}.contract-header h1{font-size:22px;margin:0 0 7px}.contract-header h2{font-size:17px;margin:0;letter-spacing:.08em}.contract-student-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}.contract-info-box{border:1px solid #e4e7ec;border-radius:8px;padding:10px}.contract-info-box label{display:block;font-size:11px;color:#667085;font-weight:700;text-transform:uppercase;margin-bottom:4px}.contract-section{margin-top:22px}.contract-section h3{font-size:15px;margin:0 0 9px;border-bottom:1px solid #eaecf0;padding-bottom:6px}.contract-section p{font-size:13px;line-height:1.6;margin:5px 0}.signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:28px}.signature-grid>div{font-size:13px;line-height:2}.contract-upload-panel{position:sticky;top:18px;border:1px solid #d9dee7;border-radius:14px;background:#f8fafc;padding:20px}.contract-sign-upload{border:1px solid #d9dee7;border-radius:12px;background:#fff;padding:14px;margin-top:12px}.contract-sign-upload h4{margin:0 0 8px;font-size:14px}.contract-sign-upload input{width:100%;font-size:12px}.contract-sign-file{font-size:11px;color:#475467;margin-top:7px;word-break:break-word}.contract-sign-preview{margin-top:10px;min-height:120px;max-height:300px;border:1px dashed #98a2b3;border-radius:9px;background:#fafafa;display:flex;align-items:center;justify-content:center;overflow:hidden}.contract-sign-preview img{max-width:100%;max-height:280px;object-fit:contain}.contract-sign-preview iframe{width:100%;height:280px;border:0}.contract-upload-panel h3{margin:0 0 8px}.contract-preview{margin-top:15px;min-height:150px;border:1px dashed #98a2b3;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.contract-preview img{max-width:100%;max-height:520px;object-fit:contain}.contract-preview iframe{width:100%;height:520px;border:0}.contract-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}@media(max-width:900px){.contract-workspace{grid-template-columns:1fr}.contract-upload-panel{position:static}.contract-document{padding:20px}.contract-student-info{grid-template-columns:1fr 1fr}}@media(max-width:600px){.contract-student-info,.signature-grid{grid-template-columns:1fr}}
 
-.contract-list-section{margin-top:18px}.contract-list-title{font-size:15px;font-weight:800;margin:0 0 10px}.contract-student-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid #d9dee7;border-radius:12px;background:#fff;margin-bottom:10px;box-shadow:0 3px 12px rgba(16,24,40,.05)}.contract-student-card.pending{border-left:5px solid #f59e0b;background:#fffaf0}.contract-student-card.completed{border-left:5px solid #12b76a;background:#f6fffa}.contract-student-meta strong{display:block;font-size:15px}.contract-student-meta span{display:block;font-size:12px;color:#667085;margin-top:3px}.contract-badge{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;padding:4px 8px;border-radius:999px;margin-top:7px}.contract-badge.pending{background:#fef0c7;color:#92400e}.contract-badge.completed{background:#dcfae6;color:#067647}.contract-list-empty{padding:18px;border:1px dashed #cbd5e1;border-radius:12px;color:#667085;text-align:center;background:#fafafa}.contract-list-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:700px){.contract-student-card{align-items:flex-start;flex-direction:column}.contract-list-actions{width:100%}}
+.contract-list-section{margin-top:18px}
+.contract-completed-summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid #d9dee7;border-radius:12px;background:#f8fafc;margin-top:18px}.contract-view-all-btn{white-space:nowrap}.contract-completed-modal-list{max-height:65vh;overflow:auto;padding:4px 2px}.completed-contracts-modal{max-width:850px;width:min(850px,94vw)}
+.contract-list-title{font-size:15px;font-weight:800;margin:0 0 10px}.contract-student-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid #d9dee7;border-radius:12px;background:#fff;margin-bottom:10px;box-shadow:0 3px 12px rgba(16,24,40,.05)}.contract-student-card.pending{border-left:5px solid #f59e0b;background:#fffaf0}.contract-student-card.completed{border-left:5px solid #12b76a;background:#f6fffa}.contract-student-meta strong{display:block;font-size:15px}.contract-student-meta span{display:block;font-size:12px;color:#667085;margin-top:3px}.contract-badge{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;padding:4px 8px;border-radius:999px;margin-top:7px}.contract-badge.pending{background:#fef0c7;color:#92400e}.contract-badge.renewal{background:#fce7f3;color:#be185d}.contract-badge.completed{background:#dcfae6;color:#067647}.contract-list-empty{padding:18px;border:1px dashed #cbd5e1;border-radius:12px;color:#667085;text-align:center;background:#fafafa}.contract-list-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:700px){.contract-student-card{align-items:flex-start;flex-direction:column}.contract-list-actions{width:100%}}
 .contract-picker-list{display:grid;gap:10px;max-height:60vh;overflow:auto;margin-top:16px}.contract-picker-item{width:100%;text-align:left;border:1px solid #d9dee7;background:#fff;border-radius:12px;padding:14px 16px;cursor:pointer}.contract-picker-item:hover{border-color:#2563eb;background:#f8fbff}.contract-picker-item strong{display:block;font-size:15px}.contract-picker-item span{display:block;font-size:12px;color:#667085;margin-top:4px}
 
 .appointment-actions .rebook{border:1px solid #7b61ff;background:#fff;color:#5b43c7;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}.appointment-actions .rebook:hover{background:#f3f0ff}
@@ -3007,6 +3051,75 @@ body:not(.portal-dark) .profile-fields .profile-field textarea{
 }
 </style>
 
+<style id="teacher-profile-theme-background-v36">
+/* Teacher Account popup background follows the selected theme.
+   Example: cyan -> light cyan, pink -> light pink, etc. */
+.profile-panel{
+  background:var(--global-accent-soft,#e7ffff)!important;
+  border-color:var(--global-border,#b8f7f7)!important;
+  color:var(--global-text-on-soft,#111)!important;
+}
+
+.profile-panel-header{
+  border-color:var(--global-border,#b8f7f7)!important;
+}
+
+.profile-fields .profile-field label,
+.profile-panel label,
+.profile-header-name b{
+  color:#111!important;
+}
+
+.profile-header-name span{
+  color:var(--global-accent-dark,#00bcbc)!important;
+}
+
+.profile-fields .profile-field input,
+.profile-fields .profile-field select,
+.profile-fields .profile-field textarea{
+  background:#fff!important;
+  color:#111!important;
+  border-color:var(--global-border,#b8f7f7)!important;
+}
+
+.profile-fields .profile-field input:focus,
+.profile-fields .profile-field select:focus,
+.profile-fields .profile-field textarea:focus{
+  border-color:var(--global-accent,#00e5e5)!important;
+  box-shadow:0 0 0 3px var(--global-accent-soft,#e7ffff)!important;
+}
+
+.profile-panel .profile-status{
+  background:var(--global-accent-pale,#f3ffff)!important;
+  border-color:var(--global-border,#b8f7f7)!important;
+  color:#111!important;
+}
+
+.profile-panel .profile-menu-wrap,
+.profile-panel .profile-more-menu{
+  border-color:var(--global-border,#b8f7f7)!important;
+}
+
+/* Keep the same theme-aware light popup even when the dashboard is in dark mode. */
+body.portal-dark .profile-panel{
+  background:var(--global-accent-soft,#e7ffff)!important;
+  color:#111!important;
+  border-color:var(--global-border,#b8f7f7)!important;
+}
+body.portal-dark .profile-panel-header{
+  border-color:var(--global-border,#b8f7f7)!important;
+}
+body.portal-dark .profile-panel-header .profile-header-name b,
+body.portal-dark .profile-panel-header .profile-header-name span,
+body.portal-dark .profile-fields .profile-field label,
+body.portal-dark .profile-panel label{
+  color:#111!important;
+}
+body.portal-dark .profile-header-name span{
+  color:var(--global-accent-dark,#00bcbc)!important;
+}
+</style>
+
 <style id="add-student-theme-header-fix">
 /* Add Student modal: theme-aware curved header */
 .student-add-modal{
@@ -3090,7 +3203,7 @@ body.portal-dark .student-add-modal-header .small{
 
 <style id="payment-package-black-text">
 #paymentReceiptPackage,
-#paymentReceiptClasses{color:#111!important;background:#fff!important;}
+#paymentReceiptPackage{color:#111!important;background:#fff!important;}
 #paymentReceiptPackage option{color:#111!important;background:#fff!important;}
 </style>
 
@@ -3206,6 +3319,54 @@ body.portal-dark .student-add-modal-header .small{
 #paymentStudentPickerModal .modal-body{
   max-height:calc(100vh - 150px)!important;
   overflow-y:auto!important;
+}
+</style>
+<style id="payment-student-picker-header-enhancement">
+/* Payment Add Student picker: larger, theme-colored header with a right-side close button */
+#paymentStudentPickerModal .payment-student-picker-modal > .modal-header{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  min-height:88px!important;
+  padding:18px 20px!important;
+  background:var(--global-accent)!important;
+  border:0!important;
+  border-radius:18px 18px 0 0!important;
+  color:var(--global-text-on-accent,#fff)!important;
+  box-shadow:0 5px 16px rgba(0,0,0,.10)!important;
+}
+#paymentStudentPickerModal .payment-student-picker-modal > .modal-header h3{
+  margin:0!important;
+  color:var(--global-text-on-accent,#fff)!important;
+  font-size:22px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+}
+#paymentStudentPickerModal .payment-student-picker-modal > .modal-header button{
+  position:static!important;
+  flex:0 0 auto!important;
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  min-height:44px!important;
+  margin-left:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid rgba(255,255,255,.75)!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.96)!important;
+  color:var(--global-accent-dark,#007f7f)!important;
+  font-size:27px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  cursor:pointer!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.12)!important;
+  padding:0!important;
+}
+#paymentStudentPickerModal .payment-student-picker-modal > .modal-header button:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 5px 14px rgba(0,0,0,.18)!important;
 }
 </style>
 <style id="payment-student-picker-click-fix">
@@ -3466,7 +3627,7 @@ body.portal-dark .quote-author{color:#c5d2d6!important}
 .contract-pdf-preview-pages .contract-pdf-page:not(:first-child) .pdf-page-header{display:none!important}
 .contract-pdf-preview-pages .contract-pdf-page:not(:first-child) .pdf-info-bullets{display:none!important}
 </style>
-</head>
+<style id="v56-evaluation-preview-header">.evaluation-image-preview-modal{padding:0!important;overflow:hidden!important;border-radius:18px!important}.evaluation-image-preview-modal>.modal-header{position:relative!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;min-height:76px!important;padding:16px 70px 16px 22px!important;background:var(--global-accent,#ff69b4)!important;color:var(--global-text-on-accent,#fff)!important;border:0!important;border-radius:18px 18px 0 0!important;box-shadow:0 4px 14px rgba(0,0,0,.10)!important}.evaluation-image-preview-modal>.modal-header h3{margin:0!important;color:var(--global-text-on-accent,#fff)!important;font-size:22px!important;font-weight:800!important;line-height:1.2!important}.evaluation-preview-title-emoji{display:inline-block!important;font-size:22px!important;line-height:1!important;margin-right:5px!important;vertical-align:-2px!important}.evaluation-preview-close-btn{position:absolute!important;top:50%!important;right:16px!important;transform:translateY(-50%)!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:0!important;margin:0!important;border:2px solid rgba(255,255,255,.9)!important;border-radius:12px!important;background:rgba(255,255,255,.96)!important;color:var(--global-accent-dark,#c21875)!important;font-size:27px!important;font-weight:900!important;line-height:1!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;z-index:10!important;box-shadow:0 3px 10px rgba(0,0,0,.15)!important}.evaluation-preview-close-btn:hover{transform:translateY(-50%) scale(1.04)!important;background:#fff!important}.evaluation-image-preview-modal>.modal-body{border-radius:0 0 18px 18px!important}</style></head>
 
 <body>
 
@@ -4147,7 +4308,7 @@ onclick="if(event.target===this) closeAddStudent()"
 <option value="40 Minutes">40 Minutes</option>
 <option value="50 Minutes">50 Minutes</option>
 </select></div>
-<div><label>Package</label><input id="newStudentPackage" placeholder="e.g. 20 Classes"></div>
+<div><label>Classes</label><input id="newStudentClasses" placeholder="e.g. 20 Classes"></div>
 
 <div><label>Status</label><select id="newStudentStatus"><option>Active</option><option>Completed</option></select></div>
 
@@ -4231,7 +4392,7 @@ onclick="if(event.target===this) closeAddStudent()"
             <button type="button" class="rich-btn" data-cmd="undo" title="Undo">↶</button>
             <button type="button" class="rich-btn" data-cmd="redo" title="Redo">↷</button>
           </div>
-          <div id="contractAgreementEditor" class="contract-rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Type your complete contract agreement here. You can include CLASS ARRANGEMENT, LESSON MATERIALS, PACKAGE & PAYMENT POLICY, WORKING STUDENT arrangements, CANCELLATION & RESCHEDULING, ASSESSMENT, CERTIFICATE, and any other terms you want to include."></div>
+          <div id="contractAgreementEditor" class="contract-rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Type your complete contract agreement here. You can include CLASS ARRANGEMENT, LESSON MATERIALS, CLASSES & PAYMENT POLICY, WORKING STUDENT arrangements, CANCELLATION & RESCHEDULING, ASSESSMENT, CERTIFICATE, and any other terms you want to include."></div>
           <textarea class="contract-editable-textarea contract-master-textarea" id="contractAgreementText" aria-hidden="true" tabindex="-1" style="display:none"></textarea>
         </div>
       </div>
@@ -4389,11 +4550,25 @@ onclick="if(event.target===this) closeAddStudent()"
     </div>
 
     <div class="full">
-      <div id="appointmentAutoInfo" class="appointment-info-box">Select a student to see the saved preferred schedule and package class limit.</div>
+      <div id="appointmentAutoInfo" class="appointment-info-box">Select a student to see the saved preferred schedule and class limit.</div>
+    </div>
+
+    <div class="full appointment-schedule-mode-wrap" id="appointmentScheduleModeWrap">
+      <label>Schedule Mode</label>
+      <div class="appointment-mode-options">
+        <label class="appointment-mode-card active" id="appointmentPreferredModeCard">
+          <input type="radio" name="appointmentScheduleMode" value="preferred" checked onchange="setAppointmentScheduleMode('preferred')">
+          <span><strong>Preferred Schedule</strong><small>Use the student's saved schedule automatically.</small></span>
+        </label>
+        <label class="appointment-mode-card" id="appointmentManualModeCard">
+          <input type="radio" name="appointmentScheduleMode" value="manual" onchange="setAppointmentScheduleMode('manual')">
+          <span><strong>Manual / One-Time Booking</strong><small>Choose any date and time. It does not follow the student's preferred schedule.</small></span>
+        </label>
+      </div>
     </div>
 
     <div>
-      <label for="appointmentDate">Start Date (First Class)</label>
+      <label for="appointmentDate">Start Date</label>
       <input id="appointmentDate" type="date" onchange="onAppointmentDateChange()">
     </div>
 
@@ -4439,6 +4614,21 @@ onclick="if(event.target===this) closeAddStudent()"
     <button type="button" class="modal-cancel" onclick="closeAppointmentModal()">Cancel</button>
     <button id="appointmentSaveBtn" type="button" class="modal-save" onclick="saveAppointment()">Save Appointment</button>
   </div>
+</div>
+</div>
+
+<!-- APPOINTMENT VIEW MODAL -->
+<div id="appointmentViewModal" class="modal-backdrop" onclick="if(event.target===this) closeAppointmentViewModal()">
+<div class="modal appointment-view-modal">
+  <div class="student-add-modal-header">
+    <div>
+      <h3>Class Details</h3>
+      <div class="appointment-reason-help">View the complete details of this booked class.</div>
+    </div>
+    <button type="button" class="student-modal-close" onclick="closeAppointmentViewModal()" aria-label="Close">×</button>
+  </div>
+  <div id="appointmentViewContent"></div>
+  <div id="appointmentViewActions" class="appointment-view-footer"></div>
 </div>
 </div>
 
@@ -4498,16 +4688,10 @@ onclick="if(event.target===this) closeAddStudent()"
         <input type="hidden" id="paymentReceiptStudentId">
 
         <div class="payment-receipt-grid">
-          <div><label>Receipt No.</label><input id="paymentReceiptNo" placeholder="Auto-generated receipt number" oninput="updatePaymentReceiptPreview()"></div>
+          <div><label>Receipt No.</label><input id="paymentReceiptNo" placeholder="Auto-generated receipt number" readonly oninput="updatePaymentReceiptPreview()"></div>
           <div><label>Payment Date</label><input id="paymentReceiptDate" type="date" oninput="updatePaymentReceiptPreview()" onchange="updatePaymentReceiptPreview()"></div>
-          <div><label>Package</label><select id="paymentReceiptPackage" onchange="updatePaymentReceiptClasses();updatePaymentReceiptPreview()">
-            <option value="">Select Package</option>
-            <option value="Package 1">Package 1</option>
-            <option value="Package 2">Package 2</option>
-            <option value="Package 3">Package 3</option>
-            <option value="Package 4">Package 4</option>
-          </select></div>
-          <div><label>Classes</label><input id="paymentReceiptClasses" type="number" min="0" step="1" placeholder="Auto-filled from package" readonly></div>
+          <input type="hidden" id="paymentReceiptPackage">
+          <div><label>Number of Classes</label><input id="paymentReceiptClasses" type="number" min="1" step="1" inputmode="numeric" placeholder="Type number of classes" oninput="updatePaymentReceiptClasses();updatePaymentReceiptPreview()"></div>
           <div><label>Student Currency</label><select id="paymentReceiptStudentCurrency" onchange="handlePaymentCurrencyChange();updatePaymentReceiptPreview()">
             <option value="">Select Student Currency</option>
             <option value="PHP">PHP — Philippine Peso</option><option value="VND">VND — Vietnamese Dong</option><option value="RMB">RMB — Chinese Yuan</option><option value="THB">THB — Thai Baht</option><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option><option value="SGD">SGD — Singapore Dollar</option><option value="MYR">MYR — Malaysian Ringgit</option><option value="JPY">JPY — Japanese Yen</option><option value="KRW">KRW — South Korean Won</option><option value="Other">Other</option>
@@ -5238,8 +5422,8 @@ onclick="if(event.target===this) closeEditStudent()"
       <div class="edit-student-field"><label>Parent/Guardian Name</label><input id="editStudentParentName" placeholder="Parent/Guardian name"></div>
       <div class="edit-student-field"><label>English Level</label><select id="editStudentLevel"><option value="">Select level</option><option>Beginner</option><option>Elementary</option><option>Pre-Intermediate</option><option>Intermediate</option><option>Upper-Intermediate</option><option>Advanced</option></select></div>
       <div class="edit-student-field"><label>Class Duration</label><select id="editStudentDuration"><option value="30 Minutes">30 Minutes</option><option value="40 Minutes">40 Minutes</option><option value="50 Minutes">50 Minutes</option></select></div>
-      <div class="edit-student-field"><label>Package</label><input id="editStudentPackage" placeholder="e.g. 20 Classes"></div>
-      <div class="edit-student-field"><label>Start Date</label><input id="editStudentStartDate" type="date"><div class="small" style="margin-top:4px">The saved start date of the student's current package.</div></div>
+      <div class="edit-student-field"><label>Classes</label><input id="editStudentClasses" placeholder="e.g. 20 Classes"></div>
+      <div class="edit-student-field"><label>Start Date</label><input id="editStudentStartDate" type="date"><div class="small" style="margin-top:4px">The saved start date of the student's current classes.</div></div>
       <div class="edit-student-field"><label>Status</label><select id="editStudentStatus"><option>Active</option><option>Completed</option></select></div>
       <div class="edit-student-field full"><label>Preferred Class Schedule</label><div class="small" style="margin-top:4px">Select the day(s) and choose the class start time. No typing required.</div><div id="editSchedulePicker" class="schedule-picker"></div></div>
     </div>
@@ -5258,14 +5442,14 @@ onclick="if(event.target===this) closeEditStudent()"
 
 
 <!-- =========================================================
-     RENEW STUDENT PACKAGE MODAL
+     RENEW STUDENT CLASSES MODAL
 ========================================================= -->
 <div id="renewPackageModal" class="modal-backdrop" onclick="if(event.target===this) closeRenewPackage()">
 <div class="modal renew-modal">
 <div class="student-add-modal-header">
   <div>
-    <h3 style="margin:0">Renew Student Package</h3>
-    <div class="small" style="margin-top:4px">Create a new package without removing the student's previous package history. The new classes will be automatically booked in the Appointment Calendar after submission.</div>
+    <h3 style="margin:0">Renew Student Classes</h3>
+    <div class="small" style="margin-top:4px">Create a new set of classes without removing the student's previous classes history. The new classes will be automatically booked in the Appointment Calendar after submission.</div>
   </div>
   <button type="button" class="student-modal-close" onclick="closeRenewPackage()" aria-label="Close">×</button>
 </div>
@@ -5273,22 +5457,18 @@ onclick="if(event.target===this) closeEditStudent()"
 <div class="renew-summary" id="renewStudentSummary">Select a student.</div>
 <div class="student-add-grid">
   <div>
-    <label>New Package</label>
-    <select id="renewPackageName" onchange="updateRenewPreview()">
-      <option value="10 Classes">10 Classes</option>
-      <option value="20 Classes">20 Classes</option>
-      <option value="30 Classes">30 Classes</option>
-      <option value="40 Classes">40 Classes</option>
-    </select>
+    <label>Classes</label>
+    <input id="renewClassCount" type="number" min="1" step="1" inputmode="numeric" placeholder="Enter number of classes" oninput="updateRenewPreview()">
+    <div class="small" style="margin-top:5px">Type the exact number of classes for the new set of classes.</div>
   </div>
   <div>
     <label>Renewal Date</label>
     <input id="renewRenewalDate" type="date" readonly>
   </div>
   <div>
-    <label>New Package Start Date</label>
+    <label>New Classes Start Date</label>
     <input id="renewStartDate" type="date" readonly>
-    <div class="small" style="margin-top:5px">Automatically connected to the last scheduled remaining class from the previous package.</div>
+    <div class="small" style="margin-top:5px">Automatically connected to the last scheduled remaining class from the previous set of classes.</div>
   </div>
   <div>
     <label>Class Duration</label>
@@ -5314,19 +5494,17 @@ onclick="if(event.target===this) closeEditStudent()"
 </div>
 
 <!-- =========================================================
-     RENEWAL SUCCESS / REFRESH NOTICE
+     RENEWAL SUCCESS NOTICE — LIVE UPDATE / NO REFRESH
 ========================================================= -->
 <div id="renewRefreshModal" class="modal-backdrop" style="z-index:99999">
-  <div class="modal" style="max-width:520px;text-align:center">
+  <div class="modal" style="max-width:560px;text-align:center">
     <div style="font-size:46px;line-height:1;margin-bottom:10px">✅</div>
     <h3 style="margin:0 0 10px">Renewal Submitted Successfully</h3>
     <p id="renewRefreshMessage" style="margin:0 0 18px;line-height:1.6">
-      Your renewed package and automatically booked classes have been saved.
-      Please refresh the page to show the updated student record.
+      Your renewed classes, contract requirement, and automatically booked classes have been updated on the screen.
     </p>
     <div class="modal-actions" style="justify-content:center">
-      <button type="button" class="modal-cancel" onclick="closeRenewRefreshNotice()">Later</button>
-      <button type="button" class="modal-save" onclick="refreshAfterRenewal()">Refresh Page</button>
+      <button type="button" class="modal-save" onclick="closeRenewRefreshNotice()">OK — Continue</button>
     </div>
   </div>
 </div>
@@ -7555,6 +7733,7 @@ function openAddStudent(){
   }
 
   modal.classList.add('show');
+  refreshSchedulePickerAvailability('new');
   setTimeout(()=>{
     const name=document.getElementById('newStudentName');
     if(name)name.focus();
@@ -7577,19 +7756,83 @@ const SCHEDULE_DAYS=[
 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
 ];
 
-function buildTimeOptions(){
-let html='<option value="">Select start time</option>';
+function getScheduleConflicts(excludeStudentId=''){
+  const students=getStudents();
+  const conflicts={};
 
-for(let minutes=6*60;minutes<=23*60+30;minutes+=30){
-const h=Math.floor(minutes/60);
-const m=minutes%60;
-const hour12=(h%12)||12;
-const ampm=h<12?'AM':'PM';
-const label=`${hour12}:${String(m).padStart(2,'0')} ${ampm}`;
-html+=`<option value="${String(minutes).padStart(4,'0')}">${label}</option>`;
+  students.forEach(student=>{
+    if(!student || String(student.id||'')===String(excludeStudentId||''))return;
+    if(String(student.status||'Active').toLowerCase()==='completed')return;
+
+    const duration=durationToMinutes(student.duration);
+    const details=student.scheduleDetails||{};
+
+    SCHEDULE_DAYS.forEach(day=>{
+      const raw=details[day];
+      if(raw===undefined || raw===null || raw==='')return;
+
+      const start=parseInt(raw,10);
+      if(!Number.isFinite(start))return;
+      const end=start+duration;
+
+      if(!conflicts[day])conflicts[day]=[];
+      conflicts[day].push({
+        start,
+        end,
+        studentName:student.name||'Another student'
+      });
+    });
+  });
+
+  return conflicts;
 }
 
-return html;
+function isScheduleTimeOccupied(day,startMinutes,duration,excludeStudentId=''){
+  const conflicts=getScheduleConflicts(excludeStudentId)[day]||[];
+  const start=Number(startMinutes);
+  const end=start+durationToMinutes(duration);
+
+  return conflicts.some(item=>start<item.end && end>item.start);
+}
+
+function buildTimeOptions(day='',duration='30 Minutes',excludeStudentId=''){
+  let html='<option value="">Select start time</option>';
+  const classDuration=durationToMinutes(duration);
+
+  for(let minutes=6*60;minutes<=23*60+30;minutes+=30){
+    const h=Math.floor(minutes/60);
+    const m=minutes%60;
+    const hour12=(h%12)||12;
+    const ampm=h<12?'AM':'PM';
+    const label=`${hour12}:${String(m).padStart(2,'0')} ${ampm}`;
+    const occupied=day && isScheduleTimeOccupied(day,minutes,classDuration,excludeStudentId);
+    const endLabel=minutesToTimeLabel(minutes+classDuration);
+
+    html+=`<option value="${String(minutes).padStart(4,'0')}" ${occupied?'disabled':''} ${occupied?`title="Already assigned${endLabel?` until ${endLabel}`:''}"`:''}>${label}${occupied?' — BOOKED':''}</option>`;
+  }
+
+  return html;
+}
+
+function refreshSchedulePickerAvailability(prefix,excludeStudentId=''){
+  const duration=document.getElementById(`${prefix}StudentDuration`)?.value||'30 Minutes';
+
+  SCHEDULE_DAYS.forEach(day=>{
+    const select=document.getElementById(`${prefix}Time_${day}`);
+    const checkbox=document.getElementById(`${prefix}Schedule_${day}`);
+    if(!select)return;
+
+    const currentValue=select.value;
+    select.innerHTML=buildTimeOptions(day,duration,excludeStudentId);
+    select.value=currentValue;
+
+    if(select.value!==currentValue && currentValue){
+      select.value='';
+    }
+
+    select.disabled=!(checkbox&&checkbox.checked);
+    updateScheduleEndTime(prefix,day);
+  });
 }
 
 function minutesToTimeLabel(totalMinutes){
@@ -7650,11 +7893,11 @@ function updateAllScheduleEndTimes(prefix){
 SCHEDULE_DAYS.forEach(day=>updateScheduleEndTime(prefix,day));
 }
 
-function buildSchedulePicker(prefix,containerId){
+function buildSchedulePicker(prefix,containerId,excludeStudentId=''){
 const container=document.getElementById(containerId);
 if(!container)return;
 
-const options=buildTimeOptions();
+const duration=document.getElementById(`${prefix}StudentDuration`)?.value||'30 Minutes';
 
 container.innerHTML=SCHEDULE_DAYS.map(day=>`
 <div class="schedule-row">
@@ -7673,7 +7916,7 @@ container.innerHTML=SCHEDULE_DAYS.map(day=>`
     disabled
     onchange="updateScheduleEndTime('${prefix}','${day}')"
   >
-    ${options}
+    ${buildTimeOptions(day,duration,excludeStudentId)}
   </select>
 
   <div id="${prefix}End_${day}" class="schedule-end-time">
@@ -7756,7 +7999,7 @@ const age=document.getElementById('newStudentAge').value.trim();
 const parentName=document.getElementById('newStudentParentName').value.trim();
 const level=document.getElementById('newStudentLevel').value;
 const duration=document.getElementById('newStudentDuration').value;
-const packageName=document.getElementById('newStudentPackage').value.trim();
+const packageName=document.getElementById('newStudentClasses').value.trim();
 const status=document.getElementById('newStudentStatus').value;
 const scheduleData=getSchedulePickerData('new');
 const schedule=scheduleData.selected;
@@ -7776,6 +8019,12 @@ scheduleDetails[day]===undefined
 if(missingTime)
 return showStudentStatus('Please choose a start time for every selected day.',false);
 
+for(const day of schedule){
+  if(isScheduleTimeOccupied(day,scheduleDetails[day],duration,'')){
+    return showStudentStatus(`${day} at ${minutesToTimeLabel(scheduleDetails[day])} is already assigned to another active student. Please choose another time.`,false);
+  }
+}
+
 const students=getStudents();
 
 if(students.some(s=>s.id.toLowerCase()===id.toLowerCase()))
@@ -7787,12 +8036,12 @@ schedule,
 duration
 );
 
-const initialPackageCount=getPackageClassCount(packageName);
+const initialClassesCount=getPackageClassCount(packageName);
 const initialPackageId=`pkg_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
-const initialPackage={
+const initialClasses={
   id:initialPackageId,
   packageName,
-  classCount:initialPackageCount,
+  classCount:initialClassesCount,
   startDate:getLocalDateString(new Date()),
   status:'Active',
   createdAt:new Date().toISOString()
@@ -7812,7 +8061,7 @@ students.push({
   scheduleDetails,
   classTime,
   currentPackageId:initialPackageId,
-  packageHistory:initialPackageCount?[initialPackage]:[],
+  packageHistory:initialClassesCount?[initialClasses]:[],
   createdAt:new Date().toISOString()
 });
 
@@ -7824,7 +8073,7 @@ saveStudents(students);
 'newStudentId',
 'newStudentAge',
 'newStudentParentName',
-'newStudentPackage'
+'newStudentClasses'
 ].forEach(id=>{
 const el=document.getElementById(id);
 if(el)el.value='';
@@ -7937,7 +8186,7 @@ document.getElementById('editStudentDuration').value=
 ?student.duration
 :'30 Minutes';
 
-document.getElementById('editStudentPackage').value=student.packageName||'';
+document.getElementById('editStudentClasses').value=student.packageName||'';
 
 const currentPackage=getCurrentStudentPackage(student);
 const savedStartDate=
@@ -7955,6 +8204,7 @@ setSchedulePicker(
 student.scheduleDetails||{},
 student.preferredSchedule||[]
 );
+refreshSchedulePickerAvailability('edit',student.id);
 
 document.getElementById('editStudentError').textContent='';
 document.getElementById('editStudentError').classList.remove('show');
@@ -7987,6 +8237,13 @@ scheduleData.details[day]===undefined
 ))
 return fail('Please choose a start time for every selected day.');
 
+const editedDuration=document.getElementById('editStudentDuration').value;
+for(const day of scheduleData.selected){
+  if(isScheduleTimeOccupied(day,scheduleData.details[day],editedDuration,originalId)){
+    return fail(`${day} at ${minutesToTimeLabel(scheduleData.details[day])} is already assigned to another active student. Please choose another time.`);
+  }
+}
+
 const students=getStudents();
 if(students.some(s=>s.id.toLowerCase()===id.toLowerCase()&&s.id!==originalId))
 return fail('That Student ID already exists.');
@@ -8004,7 +8261,7 @@ age:document.getElementById('editStudentAge').value.trim(),
 parentName:document.getElementById('editStudentParentName').value.trim(),
 level:document.getElementById('editStudentLevel').value,
 duration:document.getElementById('editStudentDuration').value,
-packageName:document.getElementById('editStudentPackage').value.trim(),
+packageName:document.getElementById('editStudentClasses').value.trim(),
 status:document.getElementById('editStudentStatus').value,
 preferredSchedule:getSchedulePickerData('edit').selected,
 scheduleDetails:getSchedulePickerData('edit').details,
@@ -8156,6 +8413,7 @@ let appointmentMonthDate=new Date();
 let selectedAppointmentDate=getLocalDateString(new Date());
 let editingAppointmentId='';
 let rebookingAppointment=false;
+let newAppointmentScheduleMode='preferred';
 
 function appointmentStorageKey(){
 return currentUser
@@ -8198,11 +8456,39 @@ function getAppointmentStudent(id){
 return getStudents().find(s=>s.id===id)||null;
 }
 
+function getStudentBookedCountForCurrentClasses(student){
+if(!student)return 0;
+const current=getCurrentStudentPackage(student);
+const appointments=getAppointments();
+const regular=appointments.filter(a=>a.studentId===student.id&&a.status!=='Cancelled'&&(a.type||'Regular Class')==='Regular Class');
+if(current){
+  const linked=regular.filter(a=>a.packageId===current.id);
+  const legacy=regular.filter(a=>!a.packageId);
+  /* Older appointments without packageId are still counted so they cannot
+     accidentally create an extra class beyond the active classes. */
+  return linked.length + legacy.length;
+}
+return regular.length;
+}
+
+function studentHasBookableClasses(student){
+if(!student)return false;
+const current=getCurrentStudentPackage(student);
+const packageCount=current
+  ? Math.max(0,parseInt(current.classCount,10)||getPackageClassCount(current.packageName))
+  : getPackageClassCount(student.packageName);
+if(!packageCount)return true; /* keep students with no readable limit selectable */
+const booked=getStudentBookedCountForCurrentClasses(student);
+return booked < packageCount;
+}
+
 function populateAppointmentStudentSelect(selectedId=''){
 const select=document.getElementById('appointmentStudent');
 if(!select)return;
 const students=getStudents().slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
-select.innerHTML='<option value="">Select student</option>'+students.map(s=>
+const editingStudentId=editingAppointmentId ? (getAppointments().find(a=>a.id===editingAppointmentId)?.studentId||'') : '';
+const visibleStudents=students.filter(s=>studentHasBookableClasses(s)||s.id===selectedId||s.id===editingStudentId);
+select.innerHTML='<option value="">Select student</option>'+visibleStudents.map(s=>
 `<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} — ${escapeHtml(s.id)}</option>`
 ).join('');
 if(selectedId)select.value=selectedId;
@@ -8213,10 +8499,11 @@ return document.getElementById('appointmentDuration')?.value||'30 Minutes';
 }
 
 function getAppointmentScheduleMode(){
-return editingAppointmentId?'manual':'preferred';
+return editingAppointmentId?'manual':newAppointmentScheduleMode;
 }
 
 function setAppointmentScheduleMode(mode){
+if(!editingAppointmentId)newAppointmentScheduleMode=mode==='manual'?'manual':'preferred';
 const preferred=document.querySelector('input[name="appointmentScheduleMode"][value="preferred"]');
 const manual=document.querySelector('input[name="appointmentScheduleMode"][value="manual"]');
 if(preferred)preferred.checked=mode==='preferred';
@@ -8335,14 +8622,15 @@ function updateAppointmentAutoInfo(){
 const box=document.getElementById('appointmentAutoInfo');
 if(!box)return;
 const student=getAppointmentStudent(document.getElementById('appointmentStudent')?.value||'');
-if(!student){box.textContent='Select a student to see the saved preferred schedule and package class limit.';return;}
+if(!student){box.textContent='Select a student to see the saved preferred schedule and class limit.';return;}
 const packageCount=getPackageClassCount(student.packageName);
 const preferredDays=SCHEDULE_DAYS.filter(day=>Object.prototype.hasOwnProperty.call(student.scheduleDetails||{},day));
 const scheduleText=preferredDays.length
 ?preferredDays.map(day=>`${day} — ${minutesToTimeLabel(parseInt(student.scheduleDetails[day],10))}`).join(' · ')
 :'No preferred schedule saved.';
-const existing=getStudentAppointmentCount(student.id);
-box.innerHTML=`<strong>${escapeHtml(student.name)}</strong><br>Package: <strong>${packageCount?packageCount+' classes':'No class limit found'}</strong> · Duration: <strong>${escapeHtml(student.duration||'30 Minutes')}</strong><br>Preferred schedule: ${escapeHtml(scheduleText)}<br>Already booked: <strong>${existing}</strong>${packageCount?` · Remaining automatic slots: <strong>${Math.max(0,packageCount-existing)}</strong>`:''}`;
+const existing=getStudentBookedCountForCurrentClasses(student);
+const mode=getAppointmentScheduleMode();
+box.innerHTML=`<strong>${escapeHtml(student.name)}</strong><br>Classes: <strong>${packageCount?packageCount+' classes':'No class limit found'}</strong> · Duration: <strong>${escapeHtml(student.duration||'30 Minutes')}</strong><br>Preferred schedule: ${escapeHtml(scheduleText)}<br>Classes used in active classes: <strong>${existing}</strong>${packageCount?` · Remaining: <strong>${Math.max(0,packageCount-existing)}</strong>`:''}<br><span style="font-weight:700">Booking mode: ${mode==='manual'?'Manual / one-time date & time':'Preferred schedule'}</span>`;
 }
 
 function updateAppointmentSummary(){
@@ -8614,9 +8902,9 @@ box.className='status success';
 box.textContent=message;
 }
 
-function openAppointmentModal(appointmentId=''){
+function openAppointmentModal(appointmentId='', openMode='edit'){
 editingAppointmentId=appointmentId||'';
-rebookingAppointment=false;
+rebookingAppointment=(openMode==='rebook');
 const modal=document.getElementById('appointmentModal');
 if(!modal)return;
 populateAppointmentStudentSelect();
@@ -8646,16 +8934,25 @@ if(appointmentId){
   if(durationSelect)durationSelect.value=item.duration||'30 Minutes';
   if(typeSelect)typeSelect.value=item.type||'Regular Class';
 
-  /* EDIT = Class Type ONLY. Everything else is locked. */
-  if(studentSelect)studentSelect.disabled=true;
-  if(appointmentDateInput)appointmentDateInput.disabled=true;
-  if(timeSelect)timeSelect.disabled=true;
-  if(durationSelect)durationSelect.disabled=true;
-  if(typeSelect)typeSelect.disabled=false;
-
-  setAppointmentScheduleMode('manual');
+  /* EDIT = Class Type ONLY. REBOOK = Date + Time ONLY. */
+  if(rebookingAppointment){
+    if(studentSelect)studentSelect.disabled=true;
+    if(appointmentDateInput)appointmentDateInput.disabled=false;
+    if(timeSelect)timeSelect.disabled=false;
+    if(durationSelect)durationSelect.disabled=true;
+    if(typeSelect)typeSelect.disabled=true;
+    setAppointmentScheduleMode('manual');
+  }else{
+    if(studentSelect)studentSelect.disabled=true;
+    if(appointmentDateInput)appointmentDateInput.disabled=true;
+    if(timeSelect)timeSelect.disabled=true;
+    if(durationSelect)durationSelect.disabled=true;
+    if(typeSelect)typeSelect.disabled=false;
+    setAppointmentScheduleMode('manual');
+  }
 }else{
   document.getElementById('appointmentOriginalId').value='';
+  newAppointmentScheduleMode='preferred';
   if(studentSelect)studentSelect.value='';
   if(appointmentDateInput)appointmentDateInput.value=selectedAppointmentDate||getLocalDateString(new Date());
   if(timeSelect)timeSelect.value='';
@@ -8681,34 +8978,39 @@ if(appointmentId)onAppointmentStudentChange();
 
 function rebookAppointment(id){
 const item=getAppointments().find(a=>a.id===id);
-if(!item||((item.status||'Scheduled')!=='Scheduled'))return;
+if(!item)return;
+const status=item.status||'Scheduled';
+if(status!=='Scheduled'){
+  apptShowMessage('Only scheduled classes can be rebooked before the class starts.');
+  return;
+}
 
+/* Open the existing appointment in true REBOOK mode.
+   Rebook changes DATE + TIME only; student, duration and class type stay locked. */
 editingAppointmentId=id;
 rebookingAppointment=true;
-openAppointmentModal(id);
+openAppointmentModal(id,'rebook');
 
+const title=document.getElementById('appointmentModalTitle');
+const saveBtn=document.getElementById('appointmentSaveBtn');
 const studentSelect=document.getElementById('appointmentStudent');
 const dateInput=document.getElementById('appointmentDate');
 const timeSelect=document.getElementById('appointmentTime');
 const durationSelect=document.getElementById('appointmentDuration');
 const typeSelect=document.getElementById('appointmentType');
-const title=document.getElementById('appointmentModalTitle');
-const saveBtn=document.getElementById('appointmentSaveBtn');
 
-/* REBOOK = Date + Time ONLY. Everything else is locked. */
 if(studentSelect)studentSelect.disabled=true;
 if(dateInput)dateInput.disabled=false;
 if(timeSelect)timeSelect.disabled=false;
 if(durationSelect)durationSelect.disabled=true;
 if(typeSelect)typeSelect.disabled=true;
-
 if(title)title.textContent='Rebook Appointment';
 if(saveBtn)saveBtn.textContent='Save Rebooked Class';
 
 setAppointmentScheduleMode('manual');
-updateAppointmentAutoInfo();
 updateAppointmentEndTime();
 updateAppointmentSummary();
+updateAppointmentConflict();
 }
 
 function closeAppointmentModal(){
@@ -8716,6 +9018,7 @@ const modal=document.getElementById('appointmentModal');
 if(modal)modal.classList.remove('show');
 editingAppointmentId='';
 rebookingAppointment=false;
+newAppointmentScheduleMode='preferred';
 }
 
 function getStudentAppointmentCount(studentId){
@@ -8742,13 +9045,13 @@ return getAppointments().some(a=>a.studentId===studentId&&a.date===date&&a.time=
 
 function generatePreferredAppointments(student,startDate,type){
 const packageLimit=getPackageClassCount(student.packageName);
-if(!packageLimit)return {created:0,remaining:0,reason:'No class limit was found in the Package field. Example: 30 Classes.'};
+if(!packageLimit)return {created:0,remaining:0,reason:'No class limit was found in the Classes field. Example: 30 Classes.'};
 const preferredDays=SCHEDULE_DAYS.filter(day=>student.scheduleDetails&&student.scheduleDetails[day]!==undefined&&student.scheduleDetails[day]!==null&&student.scheduleDetails[day]!=='');
 if(!preferredDays.length)return {created:0,remaining:packageLimit,reason:'This student has no preferred class days/times saved.'};
 let appointments=getAppointments();
 const existingCount=appointments.filter(a=>a.studentId===student.id&&a.status!=='Cancelled'&&(a.type||'Regular Class')==='Regular Class').length;
 let remaining=Math.max(0,packageLimit-existingCount);
-if(remaining===0)return {created:0,remaining:0,reason:'The package class limit has already been reached.'};
+if(remaining===0)return {created:0,remaining:0,reason:'The class limit has already been reached.'};
 let created=0;
 let cursor=new Date(`${startDate}T00:00:00`);
 for(let i=0;i<730&&created<remaining;i++){
@@ -8795,50 +9098,65 @@ const old=appointments.find(a=>a.id===editingAppointmentId);
 if(!old)return fail('The appointment could not be found.');
 
 const wasRebook=rebookingAppointment;
-const finalDate=wasRebook?date:old.date;
-const finalTime=wasRebook?time:old.time;
-const finalType=wasRebook?(old.type||'Regular Class'):type;
-
-if(updateAppointmentConflict())return fail('Please choose another date or time.');
-
-const now=new Date().toISOString();
-let record;
 
 if(wasRebook){
-  /* Rebook changes DATE + TIME only. */
-  record={
+  /* REBOOK: only DATE + TIME may change. Do not apply classes limits. */
+  if(!date)return fail('Please select the new class date.');
+  if(!time)return fail('Please select the new class time.');
+  const today=getLocalDateString(new Date());
+  if(date<today)return fail('Please choose today or a future date for the rebooked class.');
+  if(date===old.date && time===old.time)return fail('Please choose a different date or time for the rebooked class.');
+
+  const durationMinutes=durationToMinutes(old.duration||'30 Minutes');
+  const start=parseAppointmentDate(date,time);
+  if(!start)return fail('Please choose a valid date and time.');
+  const end=new Date(start.getTime()+durationMinutes*60000);
+  if(end.getDate()!==start.getDate())return fail('Please choose an earlier start time so the class stays on the same day.');
+
+  const conflict=appointments.find(a=>{
+    if(a.id===old.id||a.status==='Cancelled')return false;
+    const otherStart=getAppointmentDateTime(a);
+    if(!otherStart)return false;
+    const otherEnd=new Date(otherStart.getTime()+durationToMinutes(a.duration||'30 Minutes')*60000);
+    return start<otherEnd&&end>otherStart;
+  });
+  if(conflict)return fail(`Schedule conflict: ${conflict.studentName||'Another class'} is already scheduled for ${formatAppointmentTime(conflict.time)} on ${conflict.date}. Please choose another date or time.`);
+
+  const now=new Date().toISOString();
+  const record={
     ...old,
-    date:finalDate,
-    time:finalTime,
+    date,
+    time,
+    scheduleMode:'manual',
     updatedAt:now
   };
-}else{
-  /* Edit changes CLASS TYPE only. */
-  record={
-    ...old,
-    type:finalType,
-    updatedAt:now
-  };
+  const index=appointments.findIndex(a=>a.id===old.id);
+  if(index<0)return fail('The appointment could not be found. Please close this window and try Rebook again.');
+  appointments[index]=record;
+  saveAppointments(appointments);
+  closeAppointmentModal();
+  selectedAppointmentDate=date;
+  const movedDate=new Date(`${date}T00:00:00`);
+  appointmentMonthDate=new Date(movedDate.getFullYear(),movedDate.getMonth(),1);
+  apptShowMessage(`Appointment rebooked for ${old.studentName||student.name}. The new schedule is ${date} at ${formatAppointmentTime(time)}.`);
+  refreshLiveUI({records:false,contracts:false,studentId:student.id});
+  return;
 }
 
+/* EDIT: Class Type ONLY. */
+const finalType=type;
+if(updateAppointmentConflict())return fail('Please choose another date or time.');
+const now=new Date().toISOString();
+const record={...old,type:finalType,updatedAt:now};
 const index=appointments.findIndex(a=>a.id===editingAppointmentId);
 if(index>=0)appointments[index]=record;
 saveAppointments(appointments);
-
 closeAppointmentModal();
-selectedAppointmentDate=finalDate;
-const movedDate=new Date(`${finalDate}T00:00:00`);
+selectedAppointmentDate=old.date;
+const movedDate=new Date(`${old.date}T00:00:00`);
 appointmentMonthDate=new Date(movedDate.getFullYear(),movedDate.getMonth(),1);
-
-apptShowMessage(
-  wasRebook
-    ? `Appointment rebooked for ${student.name}. The new schedule is ${finalDate} at ${formatAppointmentTime(finalTime)}.`
-    : `Appointment updated for ${student.name}. Class Type changed to ${finalType}.`
-);
-
-renderAppointments();
-renderDashboard();
-renderStudents();
+apptShowMessage(`Appointment updated for ${student.name}. Class Type changed to ${finalType}.`);
+refreshLiveUI({records:false,contracts:false,studentId:student.id});
 return;
 }
 if(mode==='preferred'){
@@ -8849,7 +9167,7 @@ return fail(result.reason||'No appointments were generated.');
 }
 closeAppointmentModal();
 selectedAppointmentDate=date;
-apptShowMessage(`${result.created} future class${result.created===1?'':'es'} booked automatically for ${student.name}. ${result.remaining?`${result.remaining} class${result.remaining===1?'':'es'} remaining.`:'Package limit reached.'}`);
+apptShowMessage(`${result.created} future class${result.created===1?'':'es'} booked automatically for ${student.name}. ${result.remaining?`${result.remaining} class${result.remaining===1?'':'es'} remaining.`:'Classes limit reached.'}`);
 renderAppointments();renderDashboard();
 return;
 }
@@ -8870,22 +9188,33 @@ saveAppointments(appointments);
 closeAppointmentModal();
 selectedAppointmentDate=date;
 apptShowMessage(`${type} scheduled for ${student.name}.`);
-renderAppointments();renderDashboard();
+refreshLiveUI({students:false,records:false,contracts:false});
 return;
 }
 if(!time)return fail('Please select the start time.');
 if(updateAppointmentConflict())return fail('Please choose another date or time.');
+
+/* MANUAL / ONE-TIME BOOKING: choose any date + time; do not follow preferred schedule.
+   Regular Class consumes one class from the student's active classes. */
+const currentPackage=getCurrentStudentPackage(student);
+const packageLimit=currentPackage
+  ? Math.max(0,parseInt(currentPackage.classCount,10)||getPackageClassCount(currentPackage.packageName))
+  : getPackageClassCount(student.packageName);
+const bookedForClasses=getStudentBookedCountForCurrentClasses(student);
+if(type==='Regular Class' && packageLimit && bookedForClasses>=packageLimit){
+  return fail('This student has no remaining classes in the active classes. Please renew the classes first.');
+}
 const now=new Date().toISOString();
 const appointments=getAppointments();
 appointments.push({
 id:`appt_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
-studentId:student.id,studentName:student.name,date,time,duration,type,scheduleMode:'manual',createdAt:now,updatedAt:now
+studentId:student.id,studentName:student.name,date,time,duration,type,scheduleMode:'manual',packageId:type==='Regular Class'?(currentPackage?.id||student.currentPackageId||''):'',createdAt:now,updatedAt:now
 });
 saveAppointments(appointments);
 closeAppointmentModal();
 selectedAppointmentDate=date;
-apptShowMessage(`Appointment saved for ${student.name}.`);
-renderAppointments();renderDashboard();
+apptShowMessage(`${type} manually booked for ${student.name}. ${type==='Regular Class'&&packageLimit?`Remaining classes: ${Math.max(0,packageLimit-(bookedForClasses+1))}.`:''}`);
+refreshLiveUI({students:false,records:false,contracts:false});
 }
 
 function aptFilterMatch(item){
@@ -8948,38 +9277,110 @@ const d=new Date(`${date}T00:00:00`);
 const dayItems=items.filter(a=>a.date===date).sort((a,b)=>String(a.time).localeCompare(String(b.time)));
 const title=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 const addButton=`<div class="appointment-day-detail-footer"><button type="button" class="primary" onclick="openAppointmentModalForDate('${date}')">+ Add Class</button></div>`;
-if(!dayItems.length){
-container.innerHTML=`<div class="appointment-day-detail"><div class="appointment-day-detail-head"><span>${title}</span></div><div class="appointment-empty-page">No classes or appointments for this date.</div>${addButton}</div>`;
-return;
+
+/* Default view: show 6:00 AM–11:30 PM. 12:00 AM–5:30 AM is hidden until SHOW ALL TIME is clicked. */
+const slots=[];
+for(let minutes=0;minutes<24*60;minutes+=30){
+  const h=Math.floor(minutes/60);
+  const m=minutes%60;
+  const time=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  const slotItems=dayItems.filter(a=>String(a.time||'')===time);
+  slots.push({minutes,time,slotItems});
 }
-container.innerHTML=`<div class="appointment-day-detail"><div class="appointment-day-detail-head"><span>${title}</span></div><div class="appointment-day-detail-body">${dayItems.map(item=>{
-const status=item.status||'Scheduled';
-const reason=item.cancelReason||'';
-const safeId=escapeAttr(item.id);
-let actionButtons='';
-const start=getAppointmentDateTime(item);
-const endTime=start ? new Date(start.getTime()+durationToMinutes(item.duration||'30 Minutes')*60000) : null;
-const classEnded=!!endTime && new Date()>=endTime;
-if(status==='Scheduled' && !classEnded){
-/* Before the class end time: Edit, Cancel, and Rebook are available. */
-actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button><button class="rebook" type="button" onclick="rebookAppointment('${safeId}')">Rebook</button>`;
-}else if(status==='Scheduled' && classEnded){
-/* The class is automatically COMPLETED after the end time, but attendance still needs to be selected. */
-actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED</button><button class="attendance-present" type="button" onclick="markAppointmentPresent('${safeId}')">PRESENT</button><button class="attendance-absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">ABSENT</button>`;
-}else if(status==='Completed'){
-const attendance=(item.attendance||'').toUpperCase();
-if(attendance){
-  actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED · ${escapeHtml(attendance)}</button><button class="appointment-evaluate" type="button" onclick="openAppointmentEvaluation('${safeId}')">EVALUATE</button>`;
-}else{
-  actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED</button><button class="attendance-present" type="button" onclick="markAppointmentPresent('${safeId}')">PRESENT</button><button class="attendance-absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">ABSENT</button>`;
-}
-}
-return `<div class="appointment-detail-row">
-<div class="appointment-detail-time">${escapeHtml(formatAppointmentTime(item.time))} – ${escapeHtml(formatAppointmentTime(addMinutesToTime(item.time,durationToMinutes(item.duration))))}</div>
-<div class="appointment-detail-main"><b>${escapeHtml(item.studentName||'Student')}</b><span>${escapeHtml(item.type||'Regular Class')} · ${escapeHtml(item.duration||'30 Minutes')} · ${escapeHtml(status)}</span>${item.scheduleMode==='preferred'?'<span>Automatic preferred schedule</span>':''}${reason?`<span><strong>Cancellation reason:</strong> ${escapeHtml(reason)}</span>`:''}${item.notes?`<span>${escapeHtml(item.notes)}</span>`:''}</div>
-<div class="appointment-actions">${actionButtons}</div>
+
+const timeline=slots.map(slot=>{
+  const label=formatAppointmentTime(slot.time);
+  const early=slot.minutes<360;
+  let content='<span class="appointment-time-empty">Available</span>';
+  if(slot.slotItems.length){
+    content=slot.slotItems.map(item=>{
+      const status=item.status||'Scheduled';
+      const duration=item.duration||'30 Minutes';
+      const safeId=escapeAttr(item.id);
+      const attendance=item.attendance?` · ${escapeHtml(String(item.attendance).toUpperCase())}`:'';
+      let actionButtons='';
+      if(status==='Scheduled'){
+        actionButtons=`<button type="button" class="appointment-time-action open" onclick="event.stopPropagation();openAppointmentModal('${safeId}')">Open</button>
+          <button type="button" class="appointment-time-action view" onclick="event.stopPropagation();viewAppointmentDetails('${safeId}')">View</button>`;
+      }else if(status==='Completed'){
+        actionButtons=`<button type="button" class="appointment-time-action completed" disabled>Completed</button>`;
+        if(!item.attendance){
+          actionButtons+=`<button type="button" class="appointment-time-action present" onclick="event.stopPropagation();markAppointmentPresent('${safeId}')">Present</button>
+          <button type="button" class="appointment-time-action absent" onclick="event.stopPropagation();markAppointmentAbsent('${safeId}')">Absent</button>`;
+        }else if(String(item.attendance||'').toLowerCase()==='present'){
+          actionButtons+=`<button type="button" class="appointment-time-action evaluate" onclick="event.stopPropagation();openAppointmentEvaluation('${safeId}')">Evaluate</button>`;
+        }
+      }
+      return `<div class="appointment-time-booking ${status==='Completed'?'completed':'scheduled'}">
+        <div class="appointment-time-booking-main"><strong>${escapeHtml(item.studentName||'Student')}</strong><span>${escapeHtml(item.type||'Regular Class')} · ${escapeHtml(duration)} · ${escapeHtml(status)}${attendance}</span></div>
+        <div class="appointment-time-booking-actions">${actionButtons}</div>
+      </div>`;
+    }).join('');
+  }
+  return `<div class="appointment-time-slot ${early?'appointment-hidden-early-time':''}" data-early-time="${early?'1':'0'}"><div class="appointment-time-label">${escapeHtml(label)}</div><div class="appointment-time-content">${content}</div></div>`;
+}).join('');
+
+container.innerHTML=`<div class="appointment-day-detail">
+  <div class="appointment-day-detail-head"><span>${escapeHtml(title)}</span><strong>${dayItems.length} class${dayItems.length===1?'':'es'}</strong></div>
+  <div class="appointment-show-all-time-wrap"><button type="button" class="appointment-show-all-time" onclick="toggleAppointmentEarlyTimes(this)">SHOW ALL TIME</button></div>
+  <div class="appointment-time-grid">${timeline}</div>
+  ${addButton}
 </div>`;
-}).join('')}</div>${addButton}</div>`;
+}
+
+function viewAppointmentDetails(id){
+  const item=getAppointments().find(a=>a.id===id);
+  if(!item)return;
+  const student=getAppointmentStudent(item.studentId);
+  const content=document.getElementById('appointmentViewContent');
+  const actions=document.getElementById('appointmentViewActions');
+  const modal=document.getElementById('appointmentViewModal');
+  if(!content||!actions||!modal)return;
+  const status=item.status||'Scheduled';
+  const attendance=item.attendance||'Not recorded';
+  const date=item.date||'';
+  const time=formatAppointmentTime(item.time||'');
+  const endTime=(()=>{try{const d=parseAppointmentDate(date,item.time||''); if(!d)return ''; d.setMinutes(d.getMinutes()+durationToMinutes(item.duration||'30 Minutes')); return formatAppointmentTime(`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`);}catch(e){return '';}})();
+  content.innerHTML=`<div class="appointment-view-grid">
+    <div class="label">Student</div><div>${escapeHtml(item.studentName||student?.name||'Student')}</div>
+    <div class="label">Date</div><div>${escapeHtml(date)}</div>
+    <div class="label">Time</div><div>${escapeHtml(time)}${endTime?` – ${escapeHtml(endTime)}`:''}</div>
+    <div class="label">Duration</div><div>${escapeHtml(item.duration||'30 Minutes')}</div>
+    <div class="label">Class Type</div><div>${escapeHtml(item.type||'Regular Class')}</div>
+    <div class="label">Status</div><div>${escapeHtml(status)}</div>
+    <div class="label">Attendance</div><div>${escapeHtml(attendance)}</div>
+  </div>`;
+  let buttons='';
+  if(status==='Scheduled'){
+    buttons=`<button type="button" class="appointment-time-action rebook" onclick="closeAppointmentViewModal();rebookAppointment('${escapeAttr(item.id)}')">Rebook</button>
+      <button type="button" class="appointment-time-action cancel" onclick="closeAppointmentViewModal();cancelAppointment('${escapeAttr(item.id)}')">Cancel</button>`;
+  }else if(status==='Completed' && !item.attendance){
+    buttons=`<button type="button" class="appointment-time-action completed" disabled>Completed</button>
+      <button type="button" class="appointment-time-action present" onclick="closeAppointmentViewModal();markAppointmentPresent('${escapeAttr(item.id)}')">Present</button>
+      <button type="button" class="appointment-time-action absent" onclick="closeAppointmentViewModal();markAppointmentAbsent('${escapeAttr(item.id)}')">Absent</button>`;
+  }else if(status==='Completed' && String(item.attendance||'').toLowerCase()==='present'){
+    buttons=`<button type="button" class="appointment-time-action completed" disabled>Completed</button>
+      <button type="button" class="appointment-time-action evaluate" onclick="closeAppointmentViewModal();openAppointmentEvaluation('${escapeAttr(item.id)}')">Evaluate</button>`;
+  }else if(status==='Completed' && String(item.attendance||'').toLowerCase()==='absent'){
+    buttons=`<button type="button" class="appointment-time-action completed" disabled>Completed</button>`;
+  }
+  actions.innerHTML=buttons+`<button type="button" class="modal-cancel" onclick="closeAppointmentViewModal()">Close</button>`;
+  modal.classList.add('show');
+}
+
+function closeAppointmentViewModal(){
+  const modal=document.getElementById('appointmentViewModal');
+  if(modal)modal.classList.remove('show');
+}
+
+function toggleAppointmentEarlyTimes(button){
+const detail=button?.closest('.appointment-day-detail');
+if(!detail)return;
+const hidden=detail.querySelectorAll('.appointment-hidden-early-time');
+const showing=button.dataset.expanded==='1';
+hidden.forEach(row=>row.style.display=showing?'none':'grid');
+button.dataset.expanded=showing?'0':'1';
+button.textContent=showing?'SHOW ALL TIME':'HIDE 12:00 AM–6:00 AM';
 }
 
 function selectAppointmentDay(dateString){
@@ -9033,7 +9434,10 @@ return {...item,status:'Completed',completedAt:now.toISOString(),updatedAt:now.t
 }
 return item;
 });
-if(changed)saveAppointments(updated);
+if(changed){
+  saveAppointments(updated);
+  if(document.getElementById('appointmentCalendar')) renderAppointments();
+}
 return changed;
 }
 
@@ -9057,13 +9461,24 @@ if(index<0)return;
 const item=appointments[index];
 appointments[index]={...item,status:'Completed',attendance:'Present',presentAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
 saveAppointments(appointments);
-renderAppointments();
-renderDashboard();
+refreshLiveUI({students:false,records:false,contracts:false});
+}
+
+function markAppointmentAbsent(id){
+  const appointments=getAppointments();
+  const index=appointments.findIndex(a=>a.id===id);
+  if(index<0)return;
+  const item=appointments[index];
+  if((item.status||'')!=='Completed' || item.attendance)return;
+  const now=new Date().toISOString();
+  appointments[index]={...item,status:'Completed',attendance:'Absent',absentAt:now,updatedAt:now};
+  saveAppointments(appointments);
+  refreshLiveUI({students:false,records:false,contracts:false});
 }
 
 function openAppointmentEvaluation(id){
 const item=getAppointments().find(a=>a.id===id);
-if(!item || (item.status||'')!=='Completed' || !item.attendance)return;
+if(!item || (item.status||'')!=='Completed' || String(item.attendance||'').toLowerCase()!=='present')return;
 evaluationEntryMode='appointment';
 showPage('evaluation');
 evaluationEntryMode='appointment';
@@ -9115,8 +9530,7 @@ if(action==='cancel'){
 }
 saveAppointments(appointments);
 closeAppointmentReasonModal();
-renderAppointments();
-renderDashboard();
+refreshLiveUI({students:false,records:false,contracts:false});
 }
 
 function cancelAppointment(id){
@@ -9131,8 +9545,7 @@ const index=appointments.findIndex(a=>a.id===id);
 if(index<0)return;
 appointments[index]={...appointments[index],status,updatedAt:new Date().toISOString()};
 saveAppointments(appointments);
-renderAppointments();
-renderDashboard();
+refreshLiveUI({students:false,records:false,contracts:false});
 }
 
 function deleteAppointment(id){
@@ -9151,6 +9564,19 @@ const old=range.textContent;
 range.textContent=message;
 setTimeout(()=>{if(document.getElementById('appointmentRange'))renderAppointments();},1800);
 }
+}
+
+/* Keep all visible dashboard modules synchronized immediately after a save.
+   This updates the current UI from localStorage without reloading the page. */
+function refreshLiveUI(options={}){
+  try{
+    if(options.appointments!==false && document.getElementById('appointmentCalendar')) renderAppointments();
+    if(options.dashboard!==false && document.getElementById('dashboardPage')) renderDashboard();
+    if(options.students!==false && document.getElementById('studentList')) renderStudents();
+    if(options.records!==false && document.getElementById('recordsPage')) renderRecords();
+    if(options.contracts!==false && document.getElementById('contractPendingList')) renderContractStudentLists();
+    if(options.studentId && typeof populateStudentSelect==='function') populateStudentSelect(options.studentId);
+  }catch(e){ console.warn('Live UI refresh warning:',e); }
 }
 
 /* =========================================================
@@ -9301,7 +9727,7 @@ list.innerHTML=students.map(s=>`
 function getPackageClassCount(packageName){
 const matches=String(packageName||'').match(/\d+/g)||[];
 if(!matches.length)return 0;
-/* Package labels may be written as P1 - 20 Classes, P2 - 30 Classes, etc.
+/* Classes labels may be written as P1 - 20 Classes, P2 - 30 Classes, etc.
    Use the final number as the actual class quantity. */
 return Math.max(0,parseInt(matches[matches.length-1],10)||0);
 }
@@ -9368,8 +9794,8 @@ content.innerHTML=`
    <div style="margin-top:10px"><span class="student-status-badge ${escapeAttr((student.status||'Active').toLowerCase())}">${escapeHtml(student.status||'Active')}</span></div>
    <div class="student-card-actions" style="margin-top:14px">
     <button type="button" class="primary-action" onclick="closeStudentProfile();openEditStudent('${escapeAttr(student.id)}')">Edit Student</button>
-    <button type="button" class="primary-action" onclick="closeStudentProfile();openRenewPackage('${escapeAttr(student.id)}')">Renew Package</button>
-    <button type="button" class="primary-action" onclick="closeStudentProfile();openStudentContract('${escapeAttr(student.id)}')">Student Contract</button>
+    <button type="button" class="primary-action" onclick="closeStudentProfile();openRenewPackage('${escapeAttr(student.id)}')">Renew Classes</button>
+    <button type="button" class="primary-action" onclick="viewSavedStudentContract('${escapeAttr(student.id)}')">Student Contract</button>
     <button type="button" class="danger-action" onclick="closeStudentProfile();openDeleteStudent('${escapeAttr(student.id)}')">Delete Student</button>
    </div>
   </div>
@@ -9386,7 +9812,7 @@ content.innerHTML=`
     <div class="student-profile-info-box"><label>Parent / Guardian</label><div>${escapeHtml(student.parentName||'Not set')}</div></div>
     <div class="student-profile-info-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'Not set')}</div></div>
     <div class="student-profile-info-box"><label>Class Duration</label><div>${escapeHtml(student.duration||'Not set')}</div></div>
-    <div class="student-profile-info-box"><label>Package</label><div>${escapeHtml(student.packageName||'Not set')}</div></div>
+    <div class="student-profile-info-box"><label>Classes</label><div>${escapeHtml(student.packageName||'Not set')}</div></div>
     <div class="student-profile-info-box"><label>Start Date</label><div>${escapeHtml(currentStart)}</div></div>
     <div class="student-profile-info-box" style="grid-column:span 3"><label>Preferred Class Schedule</label><div>${escapeHtml(schedule)}</div></div>
    </div>
@@ -9416,18 +9842,26 @@ content.innerHTML=`
   </div>
 
   <div class="student-profile-section">
-   <h4>PACKAGE HISTORY</h4>
+   <h4>CLASSES HISTORY</h4>
    ${(p.history||[]).slice().reverse().map(pkg=>{
     const pkgCount=Math.max(0,parseInt(pkg.classCount,10)||getPackageClassCount(pkg.packageName));
     const pkgCompleted=getAppointments().filter(a=>a.studentId===student.id&&a.packageId===pkg.id&&a.type==='Regular Class'&&a.status==='Completed').length;
     const pkgStatus=pkg.id===student.currentPackageId?'Active':(pkg.status||'Completed');
     return `<div class="package-history-item"><div><b>${escapeHtml(pkg.packageName||`${pkgCount} Classes`)}</b><div class="package-history-meta">${pkgCompleted} / ${pkgCount} completed · Started ${escapeHtml(pkg.startDate||'—')}${pkg.renewalDate?` · Renewed ${escapeHtml(pkg.renewalDate)}`:''}</div></div><span class="package-history-badge ${pkg.id===student.currentPackageId?'':'old'}">${escapeHtml(pkgStatus)}</span></div>`;
-   }).join('')||'<div class="small">No package history yet.</div>'}
+   }).join('')||'<div class="small">No classes history yet.</div>'}
   </div>
 
   <div class="student-profile-section">
    <h4>STUDENT CONTRACT</h4>
-   ${getStudentContracts()[student.id]?.submittedAt?`<div class="student-detail-grid"><div class="student-detail-box"><label>Status</label><b>Saved</b></div><div class="student-detail-box"><label>Saved Date</label><b>${escapeHtml(new Date(getStudentContracts()[student.id].submittedAt).toLocaleString())}</b></div></div><div class="small" style="margin-top:8px">The saved Student Contract is stored in this student's record.</div><button type="button" class="primary-action" style="margin-top:10px" onclick="closeStudentProfile();openStudentContract('${escapeAttr(student.id)}')">VIEW STUDENT CONTRACT</button>`:'<div class="small">No Student Contract saved yet.</div>'}
+   ${getStudentContracts()[student.id]?.submittedAt?`<div class="student-detail-grid"><div class="student-detail-box"><label>Status</label><b>Saved</b></div><div class="student-detail-box"><label>Saved Date</label><b>${escapeHtml(new Date(getStudentContracts()[student.id].submittedAt).toLocaleString())}</b></div></div><div class="small" style="margin-top:8px">The saved Student Contract is stored in this student's record.</div><button type="button" class="primary-action" style="margin-top:10px" onclick="viewSavedStudentContract('${escapeAttr(student.id)}')">VIEW CONTRACT IMAGE</button>`:'<div class="small">No Student Contract saved yet.</div>'}
+  </div>
+
+  <div class="student-profile-section">
+   <h4>PAYMENT RECEIPT</h4>
+   ${(()=>{
+      const receipts=getPaymentReceipts().filter(r=>String(r.studentId||'')===String(student.id||''));
+      return receipts.length?`<div style="display:grid;gap:8px;margin-top:10px">${receipts.slice().reverse().map((r,i)=>`<div style="border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><b>${escapeHtml(r.receiptNo||`Receipt ${receipts.length-i}`)}</b><div class="small" style="margin-top:3px">${escapeHtml(r.date||'No date')} · ${escapeHtml(r.packageName||'No classes')} · ${escapeHtml(r.currency||'')} ${r.amount!==''&&r.amount!=null?escapeHtml(Number(r.amount||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})):'—'}</div></div><button type="button" class="view-record-btn" onclick="viewSavedPaymentReceipt('${escapeAttr(r.receiptNo||'')}','${escapeAttr(student.id)}')">VIEW RECEIPT IMAGE</button></div>`).join('')}</div>`:'<div class="small">No payment receipt saved yet.</div>';
+   })()}
   </div>
 
   <div class="student-profile-section">
@@ -9478,8 +9912,8 @@ document.getElementById('renewStudentId').value=student.id;
 const current=getCurrentStudentPackage(student);
 const currentCount=current?current.classCount:getPackageClassCount(student.packageName);
 const currentProgress=getStudentProgress(student);
-document.getElementById('renewStudentSummary').innerHTML=`<strong>${escapeHtml(student.name)}</strong><br>Current package: <strong>${escapeHtml(student.packageName||'Not set')}</strong> · ${currentProgress.completed} / ${currentCount||0} completed · <strong>${currentProgress.remaining} remaining</strong>`;
-document.getElementById('renewPackageName').value='20 Classes';
+document.getElementById('renewStudentSummary').innerHTML=`<strong>${escapeHtml(student.name)}</strong><br>Current classes: <strong>${escapeHtml(student.packageName||'Not set')}</strong> · ${currentProgress.completed} / ${currentCount||0} completed · <strong>${currentProgress.remaining} remaining</strong>`;
+document.getElementById('renewClassCount').value='20';
 document.getElementById('renewDuration').value=['30 Minutes','40 Minutes','50 Minutes'].includes(student.duration)?student.duration:'30 Minutes';
 const today=getLocalDateString(new Date());
 const renewalDate=document.getElementById('renewRenewalDate');
@@ -9509,11 +9943,12 @@ const id=document.getElementById('renewStudentId')?.value||'';
 const student=getStudents().find(s=>s.id===id);
 const box=document.getElementById('renewPreview');
 if(!student||!box)return;
-const count=getPackageClassCount(document.getElementById('renewPackageName')?.value||'');
+const rawCount=document.getElementById('renewClassCount')?.value||'';
+const count=Number.parseInt(rawCount,10);
 const date=document.getElementById('renewStartDate')?.value||'';
 const time=getPreferredStartTime(student,date);
 const end=time?addMinutesToTime(time,durationToMinutes(student.duration||'30 Minutes')):'';
-box.innerHTML=count?`<strong>${count} future classes</strong> will be generated automatically from the first preferred class.<br>First class: <strong>${date?new Date(`${date}T00:00:00`).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'—'}</strong>${time?` · <strong>${formatAppointmentTime(time)}–${formatAppointmentTime(end)}</strong>`:' · No preferred time found for this date.'}`:'Select a package.';
+box.innerHTML=count?`<strong>${count} future classes</strong> will be generated automatically from the first preferred class.<br>First class: <strong>${date?new Date(`${date}T00:00:00`).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'—'}</strong>${time?` · <strong>${formatAppointmentTime(time)}–${formatAppointmentTime(end)}</strong>`:' · No preferred time found for this date.'}`:'Select the number of classes.';
 }
 
 function confirmRenewPackage(){
@@ -9523,12 +9958,13 @@ const err=document.getElementById('renewPackageError');
 const fail=msg=>{err.textContent=msg;err.classList.add('show');};
 if(!student)return fail('Student record could not be found.');
 
-const packageName=document.getElementById('renewPackageName').value;
-const addedClasses=getPackageClassCount(packageName);
+const rawCount=document.getElementById('renewClassCount')?.value||'';
+const addedClasses=Number.parseInt(rawCount,10);
+const packageName=Number.isInteger(addedClasses)&&addedClasses>0?`${addedClasses} Classes`:'';
 const renewalDate=document.getElementById('renewRenewalDate')?.value||getLocalDateString(new Date());
 let startDate=getRenewalStartDate(student,renewalDate);
 
-if(!addedClasses)return fail('Please select a valid package.');
+if(!Number.isInteger(addedClasses)||addedClasses<1)return fail('Please enter a valid whole number of classes (1 or more).');
 if(!renewalDate)return fail('Renewal date is required.');
 if(!startDate)return fail('This student has no preferred class schedule. Please add a preferred day and time first.');
 
@@ -9566,7 +10002,7 @@ if(current){
 
 const newPackageId=`pkg_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
 
-/* The new active package represents the total active remaining balance:
+/* The new active classes represents the total active remaining balance:
    old remaining classes + newly purchased classes. */
 const newPackageName=`${targetRemaining} Classes`;
 history.push({
@@ -9586,13 +10022,20 @@ students[index]={
  packageName:newPackageName,
  currentPackageId:newPackageId,
  packageHistory:history,
- status:'Active'
+ status:'Active',
+ contractRenewalRequired:true,
+ contractRenewalRequestedAt:new Date().toISOString(),
+ paymentRenewalRequired:true,
+ paymentRenewalRequestedAt:new Date().toISOString(),
+ contractRenewalPackageId:newPackageId,
+ contractRenewalPackageName:newPackageName,
+ contractRenewalVersion:Number(students[index].contractRenewalVersion||getStudentContracts()?.[student.id]?.renewalVersion||0)+1
 };
 saveStudents(students);
 
 let appointments=getAppointments();
 
-/* Carry all still-upcoming regular classes into the new active package.
+/* Carry all still-upcoming regular classes into the new active classes.
    This prevents the old remaining classes from being lost and prevents
    duplicate booking when the renewal is submitted. */
 const nowMs=Date.now();
@@ -9653,29 +10096,31 @@ for(let i=0;i<1095&&created<needed;i++){
 
 saveAppointments(appointments);
 closeRenewPackage();
-renderStudents();
-renderDashboard();
-populateStudentSelect(student.id);
-renderRecords();
 
 const totalBooked=activeFutureCount+created;
 const bookingMessage=created
  ? `${created} new future class${created===1?'':'es'} booked. ${oldRemaining} previous remaining class${oldRemaining===1?'':'es'} carried forward + ${addedClasses} renewed = ${targetRemaining} total remaining.`
  : `${oldRemaining} previous remaining class${oldRemaining===1?'':'es'} carried forward + ${addedClasses} renewed = ${targetRemaining} total remaining. Existing future appointments were kept; no duplicate classes were created.`;
 
-const successMessage=`${student.name}'s package was renewed successfully. ${bookingMessage} ${totalBooked>=targetRemaining?'The active schedule now covers the full remaining balance.':'Some classes could not be booked because of schedule conflicts.'}`;
+const successMessage=`${student.name}'s classes were renewed successfully. ${bookingMessage} ${totalBooked>=targetRemaining?'The active schedule now covers the full remaining balance.':'Some classes could not be booked because of schedule conflicts.'} A new Student Contract is now required for this renewal.`;
 showStudentStatus(successMessage,true);
 
-/* The renewal is already saved before this notice appears.
-   Ask the user to refresh so the Student Management view reloads the
-   latest package/history data cleanly instead of leaving a stale card. */
+/* LIVE UPDATE: all affected screens are refreshed in memory.
+   No browser/page refresh is required. */
+renderStudents();
+renderDashboard();
+renderAppointments();
+renderRecords();
+renderContractStudentLists();
+populateStudentSelect(student.id);
+
 const refreshModal=document.getElementById('renewRefreshModal');
 const refreshMessage=document.getElementById('renewRefreshMessage');
 if(refreshMessage){
   refreshMessage.innerHTML=
     `<strong>${escapeHtml(successMessage)}</strong><br><br>`+
-    `The renewal and automatic appointments are already saved. `+
-    `<strong>Please refresh the page</strong> to display the updated student record and package history.`;
+    `Everything has been updated automatically — <strong>no page refresh is needed.</strong> `+
+    `The new classes is active, future classes are in the Appointment Calendar, and the new Student Contract is ready under Contract.`;
 }
 if(refreshModal)refreshModal.classList.add('show');
 }
@@ -9683,10 +10128,6 @@ if(refreshModal)refreshModal.classList.add('show');
 function closeRenewRefreshNotice(){
 const modal=document.getElementById('renewRefreshModal');
 if(modal)modal.classList.remove('show');
-}
-
-function refreshAfterRenewal(){
-window.location.reload();
 }
 
 function closeStudentProfile(){
@@ -10800,7 +11241,7 @@ async function previewEvaluationImage(){
       modal.innerHTML=`
         <div class="modal evaluation-image-preview-modal">
           <div class="modal-header">
-            <h3>📋 EVALUATION PREVIEW</h3>
+            <h3><span class="evaluation-preview-title-emoji" aria-hidden="true">📋</span> EVALUATION PREVIEW</h3>
             <button type="button" class="contract-preview-close-btn" onclick="closeEvaluationImagePreview()" aria-label="Close preview" title="Close preview">×</button>
           </div>
           <div class="modal-body">
@@ -12111,12 +12552,12 @@ appointmentWeekDate=new Date();
 
 document.getElementById('newStudentDuration')?.addEventListener(
 'change',
-()=>updateAllScheduleEndTimes('new')
+()=>{updateAllScheduleEndTimes('new');refreshSchedulePickerAvailability('new');}
 );
 
 document.getElementById('editStudentDuration')?.addEventListener(
 'change',
-()=>updateAllScheduleEndTimes('edit')
+()=>{updateAllScheduleEndTimes('edit');refreshSchedulePickerAvailability('edit',document.getElementById('editOriginalId')?.value||'');}
 );
 
 initAuth();
@@ -12141,19 +12582,45 @@ let contractPreviewDataUrl="";
 function contractStorageKey(){return currentUser?`${STUDENT_CONTRACTS_BASE_KEY}_${currentUser.id}`:STUDENT_CONTRACTS_BASE_KEY;}
 function getStudentContracts(){try{return JSON.parse(localStorage.getItem(contractStorageKey())||'{}')||{};}catch(e){return {};}}
 function saveStudentContracts(data){localStorage.setItem(contractStorageKey(),JSON.stringify(data));}
+function hasCurrentStudentContract(student,contracts){
+  const record=contracts?.[student?.id];
+  return !!(record && record.submittedAt && student?.contractRenewalRequired!==true);
+}
 function renderContractStudentLists(){
  const p=document.getElementById('contractPendingList'),c=document.getElementById('contractCompletedList');if(!p||!c)return;
  const students=getStudents().slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'})), contracts=getStudentContracts();
- const pending=students.filter(s=>!contracts[s.id]?.submittedAt), completed=students.filter(s=>!!contracts[s.id]?.submittedAt);
+ /* A submitted contract disappears from the Add Student selection immediately.
+    A successful renewal deliberately makes the same student visible again by setting
+    contractRenewalRequired=true until the new contract is submitted. */
+ const pending=students.filter(s=>s.contractRenewalRequired===true || !hasCurrentStudentContract(s,contracts)), completed=students.filter(s=>hasCurrentStudentContract(s,contracts));
  p.innerHTML=`<div class="contract-list-title">⚠ STUDENTS FOR CONTRACT SIGNING <span class="small">(${pending.length})</span></div>`+
- (pending.length?pending.map(s=>`<div class="contract-student-card pending"><div class="contract-student-meta"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}</span><span class="contract-badge pending">Contract Not Submitted</span></div><div class="contract-list-actions"><button type="button" class="primary-action" onclick="openStudentContract('${escapeAttr(s.id)}')">ADD STUDENT TO SIGN A CONTRACT</button></div></div>`).join(''):`<div class="contract-list-empty">All added students already have a Student Contract record.</div>`);
- c.innerHTML=`<div class="contract-list-title">✓ COMPLETED / SIGNED CONTRACTS <span class="small">(${completed.length})</span></div>`+
- (completed.length?completed.map(s=>`<div class="contract-student-card completed"><div class="contract-student-meta"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}</span><span class="contract-badge completed">Contract Submitted</span></div><div class="contract-list-actions"><button type="button" class="secondary-action" onclick="openStudentContract('${escapeAttr(s.id)}')">VIEW CONTRACT</button></div></div>`).join(''):`<div class="contract-list-empty">No completed Student Contracts yet.</div>`);
+ (pending.length?pending.map(s=>{const renewal=!!s.contractRenewalRequired;return `<div class="contract-student-card pending"><div class="contract-student-meta"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}</span><span class="contract-badge ${renewal?'renewal':'pending'}">${renewal?'NEW CONTRACT REQUIRED — CLASSES RENEWAL':'CONTRACT NOT SUBMITTED'}</span></div><div class="contract-list-actions"><button type="button" class="primary-action" onclick="openStudentContract('${escapeAttr(s.id)}')">${renewal?'FILL OUT NEW CONTRACT':'ADD STUDENT TO SIGN A CONTRACT'}</button></div></div>`}).join(''):`<div class="contract-list-empty">All added students already have a current Student Contract record.</div>`);
+ c.innerHTML=`<div class="contract-completed-summary"><div><div class="contract-list-title">✓ COMPLETED / SIGNED CONTRACTS <span class="small">(${completed.length})</span></div><div class="small" style="margin-top:4px">Completed contracts are hidden here. Click View All to see and open them.</div></div><button type="button" class="secondary-action contract-view-all-btn" onclick="openCompletedContractsModal()" ${completed.length?'':'disabled'}>VIEW ALL (${completed.length})</button></div>`;
 }
+function openCompletedContractsModal(){
+ const students=getStudents().slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'})), contracts=getStudentContracts();
+ const completed=students.filter(s=>hasCurrentStudentContract(s,contracts));
+ let modal=document.getElementById('completedContractsModal');
+ if(!modal){
+   modal=document.createElement('div');modal.id='completedContractsModal';modal.className='modal-backdrop';
+   modal.onclick=e=>{if(e.target===modal)closeCompletedContractsModal();};
+   modal.innerHTML=`<div class="modal completed-contracts-modal"><div class="student-add-modal-header"><div><h3 style="margin:0">Completed / Signed Contracts</h3><div class="small" style="margin-top:4px">Select a completed contract to view the saved contract.</div></div><button type="button" class="student-modal-close" onclick="closeCompletedContractsModal()">×</button></div><div id="completedContractsList" class="contract-completed-modal-list"></div></div>`;
+   document.body.appendChild(modal);
+ }
+ const list=document.getElementById('completedContractsList');
+ if(list)list.innerHTML=completed.length?completed.map(s=>`<div class="contract-student-card completed"><div class="contract-student-meta"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}</span><span class="contract-badge completed">Contract Submitted</span></div><div class="contract-list-actions"><button type="button" class="secondary-action" onclick="closeCompletedContractsModal();openStudentContract('${escapeAttr(s.id)}')">VIEW CONTRACT</button></div></div>`).join(''):`<div class="contract-list-empty">No completed Student Contracts yet.</div>`;
+ modal.classList.add('show');
+}
+function closeCompletedContractsModal(){const m=document.getElementById('completedContractsModal');if(m)m.classList.remove('show');}
 function openStudentContract(studentId=''){showPage('contract');renderContractStudentLists();if(studentId)loadStudentContractById(studentId);}
 function openContractStudentPicker(){
  const students=getStudents().slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'}));
- const choices=students.map(s=>`<button type=\"button\" class=\"contract-picker-item\" onclick=\"closeContractStudentPicker();openStudentContract('${escapeAttr(s.id)}')\"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}</span></button>`).join('');
+ const contracts=getStudentContracts();
+ /* Add Student Contract must show ONLY students who need a contract.
+    A submitted/current contract is hidden. A successful classes renewal sets
+    contractRenewalRequired=true, which intentionally makes that student visible again. */
+ const eligible=students.filter(s=>s.contractRenewalRequired===true || !hasCurrentStudentContract(s,contracts));
+ const choices=eligible.map(s=>`<button type=\"button\" class=\"contract-picker-item\" onclick=\"closeContractStudentPicker();openStudentContract('${escapeAttr(s.id)}')\"><strong>${escapeHtml(s.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(s.id||'—')}${s.contractRenewalRequired?' · NEW CONTRACT REQUIRED':''}</span></button>`).join('');
  let modal=document.getElementById('contractStudentPickerModal');
  if(!modal){
   modal=document.createElement('div');modal.id='contractStudentPickerModal';modal.className='modal-backdrop';
@@ -12161,12 +12628,12 @@ function openContractStudentPicker(){
   modal.innerHTML=`<div class=\"modal renew-modal\" style=\"max-width:650px\"><div class=\"student-add-modal-header\"><div><h3 style=\"margin:0\">Add Student Contract</h3><div class=\"small\" style=\"margin-top:4px\">Select a student who does not yet have a Student Contract record.</div></div><button type=\"button\" class=\"student-modal-close\" onclick=\"closeContractStudentPicker()\">×</button></div><div id=\"contractPickerList\" class=\"contract-picker-list\"></div></div>`;
   document.body.appendChild(modal);
  }
- const list=document.getElementById('contractPickerList');if(list)list.innerHTML=choices;modal.classList.add('show');
+ const list=document.getElementById('contractPickerList');if(list)list.innerHTML=choices||'<div class=\"contract-list-empty\">All students already have a Student Contract. A student will appear here again after a successful classes renewal.</div>';modal.classList.add('show');
 }
 function closeContractStudentPicker(){const m=document.getElementById('contractStudentPickerModal');if(m)m.classList.remove('show');}
 function loadStudentContractById(id){contractSelectedStudentId=id||'';const student=getStudents().find(s=>s.id===id);if(!student)return;loadStudentContractDetails(id);}
 function loadStudentContract(){loadStudentContractDetails(contractSelectedStudentId);}
-function loadStudentContractDetails(id){
+function loadStudentContractDetails(id, options={}){
  contractSelectedStudentId=id||'';contractFileData={teacher:null,parent:null};const w=document.getElementById('contractWorkspace'),e=document.getElementById('contractError'),input=document.getElementById('contractFileInput'),preview=document.getElementById('contractPreview'),name=document.getElementById('contractFileName'),status=document.getElementById('contractStatusText');
  if(e)e.textContent='';
  ['teacher','parent'].forEach(role=>{
@@ -12177,20 +12644,20 @@ function loadStudentContractDetails(id){
  if(!id){if(w)w.style.display='none';if(status)status.textContent='Not Selected';return;} if(w)w.style.display='grid';
  const student=getStudents().find(s=>s.id===id);if(!student)return;const current=getCurrentStudentPackage(student),info=document.getElementById('contractStudentInfo');
  updateContractTeacherIdentity();
- const savedContract=getStudentContracts()[id];
+ const renewalPending=student.contractRenewalRequired===true && options.viewSaved!==true; const savedContract=renewalPending ? null : getStudentContracts()[id];
  const custom=savedContract?.customSections||{};
  const agreementEl=document.getElementById('contractAgreementText');
  if(agreementEl) agreementEl.value=custom.agreementText || [custom.classArrangement,custom.lessonMaterials,custom.packagePayment].filter(Boolean).join('\n\n') || ''; const agreementEditor=document.getElementById('contractAgreementEditor'); if(agreementEditor) agreementEditor.innerHTML=custom.agreementHtml || (agreementEl?.value ? escapeHtml(agreementEl.value).replace(/\n/g,'<br>') : '');
  if(savedContract?.teacherFileData && savedContract?.teacherFileName) contractFileData.teacher={name:savedContract.teacherFileName,type:savedContract.teacherFileType||'',data:savedContract.teacherFileData};
  if(savedContract?.parentFileData && savedContract?.parentFileName) contractFileData.parent={name:savedContract.parentFileName,type:savedContract.parentFileType||'',data:savedContract.parentFileData};
  ['teacher','parent'].forEach(role=>{const f=contractFileData[role];if(!f)return;const nm=document.getElementById(role+'ContractFileName');if(nm)nm.textContent=f.name||'';const pv=document.getElementById(role+'ContractPreview');if(pv&&String(f.type||'').startsWith('image/'))pv.innerHTML=`<img src="${f.data}" alt="${role} signed contract" style="max-width:100%;max-height:180px;border-radius:10px">`;});
- if(status)status.textContent=student.name||'Selected';
- if(info)info.innerHTML=`<div class="contract-info-box"><label>Student Name</label><div>${escapeHtml(student.name||'—')}</div></div><div class="contract-info-box"><label>Student ID</label><div>${escapeHtml(student.id||'—')}</div></div><div class="contract-info-box"><label>Parent / Guardian</label><div>${escapeHtml(student.parentName||'—')}</div></div><div class="contract-info-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'—')}</div></div><div class="contract-info-box"><label>Package</label><div>${escapeHtml(student.packageName||'—')}</div></div><div class="contract-info-box"><label>Start Date</label><div>${escapeHtml((current&&current.startDate)||student.startDate||'—')}</div></div><div class="contract-info-box"><label>Class Duration</label><div>${escapeHtml(['25 Minutes','50 Minutes'].includes(student.duration)?student.duration:(student.duration==='30 Minutes'?'25 Minutes':(student.duration||'25 Minutes')))}</div></div>`;
+ if(status)status.textContent=renewalPending?`${student.name} — Renewal Contract Required`:(student.name||'Selected');
+ if(info)info.innerHTML=`<div class="contract-info-box"><label>Student Name</label><div>${escapeHtml(student.name||'—')}</div></div><div class="contract-info-box"><label>Student ID</label><div>${escapeHtml(student.id||'—')}</div></div><div class="contract-info-box"><label>Parent / Guardian</label><div>${escapeHtml(student.parentName||'—')}</div></div><div class="contract-info-box"><label>Parent Gmail</label><div>${escapeHtml(student.email||'—')}</div></div><div class="contract-info-box"><label>Classes</label><div>${escapeHtml(student.packageName||'—')}</div></div><div class="contract-info-box"><label>Start Date</label><div>${escapeHtml((current&&current.startDate)||student.startDate||'—')}</div></div><div class="contract-info-box"><label>Class Duration</label><div>${escapeHtml(['25 Minutes','50 Minutes'].includes(student.duration)?student.duration:(student.duration==='30 Minutes'?'25 Minutes':(student.duration||'25 Minutes')))}</div></div>`;
  const pn=document.getElementById('contractParentName');if(pn)pn.textContent=student.parentName||'____________________________';const record=getStudentContracts()[id];
- contractSavedForStudentId=record?.submittedAt?id:''; setStudentContractActionState(!!contractSavedForStudentId); contractPreviewDataUrl='';
- if(status&&record?.submittedAt)status.textContent=`${student.name} — Submitted`;
- if(record?.teacherFileData){contractFileData.teacher={name:record.teacherFileName||'Teacher Signed Contract',type:record.teacherFileType||'',data:record.teacherFileData};renderContractPreview(contractFileData.teacher,'teacher');}
- if(record?.parentFileData){contractFileData.parent={name:record.parentFileName||'Parent Signed Contract',type:record.parentFileType||'',data:record.parentFileData};renderContractPreview(contractFileData.parent,'parent');}
+ contractSavedForStudentId=(!renewalPending && record?.submittedAt)?id:''; setStudentContractActionState(!!contractSavedForStudentId); contractPreviewDataUrl='';
+ if(status&&record?.submittedAt && !renewalPending)status.textContent=`${student.name} — Submitted`;
+ if(!renewalPending && record?.teacherFileData){contractFileData.teacher={name:record.teacherFileName||'Teacher Signed Contract',type:record.teacherFileType||'',data:record.teacherFileData};renderContractPreview(contractFileData.teacher,'teacher');}
+ if(!renewalPending && record?.parentFileData){contractFileData.parent={name:record.parentFileName||'Parent Signed Contract',type:record.parentFileType||'',data:record.parentFileData};renderContractPreview(contractFileData.parent,'parent');}
 }
 function handleContractFile(event,role){const file=event.target.files?.[0];if(!file)return;if(file.size>8*1024*1024){showContractError('Please upload a file smaller than 8 MB.');event.target.value='';return;}const r=new FileReader();r.onload=async()=>{let data=r.result,type=file.type;if(type.startsWith('image/')){try{const cleaned=await removeWhiteSignatureBackground(data);data=cleaned.data;type='image/png';}catch(e){}}contractFileData[role]={name:file.name,type,data};const n=document.getElementById(role+'ContractFileName');if(n)n.textContent=`Selected: ${file.name}`;renderContractPreview(contractFileData[role],role);};r.readAsDataURL(file);}
 async function removeWhiteSignatureBackground(dataUrl){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const x=c.getContext('2d');x.drawImage(img,0,0);const d=x.getImageData(0,0,c.width,c.height),a=d.data;for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>235&&g>235&&b>235)a[i+3]=0;else if(r>210&&g>210&&b>210){const whiteness=(r+g+b)/3;a[i+3]=Math.max(0,Math.min(255,Math.round((255-whiteness)*6)));}}resolve({data:c.toDataURL('image/png')});};img.onerror=reject;img.src=dataUrl;});}
@@ -12493,12 +12960,17 @@ function saveStudentContract(){
  if(!contractFileData.teacher || !contractFileData.parent)return showContractError("Please upload both signed contract files: Teacher's Signed Contract and Parent's Signed Contract.");
  const contracts=getStudentContracts();
  const savedAt=new Date().toISOString();
- const record={studentId:student.id,studentName:student.name,parentEmail:student.email,teacherFileName:contractFileData.teacher.name,teacherFileType:contractFileData.teacher.type,teacherFileData:contractFileData.teacher.data,customSections:getContractCustomSectionValues(),parentFileName:contractFileData.parent.name,parentFileType:contractFileData.parent.type,parentFileData:contractFileData.parent.data,submittedAt:savedAt,savedAt,status:'Saved'};
+ const previous=contracts[student.id]||null;
+ const isRenewal=student.contractRenewalRequired===true;
+ const previousVersions=Array.isArray(previous?.previousVersions)?previous.previousVersions.slice():[];
+ if(isRenewal && previous && previous.submittedAt){ previousVersions.push(previous); }
+ const renewalVersion=isRenewal ? Number(student.contractRenewalVersion||previous?.renewalVersion||1) : Number(previous?.renewalVersion||0)+1;
+ const record={studentId:student.id,studentName:student.name,parentEmail:student.email,teacherFileName:contractFileData.teacher.name,teacherFileType:contractFileData.teacher.type,teacherFileData:contractFileData.teacher.data,customSections:getContractCustomSectionValues(),parentFileName:contractFileData.parent.name,parentFileType:contractFileData.parent.type,parentFileData:contractFileData.parent.data,submittedAt:savedAt,savedAt,status:'Saved',renewalVersion,packageId:getCurrentStudentPackage(student)?.id||student.currentPackageId||'',packageName:student.packageName||'',previousVersions};
  contracts[student.id]=record;
  saveStudentContracts(contracts);
  const students=getStudents();
  const idx=students.findIndex(s=>s.id===student.id);
- if(idx>=0){students[idx].contractStatus='Saved';students[idx].contractSavedAt=savedAt;saveStudents(students);}
+ if(idx>=0){students[idx].contractStatus='Saved';students[idx].contractSavedAt=savedAt;students[idx].contractRenewalRequired=false;students[idx].contractRenewalVersion=renewalVersion;students[idx].contractRenewalPackageId='';students[idx].contractRenewalPackageName='';students[idx].contractRenewalRequestedAt='';saveStudents(students);}
  contractSavedForStudentId=student.id;
  setStudentContractActionState(true);
  renderContractStudentLists();
@@ -13008,7 +13480,7 @@ function getPaymentReceiptData(){
     studentEmail:student?.email||'',
     studentIdNo:student?.id||'',
     packageName:paymentReceiptValue('paymentReceiptPackage').trim(),
-    classes:paymentReceiptValue('paymentReceiptClasses').trim(),
+    classes:paymentReceiptValue('paymentReceiptPackage').trim(),
     amount:paymentReceiptValue('paymentReceiptAmount'),
     currency:paymentReceiptValue('paymentReceiptStudentCurrency'),
     method:paymentReceiptValue('paymentReceiptMethod'),
@@ -13033,15 +13505,25 @@ function generatePaymentReceiptNo(){
   const year=new Date().getFullYear();
   const prefix=`TD-${year}000-`;
   const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const used=new Set(getPaymentReceipts().map(r=>String(r.receiptNo||'')));
   let code='';
   let attempts=0;
   do{
-    const a=letters[Math.floor(Math.random()*letters.length)];
-    const b=letters[Math.floor(Math.random()*letters.length)];
-    const n=String(Math.floor(Math.random()*1000)).padStart(3,'0');
+    let a,b,n;
+    if(window.crypto && crypto.getRandomValues){
+      const bytes=new Uint32Array(3);
+      crypto.getRandomValues(bytes);
+      a=letters[bytes[0]%letters.length];
+      b=letters[bytes[1]%letters.length];
+      n=String(bytes[2]%1000).padStart(3,'0');
+    }else{
+      a=letters[Math.floor(Math.random()*letters.length)];
+      b=letters[Math.floor(Math.random()*letters.length)];
+      n=String(Math.floor(Math.random()*1000)).padStart(3,'0');
+    }
     code=`${prefix}${a}${b}${n}`;
     attempts++;
-  }while(getPaymentReceipts().some(r=>r.receiptNo===code)&&attempts<50);
+  }while(used.has(code) && attempts<1000);
   return code;
 }
 function setPaymentReceiptStatus(msg,ok=true){
@@ -13067,17 +13549,26 @@ function openPaymentStudentPicker(){
   modal.style.display='flex';
   requestAnimationFrame(()=>{ if(search) search.focus(); });
 }
+function studentNeedsPaymentReceipt(student){
+  if(!student)return false;
+  /* A successful classes renewal deliberately makes the student selectable again
+     so the new classes payment/receipt can be recorded. */
+  if(student.paymentRenewalRequired===true)return true;
+  const receipts=getPaymentReceipts();
+  return !receipts.some(r=>String(r.studentId||'')===String(student.id||''));
+}
 function renderPaymentStudentPickerList(query=''){
   const list=document.getElementById('paymentStudentPickerList'); if(!list)return;
   const students=getStudents();
   const q=String(query||'').trim().toLowerCase();
-  const filtered=students.filter(st=>{
+  const eligible=students.filter(studentNeedsPaymentReceipt);
+  const filtered=eligible.filter(st=>{
     const name=String(st.name||'').toLowerCase();
     const id=String(st.id||'').toLowerCase();
     return !q || name.includes(q) || id.includes(q);
   });
-  if(!students.length){
-    list.innerHTML='<div class="payment-picker-empty">No students found. Please add a student first.</div>';
+  if(!eligible.length){
+    list.innerHTML='<div class="payment-picker-empty">All students already have a saved Payment Receipt. A student will appear here again after a successful classes renewal.</div>';
     return;
   }
   if(!filtered.length){
@@ -13108,10 +13599,10 @@ function filterPaymentStudentPicker(){
 }
 function closePaymentStudentPicker(){const m=document.getElementById('paymentStudentPickerModal');if(m)m.style.display='none';}
 function updatePaymentReceiptClasses(){
-  const pkg=paymentReceiptValue('paymentReceiptPackage');
-  const map={'Package 1':'20','Package 2':'30','Package 3':'30','Package 4':'40'};
   const classes=document.getElementById('paymentReceiptClasses');
-  if(classes) classes.value=map[pkg]||'';
+  const pkg=document.getElementById('paymentReceiptPackage');
+  const n=classes ? Math.max(0, parseInt(classes.value,10)||0) : 0;
+  if(pkg) pkg.value=n ? `${n} Classes` : '';
 }
 function togglePaymentRemaining(){
   const status=paymentReceiptValue('paymentReceiptStatus');
@@ -13125,7 +13616,21 @@ function selectPaymentReceiptStudent(id){
   document.getElementById('paymentReceiptStudentId').value=student.id;
   const sum=document.getElementById('paymentReceiptStudentSummary');
   sum.innerHTML=`<strong>Student Name: ${escapeHtml(student.name||'Unnamed Student')}</strong><span>Student ID: ${escapeHtml(student.id||'—')} · Parent: ${escapeHtml(student.email||'—')}</span>`;
-  const pkg=document.getElementById('paymentReceiptPackage'); if(pkg&&!pkg.value){ const existing=student.packageName||''; pkg.value=['Package 1','Package 2','Package 3','Package 4'].includes(existing)?existing:''; } updatePaymentReceiptClasses();
+  const pkg=document.getElementById('paymentReceiptPackage');
+  const classesInput=document.getElementById('paymentReceiptClasses');
+  /* Every new saved payment gets a fresh auto-generated receipt number.
+     This also gives the same student a different number after a classes renewal. */
+  if(!paymentReceiptSavedSnapshot){
+    const no=document.getElementById('paymentReceiptNo');
+    if(no) no.value=generatePaymentReceiptNo();
+  }
+  if(pkg && !pkg.value){
+    const current=student.packageName||'';
+    const match=String(current).match(/\d+/);
+    if(classesInput && match) classesInput.value=match[0];
+    pkg.value=match ? `${match[0]} Classes` : '';
+  }
+  updatePaymentReceiptClasses();
   closePaymentStudentPicker(); markPaymentReceiptDirty(); updatePaymentReceiptPreview();
 }
 function togglePaymentOtherMethod(){
@@ -13195,9 +13700,13 @@ function clearPaymentReceipt(){
 function savePaymentReceipt(){
   const d=getPaymentReceiptData();
   if(!d.studentId)return setPaymentReceiptStatus('Please select a student first.',false);
-  if(!d.receiptNo)return setPaymentReceiptStatus('Please enter a receipt number.',false);
+  if(!d.receiptNo){
+    const no=document.getElementById('paymentReceiptNo');
+    if(no) no.value=generatePaymentReceiptNo();
+    d.receiptNo=paymentReceiptValue('paymentReceiptNo').trim();
+  }
   if(!d.date)return setPaymentReceiptStatus('Please select the payment date.',false);
-  if(!d.packageName)return setPaymentReceiptStatus('Please select a package.',false);
+  if(!d.packageName)return setPaymentReceiptStatus('Please select a classes option.',false);
   if(!d.currency)return setPaymentReceiptStatus('Please select the student currency first.',false);
   if(!d.status)return setPaymentReceiptStatus('Please select the payment status.',false);
   if(d.status==='Partial Payment' && (d.remainingPayment==='' || Number(d.remainingPayment)<0))return setPaymentReceiptStatus('Please enter the remaining payment.',false);
@@ -13207,10 +13716,22 @@ function savePaymentReceipt(){
   const idx=receipts.findIndex(r=>r.receiptNo===d.receiptNo);
   if(idx>=0)receipts[idx]={...receipts[idx],...d};else receipts.push(d);
   savePaymentReceipts(receipts);
+  /* A saved receipt completes the current payment requirement. */
+  const studentIndex=getStudents().findIndex(s=>String(s.id||'')===String(d.studentId||''));
+  if(studentIndex>=0){
+    const updatedStudents=getStudents();
+    updatedStudents[studentIndex]={...updatedStudents[studentIndex],paymentRenewalRequired:false,paymentReceiptSubmittedAt:new Date().toISOString()};
+    saveStudents(updatedStudents);
+  }
   paymentReceiptSaved=true; paymentReceiptSavedSnapshot=paymentReceiptSnapshot();
   const b=document.getElementById('paymentReceiptDownloadBtn');if(b)b.disabled=false;
   setPaymentReceiptStatus('Payment receipt saved successfully.',true);
   updatePaymentReceiptPreview();
+  /* LIVE UPDATE: no browser refresh required. */
+  renderStudents();
+  renderDashboard();
+  renderRecords();
+  if(document.getElementById('paymentStudentPickerModal')?.style.display==='flex') renderPaymentStudentPickerList(document.getElementById('paymentStudentSearch')?.value||'');
 }
 function downloadPaymentReceipt(){
   if(!paymentReceiptSaved)return;
@@ -13255,8 +13776,7 @@ function drawPaymentReceiptCanvas(){
     ['Payment Date',d.date||''],
     ['Student Name',d.studentName||''],
     ['Student ID',d.studentIdNo||''],
-    ['Package',d.packageName||''],
-    ['Classes',d.classes?String(d.classes):''],
+    ['Classes',d.packageName||d.classes?String(d.packageName||d.classes):''],
     ['Amount Paid',amountText],
     ['Payment Method',d.method==='Other'?(d.otherMethod||''):d.method||''],
     ['Payment Status',d.status||''],
@@ -14049,6 +14569,167 @@ body.portal-dark .payment-picker-empty{color:#b9c7cc!important}
   window.addEventListener('resize', syncContractAcknowledgementFont);
   setTimeout(syncContractAcknowledgementFont, 300);
 })();
+</script>
+
+
+<style id="student-record-image-view-styles">
+.student-record-image-modal-backdrop{position:fixed!important;inset:0!important;z-index:100000!important;background:rgba(0,0,0,.72)!important;display:none;align-items:center;justify-content:center;padding:2.5vh 2.5vw!important;box-sizing:border-box}
+.student-record-image-modal-backdrop.show{display:flex!important}
+.student-record-image-modal{width:95vw!important;height:95vh!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:14px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:#fff!important}
+.student-record-image-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #d9dee7;background:#fff;flex:none}
+.student-record-image-header h3{margin:0;font-size:18px}
+.student-record-image-close{width:38px;height:38px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;font-size:24px;line-height:1;cursor:pointer;font-weight:800}
+.student-record-image-body{flex:1;overflow:auto;background:#eef1f4;padding:18px;display:flex;justify-content:center;align-items:flex-start}
+.student-record-image-stack{display:flex;flex-direction:column;gap:18px;align-items:center;min-width:max-content}
+.student-record-image-stack img{display:block;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.18);max-width:none;height:auto}
+.student-record-single-image{display:block;max-width:none;height:auto;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.student-record-image-help{font-size:12px;color:#667085;padding:0 18px 10px;background:#fff;flex:none}
+@media(max-width:700px){.student-record-image-modal-backdrop{padding:1vh 1vw!important}.student-record-image-modal{width:98vw!important;height:98vh!important}.student-record-image-body{padding:10px}}
+</style>
+<style id="manual-appointment-mode-styles">
+.appointment-schedule-mode-wrap{margin-top:4px}
+.appointment-mode-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.appointment-mode-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #d8dce3;border-radius:12px;background:#fff;cursor:pointer;transition:.15s ease}
+.appointment-mode-card.active{border-color:var(--accent,#ff69ad);background:var(--accent-soft,#fff0f7);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent,#ff69ad) 14%,transparent)}
+.appointment-mode-card input{margin-top:3px;accent-color:var(--accent,#ff69ad)}
+.appointment-mode-card span{display:flex;flex-direction:column;gap:3px}
+.appointment-mode-card small{font-size:11px;color:#667085;line-height:1.35}
+@media(max-width:700px){.appointment-mode-options{grid-template-columns:1fr}}
+</style>
+
+
+<script id="student-record-image-view-functions">
+<!-- Student Record: clicking Student Contract opens the saved final contract image directly. -->
+let studentRecordImageViewRestorePage='student';
+let studentRecordImageViewContractContext=null;
+
+function getActivePageNameForRestore(){
+  const active=document.querySelector('.page.active');
+  if(!active)return 'student';
+  return String(active.id||'studentPage').replace(/Page$/,'')||'student';
+}
+
+function ensureStudentRecordImageModal(){
+  let modal=document.getElementById('studentRecordImageViewModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='studentRecordImageViewModal';
+  modal.className='student-record-image-modal-backdrop';
+  modal.innerHTML=`<div class="student-record-image-modal" role="dialog" aria-modal="true" aria-label="Student record image preview">
+    <div class="student-record-image-header"><h3 id="studentRecordImageViewTitle">IMAGE VIEW</h3><button type="button" class="student-record-image-close" onclick="closeStudentRecordImageView()" aria-label="Close">×</button></div>
+    <div id="studentRecordImageViewHelp" class="student-record-image-help">This is the saved image view from the student's record.</div>
+    <div id="studentRecordImageViewBody" class="student-record-image-body"></div>
+  </div>`;
+  modal.addEventListener('click',e=>{if(e.target===modal)closeStudentRecordImageView();});
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function openStudentRecordImageModal(title,help){
+  const modal=ensureStudentRecordImageModal();
+  const t=document.getElementById('studentRecordImageViewTitle');
+  const h=document.getElementById('studentRecordImageViewHelp');
+  const body=document.getElementById('studentRecordImageViewBody');
+  if(t)t.textContent=title||'IMAGE VIEW';
+  if(h)h.textContent=help||'This is the saved image view from the student record.';
+  if(body)body.innerHTML='';
+  modal.classList.add('show');
+  return body;
+}
+
+function closeStudentRecordImageView(){
+  const modal=document.getElementById('studentRecordImageViewModal');
+  if(modal)modal.classList.remove('show');
+  if(studentRecordImageViewContractContext){
+    const ctx=studentRecordImageViewContractContext;
+    studentRecordImageViewContractContext=null;
+    if(ctx.page){ctx.page.setAttribute('style',ctx.oldStyle||'');}
+    showPage(ctx.restorePage||'student');
+  }
+}
+
+function drawSavedPaymentReceiptCanvas(canvas,d){
+  if(!canvas||!d)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const root=getComputedStyle(document.documentElement);
+  const accent=root.getPropertyValue('--global-accent').trim()||'#00bcbc';
+  const dark=root.getPropertyValue('--global-accent-dark').trim()||'#008f8f';
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#e5e7eb';ctx.lineWidth=3;ctx.strokeRect(45,45,W-90,H-90);
+  ctx.fillStyle=accent;ctx.beginPath();
+  const rx=45,ry=45,rw=W-90,rh=180,rr=26;
+  ctx.moveTo(rx+rr,ry);ctx.lineTo(rx+rw-rr,ry);ctx.quadraticCurveTo(rx+rw,ry,rx+rw,ry+rr);ctx.lineTo(rx+rw,ry+rh);ctx.lineTo(rx,ry+rh);ctx.lineTo(rx,ry+rr);ctx.quadraticCurveTo(rx,ry,rx+rr,ry);ctx.closePath();ctx.fill();
+  const teacher=getTeacherProfile();
+  const teacherName=teacher.name||teacher.username||'Teacher Danyeal';
+  const displayTeacherName=/^teacher\s+/i.test(String(teacherName))?String(teacherName):`Teacher ${teacherName}`;
+  const subtitle=`${displayTeacherName}'s English Class`;
+  ctx.textAlign='center';ctx.fillStyle='#111827';ctx.font='700 42px Arial';ctx.fillText('PAYMENT RECEIPT',W/2,115);ctx.fillStyle='#111827';ctx.font='24px Arial';ctx.fillText(subtitle,W/2,165);ctx.textAlign='left';
+  let y=285;
+  const amountText=d.amount!==''&&d.amount!==null&&d.amount!==undefined?`${d.currency||'PHP'} ${Number(d.amount||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`:'';
+  const rows=[['Receipt No.',d.receiptNo||''],['Payment Date',d.date||''],['Student Name',d.studentName||''],['Student ID',d.studentIdNo||d.studentId||''],['Classes',d.packageName||d.classes?String(d.packageName||d.classes):''],['Amount Paid',amountText],['Payment Method',d.method==='Other'?(d.otherMethod||''):d.method||''],['Payment Status',d.status||''],['Reference No.',d.reference||'—'],...(d.status==='Partial Payment'?[['Remaining Balance',d.remainingPayment!==''?`${d.currency||'PHP'} ${Number(d.remainingPayment||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`:'']]:[])];
+  rows.forEach(r=>{ctx.fillStyle='#6b7280';ctx.font='600 20px Arial';ctx.fillText(r[0],85,y);ctx.fillStyle='#111827';ctx.font='22px Arial';ctx.fillText(String(r[1]),360,y);y+=72;});
+  y+=20;ctx.fillStyle=dark;ctx.font='700 22px Arial';ctx.fillText('Notes',85,y);y+=45;ctx.fillStyle='#374151';ctx.font='20px Arial';
+  const notes=d.notes||'Thank you for your payment.';const words=String(notes).split(/\s+/);let line='';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>W-170){ctx.fillText(line,85,y);y+=32;line=word;}else line=test;}if(line)ctx.fillText(line,85,y);
+  ctx.fillStyle='#6b7280';ctx.font='18px Arial';ctx.fillText('This receipt confirms the payment recorded by the teacher.',85,H-95);
+}
+
+function viewSavedPaymentReceipt(receiptNo,studentId){
+  const receipts=getPaymentReceipts();
+  const receipt=receipts.find(r=>String(r.receiptNo||'')===String(receiptNo||'') && String(r.studentId||'')===String(studentId||'')) || receipts.find(r=>String(r.receiptNo||'')===String(receiptNo||''));
+  if(!receipt){alert('Payment receipt could not be found.');return;}
+  const body=openStudentRecordImageModal('PAYMENT RECEIPT — IMAGE VIEW','This is the actual receipt image generated from the saved payment record.');
+  if(!body)return;
+  const canvas=document.createElement('canvas');canvas.width=1000;canvas.height=1250;canvas.className='student-record-single-image';
+  drawSavedPaymentReceiptCanvas(canvas,receipt);
+  body.appendChild(canvas);
+}
+
+async function viewSavedStudentContract(studentId){
+  const record=getStudentContracts()?.[studentId];
+  if(!record?.submittedAt){alert('No saved Student Contract was found for this student.');return;}
+  if(typeof html2canvas!=='function'){alert('The image renderer is not available right now.');return;}
+  const restorePage=getActivePageNameForRestore();
+  studentRecordImageViewRestorePage=restorePage;
+  const contractPage=document.getElementById('contractPage');
+  if(!contractPage){alert('Student Contract page is not available.');return;}
+  const oldStyle=contractPage.getAttribute('style')||'';
+  studentRecordImageViewContractContext={restorePage,page:contractPage,oldStyle};
+  contractSelectedStudentId=studentId;
+  showPage('contract');
+  loadStudentContractDetails(studentId,{viewSaved:true});
+  contractPage.style.position='absolute';
+  contractPage.style.left='-100000px';
+  contractPage.style.top='0';
+  contractPage.style.width='1200px';
+  contractPage.style.visibility='hidden';
+  contractPage.style.display='block';
+  try{
+    await previewStudentContract();
+    const previewModal=document.getElementById('studentContractPreviewModal');
+    const pages=[...(previewModal?.querySelectorAll('.contract-legal-portrait-page-final')||[])];
+    if(!pages.length)throw new Error('No saved contract pages were generated.');
+    const body=openStudentRecordImageModal('STUDENT CONTRACT — IMAGE VIEW','This is the final parent-facing contract page image. Scroll down to see additional pages.');
+    const stack=document.createElement('div');stack.className='student-record-image-stack';body.appendChild(stack);
+    for(const page of pages){
+      const canvas=await html2canvas(page,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
+      const img=document.createElement('img');img.src=canvas.toDataURL('image/png');img.alt='Student Contract page';img.width=canvas.width;img.height=canvas.height;stack.appendChild(img);
+    }
+    if(previewModal)previewModal.style.display='none';
+  }catch(err){
+    studentRecordImageViewContractContext=null;
+    contractPage.setAttribute('style',oldStyle);
+    showPage(restorePage);
+    alert(err.message||'Unable to create the Student Contract image view.');
+  }
+}
+
+/* Override the normal contract preview close so the student-record image viewer
+   always returns to the Student Profile without exposing the Contract board. */
+const originalCloseStudentContractPreview = closeStudentContractPreview;
+closeStudentContractPreview = function(){
+  try{originalCloseStudentContractPreview();}catch(e){}
+};
 </script>
 
 </body>
