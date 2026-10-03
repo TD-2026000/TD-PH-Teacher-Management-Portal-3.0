@@ -2227,7 +2227,8 @@ button.secondary,
 .appointment-day-detail-footer{display:flex;justify-content:flex-end;padding:10px;border-top:1px solid #ddd;background:#fafafa}
 .appointment-detail-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;border:1px solid #ddd;border-radius:8px;padding:10px;background:#fff}
 /* Selected appointment day: full 12:00 AM–11:30 PM half-hour timeline */
-.appointment-time-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid #ddd}
+.appointment-time-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(18,minmax(54px,auto));grid-auto-flow:column;gap:0;border-top:1px solid #ddd}
+.appointment-time-grid.expanded{grid-template-rows:repeat(24,minmax(54px,auto))}
 .appointment-time-slot{display:grid;grid-template-columns:105px minmax(0,1fr);min-height:54px;border-bottom:1px solid #e3e3e3;background:#fff}
 .appointment-time-label{padding:15px 10px;font-weight:900;font-size:12px;color:#555;background:#fafafa;border-right:1px solid #ddd;text-align:right}
 .appointment-time-content{padding:7px 10px;display:flex;align-items:center;gap:8px;min-width:0}
@@ -9391,9 +9392,11 @@ function closeAppointmentViewModal(){
 function toggleAppointmentEarlyTimes(button){
 const detail=button?.closest('.appointment-day-detail');
 if(!detail)return;
+const grid=detail.querySelector('.appointment-time-grid');
 const hidden=detail.querySelectorAll('.appointment-hidden-early-time');
 const showing=button.dataset.expanded==='1';
 hidden.forEach(row=>row.style.display=showing?'none':'grid');
+if(grid)grid.classList.toggle('expanded',!showing);
 button.dataset.expanded=showing?'0':'1';
 button.textContent=showing?'SHOW ALL TIME':'HIDE 12:00 AM–6:00 AM';
 }
