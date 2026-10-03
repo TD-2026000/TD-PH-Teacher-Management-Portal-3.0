@@ -8769,15 +8769,17 @@ return `<div class="appointment-mini-card ${cls}" onclick="event.stopPropagation
 function renderAppointmentMonth(items){
 const first=new Date(appointmentMonthDate.getFullYear(),appointmentMonthDate.getMonth(),1);
 const last=new Date(appointmentMonthDate.getFullYear(),appointmentMonthDate.getMonth()+1,0);
+// Real-calendar layout: Sunday → Saturday.
 const gridStart=new Date(first);
-const mondayOffset=(first.getDay()+6)%7;
-gridStart.setDate(first.getDate()-mondayOffset);
+const sundayOffset=first.getDay();
+gridStart.setDate(first.getDate()-sundayOffset);
 const gridEnd=new Date(last);
-const sundayOffset=6-((last.getDay()+6)%7);
-gridEnd.setDate(last.getDate()+sundayOffset);
+const saturdayOffset=6-last.getDay();
+gridEnd.setDate(last.getDate()+saturdayOffset);
 const range=document.getElementById('appointmentRange');
 if(range)range.textContent=first.toLocaleDateString(undefined,{month:'long',year:'numeric'});
-const weekdays=SCHEDULE_DAYS.map(day=>`<div class="appointment-month-weekday">${day.slice(0,3)}</div>`).join('');
+const APPOINTMENT_WEEKDAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const weekdays=APPOINTMENT_WEEKDAYS.map(day=>`<div class="appointment-month-weekday">${day.slice(0,3)}</div>`).join('');
 let cells=weekdays;
 const cursor=new Date(gridStart);
 while(cursor<=gridEnd){
