@@ -651,6 +651,19 @@ button.secondary,
    RECORD OF EVALUATION
 ========================================================= */
 
+/* Automatic post-class evaluation queue */
+.evaluation-pending-queue{display:grid;gap:8px}
+.evaluation-pending-card{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #ddd;border-radius:10px;padding:10px 12px;background:#fff}
+.evaluation-pending-card.active{border-width:2px}
+.evaluation-pending-card .pending-meta{display:flex;flex-direction:column;gap:2px}
+.evaluation-pending-card .pending-name{font-weight:900}
+.evaluation-pending-card .pending-sub{font-size:12px;color:#667085}
+.evaluation-pending-card button{border:0;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}
+.appointment-actions .attendance-present{background:#dff6df;color:#166534}
+.appointment-actions .attendance-absent{background:#ffe1e1;color:#8b0000}
+.appointment-actions .appointment-evaluate{background:#00d9d9;color:#000;border:0;border-radius:7px;padding:7px 10px;font-weight:800;cursor:pointer}
+.appointment-actions .appointment-evaluate:hover{background:#00c8c8}
+.appointment-actions .class-ended-disabled{background:#eee;color:#777;border:1px solid #ddd!important;cursor:not-allowed!important;opacity:.9}
 .evaluation-student-list{
   display:grid;
   gap:10px;
@@ -2393,6 +2406,64 @@ button.secondary,
 #contractFontFamily option[value="Montserrat"]{font-family:Montserrat,sans-serif}
 </style>
 
+
+<style id="evaluation-preview-styles">
+/* Evaluation Preview = the exact parent-facing PNG report. */
+.evaluation-preview-btn{min-width:180px}
+.evaluation-image-preview-modal{
+  width:95vw !important;
+  max-width:95vw !important;
+  height:95vh !important;
+  max-height:95vh !important;
+  margin:2.5vh auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+.evaluation-image-preview-modal .modal-header{
+  flex:0 0 auto;
+}
+.evaluation-image-preview-modal .modal-body{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+.evaluation-image-preview-content{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  background:#eef2f7;
+  border:1px solid #d7dee8;
+  border-radius:10px;
+  padding:18px;
+  display:block !important;
+  overflow:auto !important;
+  text-align:center;
+  -webkit-overflow-scrolling:touch;
+}
+.evaluation-preview-image{
+  display:block;
+  width:900px;
+  max-width:none;
+  height:auto;
+  margin:0 auto;
+  background:#fff;
+  box-shadow:0 8px 28px rgba(0,0,0,.14);
+  border-radius:6px;
+}
+.evaluation-preview-modal-actions{
+  flex:0 0 auto;
+  justify-content:flex-end;
+  margin-top:14px;
+}
+@media(max-width:650px){
+  .evaluation-image-preview-modal{width:95vw !important;max-width:95vw !important;height:95vh !important;max-height:95vh !important}
+  .evaluation-preview-image{width:900px;max-width:none}
+  .evaluation-preview-modal-actions{flex-direction:column}
+  .evaluation-preview-modal-actions button{width:100%}
+}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -4515,30 +4586,18 @@ Evaluation
 <div class="section" style="margin-top:0">
 
 <div class="section-title">
-SELECT STUDENT TO EVALUATE
+STUDENTS READY FOR EVALUATION
 </div>
 
 <div class="section-body">
-
-<label>Student</label>
-
-<select
-id="studentSelect"
-onchange="selectStudent()"
->
-
-<option value="">
--- Select a student --
-</option>
-
-</select>
-
-<div class="small">
-Student Name, Parent's Email, and Student ID will be filled automatically from the student record.
+<div id="evaluationPendingQueue" class="evaluation-pending-queue">
+  <div class="small">Students will automatically appear here after their completed class is marked <strong>Present</strong>.</div>
 </div>
-
+<div class="small" style="margin-top:8px">From the Dashboard, choose the student/class that needs evaluation. If you open Evaluation directly from an appointment, the appointment information is filled automatically.</div>
 </div>
 </div>
+
+<div id="evaluationFormPanel" style="display:none">
 
 <div
 class="grid"
@@ -4841,6 +4900,14 @@ Generate/Update Comment
 </button>
 
 <button
+type="button"
+class="secondary evaluation-preview-btn"
+onclick="previewEvaluationImage()"
+>
+Preview Evaluation
+</button>
+
+<button
 id="submitBtn"
 class="primary"
 onclick="sendEvaluation()"
@@ -4870,6 +4937,8 @@ Clear
 
 <div class="small">
 The evaluation is saved to Record of Evaluation. Use Download/PDF to download the evaluation as an image for the parent.
+</div>
+
 </div>
 
 </div>
@@ -7424,8 +7493,13 @@ renderDashboard();
 if(page==='student')
 renderStudents();
 
-if(page==='evaluation')
-populateStudentSelect();
+if(page==='evaluation'){
+  evaluationEntryMode='dashboard';
+  setEvaluationQueueVisibility(true);
+  setEvaluationFormVisibility(false);
+  currentEvaluationAppointmentId='';
+  renderEvaluationQueue();
+}
 
 if(page==='records')
 renderRecords();
@@ -8548,37 +8622,55 @@ if(!modal)return;
 populateAppointmentStudentSelect();
 document.getElementById('appointmentModalTitle').textContent=appointmentId?'Edit Appointment':'New Appointment';
 document.getElementById('appointmentSaveBtn').textContent=appointmentId?'Save Changes':'Save Appointment';
+
+const studentSelect=document.getElementById('appointmentStudent');
 const appointmentDateInput=document.getElementById('appointmentDate');
-if(appointmentDateInput)appointmentDateInput.disabled=!!appointmentId;
+const timeSelect=document.getElementById('appointmentTime');
+const durationSelect=document.getElementById('appointmentDuration');
+const typeSelect=document.getElementById('appointmentType');
+
 document.getElementById('appointmentStatusMessage').className='status';
 document.getElementById('appointmentStatusMessage').textContent='';
 document.getElementById('appointmentConflict').classList.remove('show');
-const timeSelect=document.getElementById('appointmentTime');
+
 timeSelect.innerHTML=buildAppointmentTimeOptions();
-timeSelect.disabled=false;
+
 if(appointmentId){
-const item=getAppointments().find(a=>a.id===appointmentId);
-if(!item)return;
-document.getElementById('appointmentOriginalId').value=item.id;
-document.getElementById('appointmentStudent').value=item.studentId||'';
-document.getElementById('appointmentDate').value=item.date||'';
-document.getElementById('appointmentTime').value=item.time||'';
-document.getElementById('appointmentDuration').value=item.duration||'30 Minutes';
-document.getElementById('appointmentType').value=item.type||'Regular Class';
-/* Editing is always for this single appointment only.
-   Keep the selected date fixed, but allow the teacher to change the time. */
-setAppointmentScheduleMode('manual');
-timeSelect.disabled=false;
+  const item=getAppointments().find(a=>a.id===appointmentId);
+  if(!item)return;
+
+  document.getElementById('appointmentOriginalId').value=item.id;
+  if(studentSelect)studentSelect.value=item.studentId||'';
+  if(appointmentDateInput)appointmentDateInput.value=item.date||'';
+  if(timeSelect)timeSelect.value=item.time||'';
+  if(durationSelect)durationSelect.value=item.duration||'30 Minutes';
+  if(typeSelect)typeSelect.value=item.type||'Regular Class';
+
+  /* EDIT = Class Type ONLY. Everything else is locked. */
+  if(studentSelect)studentSelect.disabled=true;
+  if(appointmentDateInput)appointmentDateInput.disabled=true;
+  if(timeSelect)timeSelect.disabled=true;
+  if(durationSelect)durationSelect.disabled=true;
+  if(typeSelect)typeSelect.disabled=false;
+
+  setAppointmentScheduleMode('manual');
 }else{
-document.getElementById('appointmentOriginalId').value='';
-document.getElementById('appointmentStudent').value='';
-document.getElementById('appointmentDate').value=selectedAppointmentDate||getLocalDateString(new Date());
-document.getElementById('appointmentTime').value='';
-document.getElementById('appointmentDuration').value='30 Minutes';
-document.getElementById('appointmentType').value='Regular Class';
-setAppointmentScheduleMode('preferred');
-timeSelect.disabled=true;
+  document.getElementById('appointmentOriginalId').value='';
+  if(studentSelect)studentSelect.value='';
+  if(appointmentDateInput)appointmentDateInput.value=selectedAppointmentDate||getLocalDateString(new Date());
+  if(timeSelect)timeSelect.value='';
+  if(durationSelect)durationSelect.value='30 Minutes';
+  if(typeSelect)typeSelect.value='Regular Class';
+
+  if(studentSelect)studentSelect.disabled=false;
+  if(appointmentDateInput)appointmentDateInput.disabled=false;
+  if(timeSelect)timeSelect.disabled=true;
+  if(durationSelect)durationSelect.disabled=true;
+  if(typeSelect)typeSelect.disabled=false;
+
+  setAppointmentScheduleMode('preferred');
 }
+
 modal.classList.add('show');
 updateAppointmentAutoInfo();
 updateAppointmentEndTime();
@@ -8590,17 +8682,29 @@ if(appointmentId)onAppointmentStudentChange();
 function rebookAppointment(id){
 const item=getAppointments().find(a=>a.id===id);
 if(!item||((item.status||'Scheduled')!=='Scheduled'))return;
+
 editingAppointmentId=id;
 rebookingAppointment=true;
 openAppointmentModal(id);
+
+const studentSelect=document.getElementById('appointmentStudent');
 const dateInput=document.getElementById('appointmentDate');
 const timeSelect=document.getElementById('appointmentTime');
+const durationSelect=document.getElementById('appointmentDuration');
+const typeSelect=document.getElementById('appointmentType');
 const title=document.getElementById('appointmentModalTitle');
 const saveBtn=document.getElementById('appointmentSaveBtn');
+
+/* REBOOK = Date + Time ONLY. Everything else is locked. */
+if(studentSelect)studentSelect.disabled=true;
 if(dateInput)dateInput.disabled=false;
 if(timeSelect)timeSelect.disabled=false;
+if(durationSelect)durationSelect.disabled=true;
+if(typeSelect)typeSelect.disabled=true;
+
 if(title)title.textContent='Rebook Appointment';
 if(saveBtn)saveBtn.textContent='Save Rebooked Class';
+
 setAppointmentScheduleMode('manual');
 updateAppointmentAutoInfo();
 updateAppointmentEndTime();
@@ -8685,20 +8789,53 @@ if(!student)return fail('Please select a student.');
 if(!date)return fail('Please select the start date.');
 if(editingAppointmentId){
 if(!time)return fail('Please select the start time.');
-if(updateAppointmentConflict())return fail('Please choose another date or time.');
+
 const appointments=getAppointments();
 const old=appointments.find(a=>a.id===editingAppointmentId);
+if(!old)return fail('The appointment could not be found.');
+
+const wasRebook=rebookingAppointment;
+const finalDate=wasRebook?date:old.date;
+const finalTime=wasRebook?time:old.time;
+const finalType=wasRebook?(old.type||'Regular Class'):type;
+
+if(updateAppointmentConflict())return fail('Please choose another date or time.');
+
 const now=new Date().toISOString();
-const record={...old,studentId:student.id,studentName:student.name,date,time,duration,type,scheduleMode:mode,updatedAt:now};
+let record;
+
+if(wasRebook){
+  /* Rebook changes DATE + TIME only. */
+  record={
+    ...old,
+    date:finalDate,
+    time:finalTime,
+    updatedAt:now
+  };
+}else{
+  /* Edit changes CLASS TYPE only. */
+  record={
+    ...old,
+    type:finalType,
+    updatedAt:now
+  };
+}
+
 const index=appointments.findIndex(a=>a.id===editingAppointmentId);
 if(index>=0)appointments[index]=record;
 saveAppointments(appointments);
-const wasRebook=rebookingAppointment;
+
 closeAppointmentModal();
-selectedAppointmentDate=date;
-const movedDate=new Date(`${date}T00:00:00`);
+selectedAppointmentDate=finalDate;
+const movedDate=new Date(`${finalDate}T00:00:00`);
 appointmentMonthDate=new Date(movedDate.getFullYear(),movedDate.getMonth(),1);
-apptShowMessage(wasRebook?`Appointment rebooked for ${student.name}. The old booking was moved to ${date} at ${formatAppointmentTime(time)}.`:`Appointment updated for ${student.name}.`);
+
+apptShowMessage(
+  wasRebook
+    ? `Appointment rebooked for ${student.name}. The new schedule is ${finalDate} at ${formatAppointmentTime(finalTime)}.`
+    : `Appointment updated for ${student.name}. Class Type changed to ${finalType}.`
+);
+
 renderAppointments();
 renderDashboard();
 renderStudents();
@@ -8820,14 +8957,22 @@ const status=item.status||'Scheduled';
 const reason=item.cancelReason||'';
 const safeId=escapeAttr(item.id);
 let actionButtons='';
-if(status==='Scheduled'){
+const start=getAppointmentDateTime(item);
+const endTime=start ? new Date(start.getTime()+durationToMinutes(item.duration||'30 Minutes')*60000) : null;
+const classEnded=!!endTime && new Date()>=endTime;
+if(status==='Scheduled' && !classEnded){
 /* Before the class end time: Edit, Cancel, and Rebook are available. */
 actionButtons=`<button class="edit" type="button" onclick="openAppointmentModal('${safeId}')">Edit</button><button class="cancel" type="button" onclick="openAppointmentReasonModal('${safeId}','cancel')">Cancel</button><button class="rebook" type="button" onclick="rebookAppointment('${safeId}')">Rebook</button>`;
+}else if(status==='Scheduled' && classEnded){
+/* The class is automatically COMPLETED after the end time, but attendance still needs to be selected. */
+actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED</button><button class="attendance-present" type="button" onclick="markAppointmentPresent('${safeId}')">PRESENT</button><button class="attendance-absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">ABSENT</button>`;
 }else if(status==='Completed'){
-/* After the class end time: show only the 3-dot menu. Present confirms/completes the class; Absent marks it absent in red. */
-actionButtons=`<div class="appointment-more-wrap"><button class="appointment-more-btn" type="button" aria-label="More actions" onclick="toggleAppointmentMoreMenu(event,'${safeId}')">⋮</button><div id="appointmentMore_${safeId}" class="appointment-more-menu"><button type="button" onclick="markAppointmentPresent('${safeId}')">Present</button><button class="absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">Absent</button></div></div>`;
+const attendance=(item.attendance||'').toUpperCase();
+if(attendance){
+  actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED · ${escapeHtml(attendance)}</button><button class="appointment-evaluate" type="button" onclick="openAppointmentEvaluation('${safeId}')">EVALUATE</button>`;
 }else{
-actionButtons='';
+  actionButtons=`<button class="class-ended-disabled" type="button" disabled aria-disabled="true">COMPLETED</button><button class="attendance-present" type="button" onclick="markAppointmentPresent('${safeId}')">PRESENT</button><button class="attendance-absent" type="button" onclick="openAppointmentReasonModal('${safeId}','absent')">ABSENT</button>`;
+}
 }
 return `<div class="appointment-detail-row">
 <div class="appointment-detail-time">${escapeHtml(formatAppointmentTime(item.time))} – ${escapeHtml(formatAppointmentTime(addMinutesToTime(item.time,durationToMinutes(item.duration))))}</div>
@@ -8866,7 +9011,6 @@ renderAppointments();
 }
 
 function renderAppointments(){
-autoCompleteFinishedAppointments();
 const container=document.getElementById('appointmentCalendar');
 if(!container)return;
 const items=filteredAppointments();
@@ -8914,6 +9058,18 @@ const item=appointments[index];
 appointments[index]={...item,status:'Completed',attendance:'Present',presentAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
 saveAppointments(appointments);
 renderAppointments();
+renderDashboard();
+}
+
+function openAppointmentEvaluation(id){
+const item=getAppointments().find(a=>a.id===id);
+if(!item || (item.status||'')!=='Completed' || !item.attendance)return;
+evaluationEntryMode='appointment';
+showPage('evaluation');
+evaluationEntryMode='appointment';
+setEvaluationQueueVisibility(false);
+loadEvaluationFromAppointment(id,{fromAppointment:true});
+window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function openAppointmentReasonModal(id,action){
@@ -8952,9 +9108,10 @@ const index=appointments.findIndex(a=>a.id===id);
 if(index<0)return;
 const now=new Date().toISOString();
 if(action==='cancel'){
-appointments[index]={...appointments[index],status:'Cancelled',cancelReason:reason,cancelledAt:now,updatedAt:now};
+  appointments[index]={...appointments[index],status:'Cancelled',cancelReason:reason,cancelledAt:now,updatedAt:now};
 }else{
-appointments[index]={...appointments[index],status:'No Show',absentReason:reason,absentAt:now,updatedAt:now};
+  /* ABSENT is still a COMPLETED class; attendance is recorded separately. */
+  appointments[index]={...appointments[index],status:'Completed',attendance:'Absent',absentReason:reason,absentAt:now,updatedAt:now};
 }
 saveAppointments(appointments);
 closeAppointmentReasonModal();
@@ -9644,86 +9801,132 @@ function renderStudents(){
    STUDENT SELECT
 ========================================================= */
 
+let currentEvaluationAppointmentId='';
+let evaluationEntryMode='dashboard';
+
+function setEvaluationQueueVisibility(show){
+  const queue=document.getElementById('evaluationPendingQueue');
+  const section=queue?.closest('.section');
+  if(section) section.style.display=show?'':'none';
+}
+
+function setEvaluationFormVisibility(show){
+  const form=document.getElementById('evaluationFormPanel');
+  if(form) form.style.display=show?'':'none';
+}
+
+function clearEvaluationFormForDashboard(){
+  setEvaluationFormVisibility(false);
+  currentEvaluationAppointmentId='';
+}
+
+function getPendingEvaluationAppointments(){
+  const appointments=getAppointments();
+  const evals=getEvaluations();
+  const evaluatedIds=new Set(evals.map(e=>e.appointmentId).filter(Boolean));
+  const now=new Date();
+  return appointments.filter(a=>{
+    if((a.status||'Scheduled')!=='Completed') return false;
+    if(!['present','absent'].includes((a.attendance||'').toLowerCase())) return false;
+    if(!a.id || evaluatedIds.has(a.id)) return false;
+    const end=getAppointmentDateTime(a);
+    if(!end) return true;
+    return now>=new Date(end.getTime()+durationToMinutes(a.duration||'30 Minutes')*60000);
+  }).sort((a,b)=>String(a.date+' '+a.time).localeCompare(String(b.date+' '+b.time)));
+}
+
+function renderEvaluationQueue(activeId){
+  const queue=document.getElementById('evaluationPendingQueue');
+  if(!queue)return;
+  if(evaluationEntryMode==='appointment'){
+    setEvaluationQueueVisibility(false);
+    return;
+  }
+  setEvaluationQueueVisibility(true);
+  const pending=getPendingEvaluationAppointments();
+  if(!pending.length){
+    queue.innerHTML='<div class="small">No completed classes are waiting for evaluation.</div>';
+    return;
+  }
+  const selected=activeId||currentEvaluationAppointmentId||'';
+  queue.innerHTML=`<div class="small" style="margin-bottom:10px;font-weight:700">${pending.length} class${pending.length===1?'':'es'} need${pending.length===1?'s':''} evaluation.</div>`+pending.map(a=>{
+    const active=a.id===selected;
+    const d=getAppointmentDateTime(a);
+    const when=d?d.toLocaleString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):`${a.date||''} ${a.time||''}`;
+    return `<div class="evaluation-pending-card ${active?'active':''}">
+      <div class="pending-meta"><span class="pending-name">${escapeHtml(a.studentName||'Student')}</span><span class="pending-sub">${escapeHtml(a.id||'')} · ${escapeHtml(when)} · ${escapeHtml(a.duration||'30 Minutes')}</span></div>
+      <button type="button" onclick="loadEvaluationFromAppointment('${escapeAttr(a.id)}')">${active?'Evaluating':'Evaluate'}</button>
+    </div>`;
+  }).join('');
+}
+
 function populateStudentSelect(selectedId){
-
-const select=
-document.getElementById(
-'studentSelect'
-);
-
-const students=getStudents();
-
-const current=
-selectedId ||
-select.value;
-
-select.innerHTML=
-'<option value="">-- Select a student --</option>'+
-students.map(
-s=>
-`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} — ${escapeHtml(s.id)}</option>`
-)
-.join('');
-
-if(
-current &&
-students.some(
-s=>s.id===current
-)
-){
-
-select.value=current;
-
+  /* Legacy compatibility: the manual student selector is intentionally removed. */
+  renderEvaluationQueue(selectedId);
 }
 
+function loadEvaluationFromAppointment(appointmentId,options={}){
+  const item=getAppointments().find(a=>String(a.id)===String(appointmentId));
+  if(!item)return;
+
+  /*
+     IMPORTANT: Evaluation is opened directly from a completed appointment.
+     The appointment already knows which student was evaluated, so the
+     Student Name, Student ID and Parent Gmail must be filled automatically.
+     Match IDs as strings as well because older saved records may contain a
+     numeric ID while the appointment contains the same ID as text.
+  */
+  const students=getStudents();
+  const student=students.find(s=>String(s.id)===String(item.studentId))
+    || students.find(s=>String(s.name||'').trim().toLowerCase()===String(item.studentName||'').trim().toLowerCase());
+
+  currentEvaluationAppointmentId=item.id;
+  setEvaluationFormVisibility(true);
+
+  const set=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el)el.value=value??'';
+  };
+
+  const studentName=student?.name || item.studentName || item.student || item.name || '';
+  const studentId=student?.id ?? item.studentId ?? '';
+  const parentEmail=student?.email || item.parentEmail || item.parent_email || item.parentGmail || item.parentEmailAddress || item.email || '';
+
+  set('studentName',studentName);
+  set('parentEmail',parentEmail);
+  set('studentId',studentId);
+  set('date',item.date||'');
+  set('time',item.time||'');
+  // Lesson / Topic is intentionally blank. The teacher must type the actual lesson taught.
+  set('lessonTopic','');
+  set('duration',item.duration||student?.duration||'30 Minutes');
+
+  if(options.fromAppointment){
+    evaluationEntryMode='appointment';
+    setEvaluationQueueVisibility(false);
+  }else{
+    evaluationEntryMode='dashboard';
+    setEvaluationQueueVisibility(true);
+  }
+
+  const teacher=getTeacherProfile();
+  set('teacher',teacher.username||currentUser?.user_metadata?.username||defaultUsername(currentUser?.email)||'Teacher Danyeal');
+
+  commentVersion=0;
+  updateOverallScore();
+  generateComment();
+  markEvaluationUnsaved();
+  renderEvaluationQueue(item.id);
 }
-
-
-/* =========================================================
-   SELECT STUDENT
-========================================================= */
 
 function selectStudent(){
-
-markEvaluationUnsaved();
-
-const id=
-document.getElementById(
-'studentSelect'
-).value;
-
-const student=
-getStudents().find(
-s=>s.id===id
-);
-
-document.getElementById(
-'studentName'
-).value=
-student
-?student.name
-:'';
-
-document.getElementById(
-'parentEmail'
-).value=
-student
-?student.email
-:'';
-
-document.getElementById(
-'studentId'
-).value=
-student
-?student.id
-:'';
-
-commentVersion=0;
-
-updateOverallScore();
-
-generateComment();
-
+  /* Legacy compatibility for older saved pages. */
+  const id=document.getElementById('studentId')?.value;
+  const student=getStudents().find(s=>s.id===id);
+  if(student){
+    const appt=getPendingEvaluationAppointments().find(a=>a.studentId===student.id);
+    if(appt)loadEvaluationFromAppointment(appt.id);
+  }
 }
 
 
@@ -10420,16 +10623,13 @@ new Date().toISOString();
 
 const record={
 ...templateParams,
-
+appointmentId:currentEvaluationAppointmentId||'',
 dateTime:
 `${dateValue}T${timeValue}`,
-
 createdAt:
 evaluationSavedAt,
-
 evaluationSavedAt:
 evaluationSavedAt
-
 };
 
 submitBtn.disabled=true;
@@ -10454,6 +10654,7 @@ true
 
 renderDashboard();
 renderRecords();
+renderEvaluationQueue();
 
 setTimeout(()=>{
 submitBtn.disabled=false;
@@ -10463,8 +10664,219 @@ submitBtn.textContent='Save Evaluation';
 }
 
 /* =========================================================
+   EVALUATION IMAGE PREVIEW
+========================================================= */
+
+function buildEvaluationParentReport(){
+  const evaluationPage=document.getElementById('evaluationPage');
+  if(!evaluationPage) throw new Error('Evaluation page not found.');
+
+  const report=evaluationPage.cloneNode(true);
+  report.id='parentEvaluationReportPreview';
+  report.style.display='block';
+  report.style.visibility='visible';
+  report.style.position='relative';
+  report.style.width='100%';
+  report.style.maxWidth='900px';
+  report.style.margin='0';
+  report.style.padding='40px';
+  report.style.background='#ffffff';
+  report.style.boxSizing='border-box';
+  report.style.color='#111827';
+
+  report.querySelectorAll('.page-back-wrap, .buttons, #status').forEach(el=>el.remove());
+
+  // Parent-facing image must contain ONLY the final evaluation report.
+  // Never include the teacher-only "Students Ready for Evaluation" queue.
+  const evaluationQueue=report.querySelector('#evaluationPendingQueue');
+  if(evaluationQueue){
+    const queueSection=evaluationQueue.closest('.section');
+    if(queueSection) queueSection.remove();
+    else evaluationQueue.remove();
+  }
+
+  const studentSelect=report.querySelector('#studentSelect');
+  if(studentSelect){
+    const pickerSection=studentSelect.closest('.section');
+    if(pickerSection) pickerSection.remove();
+  }
+
+  [...report.querySelectorAll('.section-title')].forEach(el=>{
+    const text=el.textContent.replace(/\s+/g,' ').trim().toUpperCase();
+    if(text.includes('SELECT STUDENT TO EVALUATE')){
+      const section=el.closest('.section');
+      if(section) section.remove(); else el.remove();
+    }
+  });
+
+  [...report.querySelectorAll('.small')].forEach(el=>el.remove());
+
+  report.querySelectorAll('input, select, textarea').forEach(control=>{
+    if(control.id==='vocabulary' || control.id==='improvement'){
+      const items=(control.value||'').split(/\n+/).map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
+      const list=document.createElement('ul');
+      list.style.margin='0';
+      list.style.paddingLeft='24px';
+      list.style.lineHeight='1.65';
+      if(items.length){
+        items.forEach(item=>{const li=document.createElement('li');li.textContent=item;list.appendChild(li);});
+      }else{
+        const li=document.createElement('li');li.textContent='—';list.appendChild(li);
+      }
+      control.replaceWith(list);
+      return;
+    }
+    let value='';
+    if(control.tagName==='SELECT') value=control.options[control.selectedIndex]?.textContent?.trim() || '';
+    else value=control.value || control.getAttribute('value') || '';
+    if(!value || /^--\s*select/i.test(value) || /^select a student/i.test(value)) value='—';
+    const valueBox=document.createElement('div');
+    valueBox.className='parent-report-value';
+    valueBox.textContent=value;
+    control.replaceWith(valueBox);
+  });
+
+  const reportStyle=document.createElement('style');
+  reportStyle.textContent=`
+#parentEvaluationReportPreview{
+  font-family:Arial,Helvetica,sans-serif !important;
+  line-height:1.5 !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:12px !important;
+}
+#parentEvaluationReportPreview h2{
+  text-align:center !important;
+  font-size:30px !important;
+  margin:0 0 8px !important;
+  color:#111827 !important;
+}
+#parentEvaluationReportPreview h2::after{content:none !important;}
+#parentEvaluationReportPreview .section{break-inside:avoid !important;page-break-inside:avoid !important;}
+#parentEvaluationReportPreview .section-title{letter-spacing:.3px !important;}
+#parentEvaluationReportPreview .parent-report-value{
+  min-height:42px !important;padding:10px 12px !important;border:1px solid #d1d5db !important;
+  border-radius:8px !important;background:#f9fafb !important;color:#111827 !important;
+  display:flex !important;align-items:center !important;white-space:pre-wrap !important;overflow-wrap:anywhere !important;
+}
+#parentEvaluationReportPreview .section-body .parent-report-value{min-height:54px !important;align-items:flex-start !important;}
+#parentEvaluationReportPreview .comment-box{background:#f9fafb !important;border:1px solid #d1d5db !important;color:#111827 !important;}
+#parentEvaluationReportPreview .score-box{border:1px solid #d1d5db !important;background:#f9fafb !important;}
+#parentEvaluationReportPreview .performance{break-inside:avoid !important;page-break-inside:avoid !important;}
+#parentEvaluationReportPreview .stars{pointer-events:none !important;}
+`;
+  report.prepend(reportStyle);
+
+  const reportTitle=report.querySelector('h2');
+  if(reportTitle){
+    const username=(document.getElementById('profileUsername')?.value || '').trim();
+    const cleanUsername=username || 'Teacher Danyeal';
+    const teacherLabel=/^teacher\b/i.test(cleanUsername) ? cleanUsername : `Teacher ${cleanUsername}`;
+    const reportSubtitle=document.createElement('div');
+    reportSubtitle.className='parent-report-subtitle';
+    reportSubtitle.textContent=`${teacherLabel}'s English Class Memo`;
+    reportSubtitle.style.cssText='font-size:14px;font-weight:normal;margin-top:8px;color:#6b7280;text-align:center;';
+    reportTitle.insertAdjacentElement('afterend',reportSubtitle);
+  }
+
+  return report;
+}
+
+async function previewEvaluationImage(){
+  try{
+    if(typeof html2canvas==='undefined') throw new Error('Image preview is still loading. Please try again.');
+    const name=document.getElementById('studentName')?.value.trim();
+    if(!name) return showStatus('Please select a completed class/student first.',false);
+    if(!document.getElementById('date')?.value) return showStatus('Please select the class date first.',false);
+    if(!document.getElementById('time')?.value) return showStatus('Please select the class time first.',false);
+
+    updateOverallScore();
+    generateComment();
+
+    let modal=document.getElementById('evaluationImagePreviewModal');
+    if(!modal){
+      modal=document.createElement('div');
+      modal.id='evaluationImagePreviewModal';
+      modal.className='modal-backdrop';
+      modal.innerHTML=`
+        <div class="modal evaluation-image-preview-modal">
+          <div class="modal-header">
+            <h3>📋 EVALUATION PREVIEW</h3>
+            <button type="button" class="contract-preview-close-btn" onclick="closeEvaluationImagePreview()" aria-label="Close preview" title="Close preview">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="small" style="margin-bottom:12px">This is the exact final PNG image used for the parent evaluation report. What you see here is the final output.</div>
+            <div id="evaluationImagePreviewContent" class="evaluation-image-preview-content"></div>
+            <div class="buttons evaluation-preview-modal-actions">
+              <button type="button" class="secondary" onclick="closeEvaluationImagePreview()">Close Preview</button>
+              <button type="button" class="primary" onclick="closeEvaluationImagePreview();sendEvaluation()">Save Evaluation</button>
+            </div>
+          </div>
+        </div>`;
+      modal.addEventListener('click',e=>{if(e.target===modal)closeEvaluationImagePreview();});
+      document.body.appendChild(modal);
+    }
+
+    const content=document.getElementById('evaluationImagePreviewContent');
+    if(!content)return;
+    content.innerHTML='<div class="small" style="padding:30px;text-align:center">Preparing image preview...</div>';
+    modal.classList.add('show');
+
+    const dataUrl=await renderEvaluationParentImage();
+
+    content.innerHTML='';
+    const img=document.createElement('img');
+    img.className='evaluation-preview-image';
+    img.src=dataUrl;
+    img.alt='Evaluation parent-facing preview';
+    content.appendChild(img);
+  }catch(error){
+    console.error('Evaluation preview failed:',error);
+    const modal=document.getElementById('evaluationImagePreviewModal');
+    if(modal) modal.classList.remove('show');
+    showStatus(error.message||'Unable to prepare the evaluation preview.',false);
+  }
+}
+
+function closeEvaluationImagePreview(){
+  const modal=document.getElementById('evaluationImagePreviewModal');
+  if(modal)modal.classList.remove('show');
+}
+
+/* =========================================================
    DOWNLOAD EVALUATION AS IMAGE
 ========================================================= */
+
+async function renderEvaluationParentImage(){
+  if(typeof html2canvas==='undefined') throw new Error('Image preview is still loading. Please try again.');
+
+  const report=buildEvaluationParentReport();
+  const host=document.createElement('div');
+  host.style.position='fixed';
+  host.style.left='-100000px';
+  host.style.top='0';
+  host.style.width='900px';
+  host.style.background='#ffffff';
+  host.style.zIndex='-1';
+  host.style.padding='0';
+  host.appendChild(report);
+  document.body.appendChild(host);
+
+  try{
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const canvas=await html2canvas(report,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#ffffff',
+      logging:false,
+      windowWidth:900,
+      scrollX:0,
+      scrollY:0
+    });
+    return canvas.toDataURL('image/png');
+  }finally{
+    host.remove();
+  }
+}
 
 async function downloadEvaluationImage(){
 
@@ -10473,14 +10885,6 @@ if(downloadBtn && downloadBtn.disabled){
   return showStatus('Please save the evaluation first before downloading the report.',false);
 }
 
-const evaluationPage=document.getElementById('evaluationPage');
-
-if(!evaluationPage)
-return showStatus('Evaluation page not found.',false);
-
-if(typeof html2canvas==='undefined')
-return showStatus('Image download is still loading. Please try again.',false);
-
 const studentName=(document.getElementById('studentName')?.value || 'Student')
 .trim()
 .replace(/[^a-z0-9]+/gi,'-')
@@ -10488,222 +10892,39 @@ const studentName=(document.getElementById('studentName')?.value || 'Student')
 
 showStatus('Preparing formal evaluation report...',true);
 
-let reportHost=null;
-
 try{
+  const dataUrl=await renderEvaluationParentImage();
+  const filename=`Teacher-Danyeal-Evaluation-${studentName}.png`;
 
-/* Create a separate parent-facing copy. Teacher dashboard controls are never captured. */
-reportHost=document.createElement('div');
-reportHost.style.position='fixed';
-reportHost.style.left='-100000px';
-reportHost.style.top='0';
-reportHost.style.width='900px';
-reportHost.style.background='#ffffff';
-reportHost.style.zIndex='-1';
-reportHost.style.padding='0';
-
-const report=evaluationPage.cloneNode(true);
-report.id='parentEvaluationReport';
-report.style.display='block';
-report.style.visibility='visible';
-report.style.position='relative';
-report.style.width='100%';
-report.style.maxWidth='900px';
-report.style.margin='0';
-report.style.padding='40px';
-report.style.background='#ffffff';
-report.style.boxSizing='border-box';
-report.style.color='#111827';
-
-/* Remove website-only controls. */
-report.querySelectorAll('.page-back-wrap, .buttons, #status').forEach(el=>el.remove());
-
-/* Remove the COMPLETE student selector section. */
-const studentSelect=report.querySelector('#studentSelect');
-if(studentSelect){
-  const pickerSection=studentSelect.closest('.section');
-  if(pickerSection) pickerSection.remove();
-}
-
-/* Extra safety in case the selector markup changes later. */
-[...report.querySelectorAll('.section-title')].forEach(el=>{
-  const text=el.textContent.replace(/\s+/g,' ').trim().toUpperCase();
-  if(text.includes('SELECT STUDENT TO EVALUATE')){
-    const section=el.closest('.section');
-    if(section) section.remove(); else el.remove();
-  }
-});
-
-/* Remove teacher instructions/helper text. */
-[...report.querySelectorAll('.small')].forEach(el=>el.remove());
-
-/* Convert form controls to formal, non-editable report values. */
-report.querySelectorAll('input, select, textarea').forEach(control=>{
-  if(control.id==='vocabulary' || control.id==='improvement'){
-    const items=(control.value||'').split(/\n+/).map(item=>item.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
-    const list=document.createElement('ul');
-    list.style.margin='0';
-    list.style.paddingLeft='24px';
-    list.style.lineHeight='1.65';
-    if(items.length){
-      items.forEach(item=>{
-        const li=document.createElement('li');
-        li.textContent=item;
-        list.appendChild(li);
+  if(typeof window.showSaveFilePicker==='function'){
+    try{
+      const handle=await window.showSaveFilePicker({
+        suggestedName:filename,
+        types:[{description:'PNG Image',accept:{'image/png':['.png']}}]
       });
-    }else{
-      const li=document.createElement('li');
-      li.textContent='—';
-      list.appendChild(li);
+      const writable=await handle.createWritable();
+      const response=await fetch(dataUrl);
+      const blob=await response.blob();
+      await writable.write(blob);
+      await writable.close();
+    }catch(saveError){
+      if(saveError?.name!=='AbortError') throw saveError;
+      return showStatus('Download cancelled.',false);
     }
-    control.replaceWith(list);
-    return;
-  }
-
-  let value='';
-  if(control.tagName==='SELECT'){
-    value=control.options[control.selectedIndex]?.textContent?.trim() || '';
   }else{
-    value=control.value || control.getAttribute('value') || '';
+    const link=document.createElement('a');
+    link.download=filename;
+    link.href=dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
-  if(!value || /^--\s*select/i.test(value) || /^select a student/i.test(value)) value='—';
 
-  const valueBox=document.createElement('div');
-  valueBox.className='parent-report-value';
-  valueBox.textContent=value;
-  control.replaceWith(valueBox);
-});
-
-/* Formal parent-facing appearance. */
-const reportStyle=document.createElement('style');
-reportStyle.textContent=`
-#parentEvaluationReport{
-  font-family:Arial,Helvetica,sans-serif !important;
-  line-height:1.5 !important;
-  border:1px solid #e5e7eb !important;
-  border-radius:12px !important;
-}
-#parentEvaluationReport h2{
-  text-align:center !important;
-  font-size:30px !important;
-  margin:0 0 8px !important;
-  color:#111827 !important;
-}
-#parentEvaluationReport h2::after{
-  content:none !important;
-}
-#parentEvaluationReport .section{
-  break-inside:avoid !important;
-  page-break-inside:avoid !important;
-}
-#parentEvaluationReport .section-title{
-  letter-spacing:.3px !important;
-}
-#parentEvaluationReport .parent-report-value{
-  min-height:42px !important;
-  padding:10px 12px !important;
-  border:1px solid #d1d5db !important;
-  border-radius:8px !important;
-  background:#f9fafb !important;
-  color:#111827 !important;
-  display:flex !important;
-  align-items:center !important;
-  white-space:pre-wrap !important;
-  overflow-wrap:anywhere !important;
-}
-#parentEvaluationReport .section-body .parent-report-value{
-  min-height:54px !important;
-  align-items:flex-start !important;
-}
-#parentEvaluationReport .comment-box{
-  background:#f9fafb !important;
-  border:1px solid #d1d5db !important;
-  color:#111827 !important;
-}
-#parentEvaluationReport .score-box{
-  border:1px solid #d1d5db !important;
-  background:#f9fafb !important;
-}
-#parentEvaluationReport .performance{
-  break-inside:avoid !important;
-  page-break-inside:avoid !important;
-}
-#parentEvaluationReport .stars{
-  pointer-events:none !important;
-}
-`;
-report.prepend(reportStyle);
-
-/* Dynamic parent-facing header: use the Teacher Profile username. */
-const reportTitle=report.querySelector('h2');
-if(reportTitle){
-  const username=(document.getElementById('profileUsername')?.value || '').trim();
-  const cleanUsername=username || 'Teacher Danyeal';
-  const teacherLabel=/^teacher\b/i.test(cleanUsername)
-    ? cleanUsername
-    : `Teacher ${cleanUsername}`;
-
-  const reportSubtitle=document.createElement('div');
-  reportSubtitle.className='parent-report-subtitle';
-  reportSubtitle.textContent=`${teacherLabel}'s English Class Memo`;
-  reportSubtitle.style.cssText='font-size:14px;font-weight:normal;margin-top:8px;color:#6b7280;text-align:center;';
-  reportTitle.insertAdjacentElement('afterend',reportSubtitle);
-}
-
-reportHost.appendChild(report);
-document.body.appendChild(reportHost);
-
-await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-
-const canvas=await html2canvas(report,{
-  scale:2,
-  useCORS:true,
-  backgroundColor:'#ffffff',
-  logging:false,
-  windowWidth:900,
-  scrollX:0,
-  scrollY:0
-});
-
-const filename=`Teacher-Danyeal-Evaluation-${studentName}.png`;
-const dataUrl=canvas.toDataURL('image/png');
-
-/* Open the native Save As dialog when the browser supports it. */
-if(typeof window.showSaveFilePicker==='function'){
-  try{
-    const handle=await window.showSaveFilePicker({
-      suggestedName:filename,
-      types:[{
-        description:'PNG Image',
-        accept:{'image/png':['.png']}
-      }]
-    });
-    const writable=await handle.createWritable();
-    const response=await fetch(dataUrl);
-    const blob=await response.blob();
-    await writable.write(blob);
-    await writable.close();
-  }catch(saveError){
-    if(saveError?.name!=='AbortError') throw saveError;
-    return showStatus('Download cancelled.',false);
-  }
-}else{
-  const link=document.createElement('a');
-  link.download=filename;
-  link.href=dataUrl;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-showStatus('Formal evaluation report downloaded successfully.',true);
+  showStatus('Formal evaluation report downloaded successfully.',true);
 
 }catch(error){
-console.error('Evaluation image download failed:',error);
-showStatus('Unable to download the formal evaluation report. Please try again.',false);
-
-}finally{
-if(reportHost) reportHost.remove();
+  console.error('Evaluation image download failed:',error);
+  showStatus('Unable to download the formal evaluation report. Please try again.',false);
 }
 
 }
@@ -10726,9 +10947,7 @@ function resetForm(){
 const downloadBtn=document.getElementById('downloadEvaluationBtn');
 if(downloadBtn) downloadBtn.disabled=true;
 
-document.getElementById(
-'studentSelect'
-).value='';
+currentEvaluationAppointmentId='';
 
 [
 'studentName',
@@ -10763,7 +10982,8 @@ commentVersion=0;
 document.getElementById(
 'commentPreview'
 ).textContent=
-"Select a student and fill in the lesson details. The teacher's comment will be generated automatically.";
+"Select a completed class above to begin the evaluation.";
+renderEvaluationQueue();
 
 showStatus(
 'Form cleared.',
