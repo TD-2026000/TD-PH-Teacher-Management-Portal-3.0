@@ -222,21 +222,6 @@ body{
   box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
- .dashboard-todo-list{display:flex;flex-direction:column;gap:10px;}
-.dashboard-todo-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 14px;border:1px solid #ddd;border-left:5px solid #87CEEB;border-radius:10px;background:#fafafa;}
-.dashboard-todo-card-main{min-width:0;}
-.dashboard-todo-card-name{font-size:16px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.dashboard-todo-card-meta{margin-top:4px;color:#666;font-size:13px;}
-.dashboard-todo-card-time{flex:0 0 auto;font-size:15px;font-weight:900;text-align:right;}
-.dashboard-todo-showall{width:100%;margin-top:2px;border:1px solid #bbb;border-radius:9px;padding:10px 12px;background:#f5f5f5;font-weight:800;cursor:pointer;}
-.dashboard-todo-showall:hover{background:#ececec;}
-.dashboard-todo-empty{padding:8px 2px;color:#777;font-size:14px;}
-.dashboard-todo-section{margin-top:18px;padding-top:15px;border-top:2px dashed #ddd;}
-.dashboard-todo-section-title{margin-bottom:9px;font-size:13px;font-weight:900;letter-spacing:.5px;color:#777;}
-.dashboard-todo-completed .dashboard-todo-card{background:#f3f3f3;border-left-color:#aaa;opacity:.88;}
-.dashboard-todo-completed .dashboard-todo-card-name{text-decoration:line-through;color:#666;}
-.dashboard-todo-completed-badge{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#e1e1e1;color:#555;font-size:11px;font-weight:900;text-decoration:none;}
-@media(max-width:700px){.dashboard-todo-card{align-items:flex-start;}.dashboard-todo-card-time{font-size:14px;}}
 .dashboard-todo-title{
   padding:13px 16px;
   background:#87CEEB;
@@ -2227,7 +2212,7 @@ button.secondary,
 .appointment-day-detail-footer{display:flex;justify-content:flex-end;padding:10px;border-top:1px solid #ddd;background:#fafafa}
 .appointment-detail-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;border:1px solid #ddd;border-radius:8px;padding:10px;background:#fff}
 /* Selected appointment day: full 12:00 AM–11:30 PM half-hour timeline */
-.appointment-time-grid{display:grid;gap:0;border-top:1px solid #ddd}
+.appointment-time-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid #ddd}
 .appointment-time-slot{display:grid;grid-template-columns:105px minmax(0,1fr);min-height:54px;border-bottom:1px solid #e3e3e3;background:#fff}
 .appointment-time-label{padding:15px 10px;font-weight:900;font-size:12px;color:#555;background:#fafafa;border-right:1px solid #ddd;text-align:right}
 .appointment-time-content{padding:7px 10px;display:flex;align-items:center;gap:8px;min-width:0}
@@ -2265,7 +2250,7 @@ button.secondary,
 .appointment-show-all-time{border:1px solid #ccc;border-radius:7px;background:#fff;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer}
 .appointment-show-all-time:hover{background:#f3f3f3}
 .appointment-hidden-early-time{display:none}
-@media(max-width:700px){.appointment-time-slot{grid-template-columns:82px minmax(0,1fr)}.appointment-time-label{font-size:11px;padding:13px 7px}.appointment-time-content{padding:6px}.appointment-time-booking{align-items:flex-start;flex-direction:column}.appointment-time-booking-actions{width:100%;justify-content:flex-start}}
+@media(max-width:700px){.appointment-time-grid{grid-template-columns:1fr}.appointment-time-slot{grid-template-columns:82px minmax(0,1fr)}.appointment-time-label{font-size:11px;padding:13px 7px}.appointment-time-content{padding:6px}.appointment-time-booking{align-items:flex-start;flex-direction:column}.appointment-time-booking-actions{width:100%;justify-content:flex-start}}
 
 .appointment-detail-time{font-weight:900}
 .appointment-detail-main b{display:block}
@@ -4189,10 +4174,10 @@ Dashboard
 </div>
 
 <div class="dashboard-todo">
-<div class="dashboard-todo-title">TO-DO LIST · TODAY'S CLASSES</div>
+<div class="dashboard-todo-title">TO-DO LIST</div>
 <div class="dashboard-todo-body">
-<div id="dashboardTodayTodoActive" class="dashboard-todo-list"></div>
-<div id="dashboardTodayTodoCompleted" class="dashboard-todo-completed"></div>
+<div id="dashboardNextClass" class="dashboard-todo-main">No upcoming class.</div>
+<div id="dashboardNextClassSub" class="dashboard-todo-sub">Your next class or appointment will appear here.</div>
 </div>
 </div>
 
@@ -9630,19 +9615,6 @@ if(!isNaN(d.getTime())) return d;
 return null;
 }
 
-let dashboardShowAllClasses=false;
-let dashboardShowAllCompleted=false;
-
-function toggleDashboardAllClasses(){
-  dashboardShowAllClasses=!dashboardShowAllClasses;
-  renderDashboard();
-}
-
-function toggleDashboardAllCompleted(){
-  dashboardShowAllCompleted=!dashboardShowAllCompleted;
-  renderDashboard();
-}
-
 function renderDashboard(){
 
 const students=getStudents();
@@ -9702,54 +9674,22 @@ if(appointmentCountDash) appointmentCountDash.textContent=appointments.length;
 const todayClassCountDash=document.getElementById('dashboardTodayClassCount');
 if(todayClassCountDash) todayClassCountDash.textContent=todayCount;
 
-const todayAppointments=validAppointments
-.filter(x=>{
-  const d=x.date;
-  return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth() && d.getDate()===now.getDate() && String(x.item.status||'Scheduled').toLowerCase()!=='cancelled';
-})
-.sort((a,b)=>a.date-b.date);
+const next=validAppointments
+.filter(x=>x.date.getTime()>=now.getTime())
+.sort((a,b)=>a.date-b.date)[0];
 
-const dashboardClasses=todayAppointments.map(x=>{
-  const item=x.item;
-  const duration=durationToMinutes(item.duration||'30 Minutes');
-  const end=new Date(x.date.getTime()+duration*60000);
-  const status=String(item.status||'Scheduled').toLowerCase();
-  return {...x,end,completed:status==='completed'||now>=end};
-});
+const nextMain=document.getElementById('dashboardNextClass');
+const nextSub=document.getElementById('dashboardNextClassSub');
 
-const activeToday=dashboardClasses.filter(x=>!x.completed);
-const completedToday=dashboardClasses.filter(x=>x.completed).sort((a,b)=>b.date-a.date);
-const activeToShow=dashboardShowAllClasses?activeToday:activeToday.slice(0,2);
-const completedToShow=dashboardShowAllCompleted?completedToday:completedToday.slice(0,0);
-const activeBox=document.getElementById('dashboardTodayTodoActive');
-const completedBox=document.getElementById('dashboardTodayTodoCompleted');
-
-if(activeBox){
-  if(!activeToday.length){
-    activeBox.innerHTML=`<div class="dashboard-todo-empty">${completedToday.length?'All classes for today have been completed.':'No classes scheduled for today.'}</div>`;
-  }else{
-    activeBox.innerHTML=activeToShow.map(x=>{
-      const item=x.item;
-      const studentName=item.studentName||item.student||item.name||'Student';
-      const type=item.type||item.title||item.subject||'Regular Class';
-      const time=x.date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      return `<div class="dashboard-todo-card"><div class="dashboard-todo-card-main"><div class="dashboard-todo-card-name">${escapeHtml(studentName)}</div><div class="dashboard-todo-card-meta">${escapeHtml(type)} · ${escapeHtml(item.duration||'30 Minutes')}</div></div><div class="dashboard-todo-card-time">${escapeHtml(time)}</div></div>`;
-    }).join('')+(activeToday.length>2?`<button type="button" class="dashboard-todo-showall" onclick="toggleDashboardAllClasses()">${dashboardShowAllClasses?'▲ Show Less':`▼ Show All Classes (${activeToday.length-2} more)`}</button>`:'');
-  }
-}
-
-if(completedBox){
-  if(!completedToday.length){
-    completedBox.innerHTML='';
-  }else{
-    completedBox.innerHTML=`<div class="dashboard-todo-section"><div class="dashboard-todo-section-title">COMPLETED CLASSES TODAY · ${completedToday.length}</div>${completedToShow.map(x=>{
-      const item=x.item;
-      const studentName=item.studentName||item.student||item.name||'Student';
-      const type=item.type||item.title||item.subject||'Regular Class';
-      const time=x.date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      return `<div class="dashboard-todo-card"><div class="dashboard-todo-card-main"><div class="dashboard-todo-card-name">${escapeHtml(studentName)}<span class="dashboard-todo-completed-badge">COMPLETED</span></div><div class="dashboard-todo-card-meta">${escapeHtml(type)} · ${escapeHtml(item.duration||'30 Minutes')}</div></div><div class="dashboard-todo-card-time">${escapeHtml(time)}</div></div>`;
-    }).join('')}${completedToday.length?`<button type="button" class="dashboard-todo-showall" onclick="toggleDashboardAllCompleted()">${dashboardShowAllCompleted?'▲ Hide Completed Classes':`▼ Show All Completed Classes Today (${completedToday.length})`}</button>`:''}</div>`;
-  }
+if(next){
+const item=next.item;
+const studentName=item.studentName || item.student || item.name || 'Student';
+const label=item.title || item.subject || 'Class / Appointment';
+if(nextMain) nextMain.textContent=`${label} — ${studentName}`;
+if(nextSub) nextSub.textContent=formatDateTime(next.date.toISOString());
+}else{
+if(nextMain) nextMain.textContent='No upcoming class.';
+if(nextSub) nextSub.textContent='Your next class or appointment will appear here.';
 }
 
 const list=document.getElementById('studentList');
